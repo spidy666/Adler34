@@ -4,6 +4,26 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.14.0] — 2026-06-08
+
+### Fixed
+- **Results screen position mismatch** — finishing 2nd (68–77 pts) incorrectly showed "BUNDESLIGA-MEISTER · PLATZ 1" in the headline while the stat box correctly showed 2nd place
+  - Root cause: `isChampion` threshold was `points >= 68` (2nd place) but the sub text hardcoded "PLATZ 1"
+  - Fix: display logic now branches on `result.position` directly — headline and stat box always agree
+  - Added a dedicated **VIZEMEISTER** branch for position 2 (displayed in gold, same as Meister)
+  - `isChampion` corrected to `points >= 78` (actual 1st-place threshold) to match `estimatePosition`
+
+---
+
+## [0.13.0] — 2026-06-08
+
+### Changed
+- **Draft header shows era instead of specific season** — label above the player list now reads "90er Jahre" (or 60er / 70er / 80er / 2000er / 2010er / 2020er Jahre) instead of "Saison 1993/94"
+  - The player pool covers an entire decade, not a single season, so the season year was misleading
+  - Sub-label updated from "Saisonkader" to "Kader dieser Ära"
+
+---
+
 ## [0.12.0] — 2026-06-08
 
 ### Changed
