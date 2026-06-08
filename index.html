@@ -195,7 +195,10 @@
     .draft-card:hover { border-left-color: var(--red); background: #141414; }
     .draft-card.selected { border-left-color: var(--gold); background: rgba(212,160,23,0.06); }
     .dc-pos { font-family: var(--font-display); font-size: 0.82rem; color: var(--red); letter-spacing: 0.12em; grid-column: 1; display: flex; align-items: baseline; gap: 6px; }
-    .dc-alt { font-size: 0.65rem; color: var(--dim); letter-spacing: 0.08em; font-family: var(--font-mono); }
+    .dc-alt { font-size: 0.62rem; color: #999; letter-spacing: 0.08em; font-family: var(--font-mono); }
+    .draft-card.slot-match { border-left-color: #4caf50; background: rgba(76,175,80,0.07); }
+    .draft-card.slot-dim   { opacity: 0.28; pointer-events: none; }
+    .p-slot.slot-active    { border-style: solid; border-color: var(--gold); background: rgba(212,160,23,0.22); }
     .dc-name { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; line-height: 1.2; grid-column: 1; }
     .dc-meta { font-size: 0.72rem; color: var(--dim); grid-column: 1; margin-bottom: 4px; }
     .dc-stats { font-size: 0.75rem; color: var(--dim); display: flex; gap: 10px; grid-column: 1; }
@@ -599,6 +602,16 @@ function isCompatible(playerPos, slotPos) {
   return (POS_COMPAT[playerPos] || []).includes(slotPos);
 }
 
+// English position codes → German abbreviations used on pitch
+const POS_DE = { GK:'TW', RB:'RV', LB:'LV', CB:'IV', DM:'DM', MF:'MF', AM:'OM', RW:'RA', LW:'LA', CF:'ST' };
+function posDE(code) { return POS_DE[code] || code; }
+
+// Returns true if player (using main or alt positions) can fill slotPos
+function playerFitsSlot(player, slotPos) {
+  if (isCompatible(player.position, slotPos)) return true;
+  return (player.altPositions || []).some(ap => isCompatible(ap, slotPos));
+}
+
 // ── SEASON DATA ────────────────────────────────────────────────────────
 // Bundesliga seasons SGE participated in (by start year, gaps = relegation)
 const SGE_SEASONS = [
@@ -629,6 +642,7 @@ let phase         = 'deal';   // 'deal' | 'place'
 let teamYear      = null;      // currently shown season start year
 let teamPlayers   = [];        // players in current deal
 let selectedCard  = null;      // player chosen from deal
+let activeFilterSlot = null;  // slot being filtered during deal phase
 
 // ── DOM REFS ─────────────────────────────────────────────────────────────
 const formationGrid      = document.getElementById('formationGrid');
@@ -709,7 +723,7 @@ function renderPitch() {
     const el = document.getElementById('slot-' + slot.id);
     if (!el) return;
     const player = slotFills[slot.id];
-    el.classList.remove('filled','compatible','incompatible');
+    el.classList.remove('filled','compatible','incompatible','slot-active');
 
     if (player) {
       el.classList.add('filled');
@@ -720,8 +734,10 @@ function renderPitch() {
         <span class="slot-player-rating">${player.rating}</span>
       `;
     } else {
-      if (selectedCard) {
-        el.classList.add(isCompatible(selectedCard.position, slot.pos) ? 'compatible' : 'incompatible');
+      if (phase === 'place' && selectedCard) {
+        el.classList.add(playerFitsSlot(selectedCard, slot.pos) ? 'compatible' : 'incompatible');
+      } else if (phase === 'deal' && activeFilterSlot === slot.id) {
+        el.classList.add('slot-active');
       }
       el.innerHTML = `<span class="slot-pos-label">${slot.label}</span>`;
     }
@@ -729,6 +745,13 @@ function renderPitch() {
 }
 
 function handleSlotClick(slotId) {
+  if (phase === 'deal') {
+    // Toggle position filter — clicking same slot again clears it
+    activeFilterSlot = (activeFilterSlot === slotId) ? null : slotId;
+    renderPitch();
+    renderSidebar();
+    return;
+  }
   if (phase !== 'place' || !selectedCard) return;
   const existing = slotFills[slotId];
   if (existing) placedIds.delete(existing.id);
@@ -737,6 +760,7 @@ function handleSlotClick(slotId) {
   placedIds.add(selectedCard.id);
   selectedCard = null;
   phase = 'deal';
+  activeFilterSlot = null;
 
   renderPitch();
   updateStatus();
@@ -766,6 +790,7 @@ function dealNewTeam() {
   teamPlayers  = PLAYERS.filter(p => p.activeFrom <= teamYear && p.activeTo >= teamYear && !placedIds.has(p.id));
   phase        = 'deal';
   selectedCard = null;
+  activeFilterSlot = null;
   renderSidebar();
   renderPitch();
 }
@@ -781,10 +806,24 @@ function renderSidebar() {
       </div>
       <div class="deal-cards">
     `;
+    // Determine which slot is being filtered and find its slotPos
+    let filterSlotPos = null;
+    if (activeFilterSlot) {
+      const slots = FORMATIONS[formationKey]?.slots || [];
+      const fs = slots.find(s => s.id === activeFilterSlot);
+      if (fs) filterSlotPos = fs.pos;
+    }
+
     teamPlayers.forEach((p, i) => {
+      const altStr = p.altPositions && p.altPositions.length
+        ? `<span class="dc-alt">· ${p.altPositions.map(posDE).join(' ')}</span>` : '';
+      let filterClass = '';
+      if (filterSlotPos) {
+        filterClass = playerFitsSlot(p, filterSlotPos) ? ' slot-match' : ' slot-dim';
+      }
       html += `
-        <div class="draft-card" data-pid="${p.id}" style="animation-delay:${i * 0.04}s">
-          <div class="dc-pos">${p.position}${p.altPositions && p.altPositions.length ? `<span class="dc-alt">· ${p.altPositions.join(' ')}</span>` : ''}</div>
+        <div class="draft-card${filterClass}" data-pid="${p.id}" style="animation-delay:${i * 0.04}s">
+          <div class="dc-pos">${posDE(p.position)}${altStr}</div>
           <div class="dc-name">${p.name}</div>
           <div class="dc-meta">${p.nationality} · ${p.peakSeason || p.years}</div>
           <div class="dc-stats">
@@ -799,7 +838,7 @@ function renderSidebar() {
 
     teamDealEl.innerHTML = html;
 
-    teamDealEl.querySelectorAll('.draft-card').forEach(card => {
+    teamDealEl.querySelectorAll('.draft-card:not(.slot-dim)').forEach(card => {
       card.addEventListener('click', () => {
         const player = PLAYERS.find(p => p.id === card.dataset.pid);
         if (player) pickPlayer(player);
@@ -815,15 +854,16 @@ function renderSidebar() {
         <div class="spv-label">Ausgewählt</div>
         <div class="spv-rating">${p.rating}</div>
         <div class="spv-name">${p.name}</div>
-        <div class="spv-pos">${p.position} — ${p.positionLabel}${p.altPositions && p.altPositions.length ? `<br><span style="font-size:0.75rem;color:var(--dim);letter-spacing:0.08em;">auch: ${p.altPositions.join(' · ')}</span>` : ''}</div>
+        <div class="spv-pos">${posDE(p.position)} — ${p.positionLabel}${p.altPositions && p.altPositions.length ? `<br><span style="font-size:0.75rem;color:var(--dim);letter-spacing:0.08em;">auch: ${p.altPositions.map(posDE).join(' · ')}</span>` : ''}</div>
         <div class="spv-meta">${p.nationality} · ${p.peakSeason || p.years}</div>
         <div class="spv-instruction">Klicke jetzt auf einen freien Platz im Feld um diesen Spieler zu platzieren</div>
       </div>
       <button class="btn-cancel-pick" id="btnCancelPick">← Andere Wahl</button>
     `;
     document.getElementById('btnCancelPick').addEventListener('click', () => {
-      phase        = 'deal';
-      selectedCard = null;
+      phase            = 'deal';
+      selectedCard     = null;
+      activeFilterSlot = null;
       renderSidebar();
       renderPitch();
       updateStatus();
