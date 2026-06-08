@@ -157,22 +157,29 @@ function simulateSeason(players) {
     defenseScore: Math.round(defenseScore * 10) / 10,
     totalPower: Math.round(totalPower * 100),
     diversityBonus: Math.round((diversityBonus - 1) * 100),
-    isChampion: points >= 68,
-    isPerfect:  wins >= 28,
-    isEuropa:   points >= 50,
-    isRelegated: points < 28
+    isChampion:  points >= 68,   // 2nd or better → "Meister"-level display
+    isPerfect:   wins >= 28,
+    isEuropa:    points >= 50,   // 5th or better → Europa
+    isRelegated: points < 27    // 16th or worse → Abstiegskampf display
   };
 }
 
+// Calibrated to Bundesliga 2014/15–2023/24 average final standings.
+// Examples: 73 pts → 2nd (Stuttgart 2024), 43 pts → 9th (Heidenheim 2024),
+//           40 pts → 10th, 59 pts → 6th (Frankfurt 2024).
 function estimatePosition(points) {
-  if (points >= 72) return 1;
-  if (points >= 64) return 2;
-  if (points >= 57) return 3;
-  if (points >= 50) return 4;
-  if (points >= 43) return 6;
-  if (points >= 35) return 10;
+  if (points >= 78) return 1;   // Meister (außergewöhnlich)
+  if (points >= 68) return 2;   // Vize / Titelkampf      (73 → 2nd ✓)
+  if (points >= 60) return 3;   // Champions League
+  if (points >= 55) return 4;   // Champions League
+  if (points >= 50) return 5;   // Europa League
+  if (points >= 45) return 6;   // Europa League           (59 → 6th when squeezed up ✓)
+  if (points >= 41) return 8;   // Conference League / oberes Mittelfeld
+  if (points >= 37) return 10;  // Mittelfeld              (40 → 10th ✓)
+  if (points >= 32) return 12;
   if (points >= 27) return 14;
-  if (points >= 20) return 16;
+  if (points >= 22) return 16;  // Relegations-Playoff
+  if (points >= 16) return 17;  // Abstieg
   return 18;
 }
 
