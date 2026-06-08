@@ -194,7 +194,8 @@
     }
     .draft-card:hover { border-left-color: var(--red); background: #141414; }
     .draft-card.selected { border-left-color: var(--gold); background: rgba(212,160,23,0.06); }
-    .dc-pos { font-family: var(--font-display); font-size: 0.82rem; color: var(--red); letter-spacing: 0.12em; grid-column: 1; }
+    .dc-pos { font-family: var(--font-display); font-size: 0.82rem; color: var(--red); letter-spacing: 0.12em; grid-column: 1; display: flex; align-items: baseline; gap: 6px; }
+    .dc-alt { font-size: 0.65rem; color: var(--dim); letter-spacing: 0.08em; font-family: var(--font-mono); }
     .dc-name { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; line-height: 1.2; grid-column: 1; }
     .dc-meta { font-size: 0.72rem; color: var(--dim); grid-column: 1; margin-bottom: 4px; }
     .dc-stats { font-size: 0.75rem; color: var(--dim); display: flex; gap: 10px; grid-column: 1; }
@@ -783,7 +784,7 @@ function renderSidebar() {
     teamPlayers.forEach((p, i) => {
       html += `
         <div class="draft-card" data-pid="${p.id}" style="animation-delay:${i * 0.04}s">
-          <div class="dc-pos">${p.position}</div>
+          <div class="dc-pos">${p.position}${p.altPositions && p.altPositions.length ? `<span class="dc-alt">· ${p.altPositions.join(' ')}</span>` : ''}</div>
           <div class="dc-name">${p.name}</div>
           <div class="dc-meta">${p.nationality} · ${p.peakSeason || p.years}</div>
           <div class="dc-stats">
@@ -814,7 +815,7 @@ function renderSidebar() {
         <div class="spv-label">Ausgewählt</div>
         <div class="spv-rating">${p.rating}</div>
         <div class="spv-name">${p.name}</div>
-        <div class="spv-pos">${p.position} — ${p.positionLabel}</div>
+        <div class="spv-pos">${p.position} — ${p.positionLabel}${p.altPositions && p.altPositions.length ? `<br><span style="font-size:0.75rem;color:var(--dim);letter-spacing:0.08em;">auch: ${p.altPositions.join(' · ')}</span>` : ''}</div>
         <div class="spv-meta">${p.nationality} · ${p.peakSeason || p.years}</div>
         <div class="spv-instruction">Klicke jetzt auf einen freien Platz im Feld um diesen Spieler zu platzieren</div>
       </div>
