@@ -4,6 +4,31 @@
  */
 
 /**
+ * How much each opponent shifts the base win probability.
+ * Positive = harder to beat (reduce winProb), negative = easier to beat (increase winProb).
+ * Calibrated to approximate Bundesliga strength differences over the last decade.
+ */
+const OPPONENT_DIFFICULTY = {
+  'Bayern München':       0.22,
+  'Borussia Dortmund':    0.15,
+  'Bayer Leverkusen':     0.14,
+  'RB Leipzig':           0.14,
+  'VfB Stuttgart':        0.08,
+  "Borussia M'gladbach":  0.07,
+  'SC Freiburg':          0.05,
+  'Union Berlin':         0.05,
+  'TSG Hoffenheim':       0.03,
+  'Wolfsburg':            0.01,
+  'Mainz 05':             0.00,
+  'Werder Bremen':        0.00,
+  'Augsburg':            -0.02,
+  'Köln':                -0.01,
+  'Hamburger SV':        -0.02,
+  'Hertha BSC':          -0.03,
+  'Schalke 04':          -0.03,
+};
+
+/**
  * Position weights for squad balance rating
  * Positions that matter more for different stat categories
  */
@@ -96,14 +121,13 @@ function simulateSeason(players) {
   const totalPower = ((attackScore * 0.4 + midfieldScore * 0.3 + defenseScore * 0.3) 
                       * balancePenalty * diversityBonus);
 
-  // Win probability per game. Three-tier position penalties (main 1.0, alt 0.88, out 0.65)
-  // push OOP squads down significantly. Typical ranges:
-  //   74-78 rated, mostly red OOP          → low power  → ~25–38 pts (relegation zone)
-  //   74-78 rated, in position, mixed eras → mid power  → ~40–52 pts (midtable)
-  //   82-86 rated, diverse, in position    → high power → ~58–70 pts (Europa/title race)
+  // Base win probability from squad strength. Adjusted per-game by opponent difficulty.
+  // Typical base ranges:
+  //   74-78 rated, mostly red OOP          → ~0.18 base → drops further vs strong opponents
+  //   74-78 rated, in position, mixed eras → ~0.30–0.42 base
+  //   82-86 rated, diverse, in position    → ~0.50–0.62 base
   const winProb  = Math.min(0.70, Math.max(0.18, 0.12 * totalPower - 0.63));
   const drawProb = 0.22;
-  const lossProb = 1 - winProb - drawProb;
 
   let wins = 0, draws = 0, losses = 0;
   let goalsFor = 0, goalsAgainst = 0;
@@ -120,12 +144,18 @@ function simulateSeason(players) {
     const opponent = opponents[i];
     let result, gf, ga;
 
-    if (roll < lossProb) {
+    // Per-game probability adjusted for opponent strength.
+    // gameWin clamped to [0.04, 0.76] so lossProb stays positive and upsets remain possible.
+    const oppMod    = OPPONENT_DIFFICULTY[opponent] ?? 0;
+    const gameWin   = Math.max(0.04, Math.min(0.76, winProb - oppMod));
+    const gameLoss  = 1 - gameWin - drawProb;
+
+    if (roll < gameLoss) {
       result = "L";
       gf = Math.floor(rng() * 2);
       ga = Math.floor(rng() * 2) + 1;
       losses++;
-    } else if (roll < lossProb + drawProb) {
+    } else if (roll < gameLoss + drawProb) {
       result = "D";
       gf = Math.floor(rng() * 3) + 1;
       ga = gf;

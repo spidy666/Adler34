@@ -4,6 +4,19 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.10.0] — 2026-06-08
+
+### Added
+- **Per-opponent difficulty modifiers** — each of the 17 Bundesliga opponents now has a strength rating that shifts the win probability for that individual game
+  - Bayern München: −0.22 to winProb (hardest opponent)
+  - BVB / Leverkusen / Leipzig: −0.14 to −0.15
+  - Stuttgart / M'gladbach: −0.07 to −0.08
+  - Augsburg / Köln / HSV / Hertha / Schalke: up to +0.03 (easier opponents)
+  - Previously every game used the same flat probability regardless of opponent — a weak OOP squad would beat Bayern as often as Schalke, which was unrealistic
+  - `gameWin` is clamped to [0.04, 0.76] so upsets remain possible but a weak squad has almost no chance vs the top four
+
+---
+
 ## [0.9.0] — 2026-06-08
 
 ### Changed
