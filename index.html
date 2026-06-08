@@ -826,7 +826,7 @@ function dealNewTeam() {
 
   teamYear     = chooseFrom[Math.floor(Math.random() * chooseFrom.length)];
   teamPlayers  = PLAYERS
-    .filter(p => p.activeFrom <= teamYear && p.activeTo >= teamYear && !placedIds.has(p.id))
+    .filter(p => p.decade === decadeForYear(teamYear) && !placedIds.has(p.id))
     .sort((a, b) => (POS_ORDER[a.position] ?? 5) - (POS_ORDER[b.position] ?? 5));
   phase        = 'deal';
   selectedCard = null;
