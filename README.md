@@ -76,7 +76,7 @@ The power rating drives a **base win probability** (max 70 %), which is then adj
 | **1990s** | Tony Yeboah, Jay-Jay Okocha, Andreas Möller, Axel Kruse, Dietmar Roth, Slobodan Komljenović, Ralf Weber |
 | **2000s** | Alexander Meier, Marco Russ, Pirmin Schwegler, Jermaine Jones, Alexander Schur, Benjamin Köhler |
 | **2010s** | Kevin Trapp, Filip Kostić, André Silva, Daichi Kamada, Sebastian Jung, Bastian Oczipka, Marc Stendera |
-| **2020s** | Djibril Sow, Faride Alidou, Mario Götze, Randal Kolo Muani |
+| **2020s** | Djibril Sow, Faride Alidou, Mario Götze, Omar Marmoush |
 
 Each player object includes:
 - Rating (70–92), Bundesliga appearances and goals at SGE

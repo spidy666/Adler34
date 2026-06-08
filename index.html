@@ -616,7 +616,8 @@ const FORMATIONS = {
 };
 
 // English position codes → German abbreviations used on pitch
-const POS_DE = { GK:'TW', RB:'RV', LB:'LV', CB:'IV', DM:'DM', MF:'MF', AM:'OM', RW:'RA', LW:'LA', CF:'ST' };
+const POS_DE    = { GK:'TW', RB:'RV', LB:'LV', CB:'IV', DM:'DM', MF:'MF', AM:'OM', RW:'RA', LW:'LA', CF:'ST' };
+const POS_ORDER = { CF:0, RW:1, LW:2, AM:3, MF:4, DM:5, RB:6, LB:7, CB:8, GK:9 };
 function posDE(code) { return POS_DE[code] || code; }
 
 // Three-tier fit check based strictly on player data:
@@ -814,7 +815,9 @@ function dealNewTeam() {
   const chooseFrom = (biased.length > 0 && Math.random() < 0.65) ? biased : pool;
 
   teamYear     = chooseFrom[Math.floor(Math.random() * chooseFrom.length)];
-  teamPlayers  = PLAYERS.filter(p => p.activeFrom <= teamYear && p.activeTo >= teamYear && !placedIds.has(p.id));
+  teamPlayers  = PLAYERS
+    .filter(p => p.activeFrom <= teamYear && p.activeTo >= teamYear && !placedIds.has(p.id))
+    .sort((a, b) => (POS_ORDER[a.position] ?? 5) - (POS_ORDER[b.position] ?? 5));
   phase        = 'deal';
   selectedCard = null;
   activeFilterSlot = null;

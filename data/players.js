@@ -1308,20 +1308,6 @@ const PLAYERS = [
     trophy: "2022 UEFA Europa League"
   },
   {
-    id: "randal-kolo-muani",
-    name: "Randal Kolo Muani",
-    season: "2022/23", decade: "2020s",
-    activeFrom: 2022, activeTo: 2022,
-    position: "CF", positionLabel: "Mittelstürmer",
-    altPositions: ["LW", "RW", "AM"],
-    nationality: "🇫🇷 France",
-    years: "2022–2023",
-    bundesligaApps: 32, bundesligaGoals: 15, rating: 87,
-    peakSeason: "2022/23",
-    bio: "Explosive French striker — 15 goals and 12 assists in one Bundesliga season. His pace and directness made him virtually unplayable before his €95m move to PSG.",
-    trophy: "Bundesliga Top-Performer 2022/23"
-  },
-  {
     id: "omar-marmoush",
     name: "Omar Marmoush",
     season: "2023/24", decade: "2020s",
