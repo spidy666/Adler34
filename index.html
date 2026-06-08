@@ -929,7 +929,7 @@ btnSimulate.addEventListener('click', () => {
     .map(([slotId, player]) => {
       const slot = formation.slots.find(s => s.id === slotId);
       const fits = slot ? playerFitsSlot(player, slot.pos) : true;
-      return { ...player, inPosition: fits };
+      return { ...player, inPosition: fits, slotPos: slot ? slot.pos : player.position };
     });
   showResults(simulateSeason(squad));
 });

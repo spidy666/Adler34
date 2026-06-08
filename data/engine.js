@@ -29,15 +29,16 @@ function calculateSquadStrength(players) {
   let defenseScore = 0;
 
   players.forEach(player => {
-    const pos = player.position;
-    const weights = POSITION_WEIGHTS[pos] || { defense: 1, attack: 1, midfield: 1 };
+    // Use SLOT position for contribution weights, not natural position.
+    // A CF placed in the GK slot contributes as a goalkeeper (high defense, no attack),
+    // just with a penalty on effectiveness. This is the core mechanic: placement matters.
+    const effectivePos = player.slotPos || player.position;
+    const weights = POSITION_WEIGHTS[effectivePos] || { defense: 1, attack: 1, midfield: 1 };
 
-    // Out-of-position players contribute less across all areas
-    const posFactor = (player.inPosition === false) ? 0.82 : 1.0;
+    // 25% effectiveness penalty for playing outside a compatible position
+    const posFactor = (player.inPosition === false) ? 0.75 : 1.0;
     const base = (player.rating * posFactor) / 100;
 
-    // Goals/apps give a small edge — kept tiny because Frankfurt players all have
-    // high career stats, so large bonuses inflate everyone equally and break calibration
     const goalBonus = Math.min(player.bundesligaGoals / 15, 3);
     const appBonus  = Math.min(player.bundesligaApps  / 100, 2);
 
@@ -93,12 +94,12 @@ function simulateSeason(players) {
   const totalPower = ((attackScore * 0.4 + midfieldScore * 0.3 + defenseScore * 0.3) 
                       * balancePenalty * diversityBonus);
 
-  // Win probability per game. With minimal bonuses, typical totalPower ranges:
-  //   74-76 rated, single era, mostly OOP → ~7–8    → winProb ~0.22–0.30 → ~35–40 pts (relegation fight)
-  //   74-76 rated, mixed eras, in position → ~8–9   → winProb ~0.30–0.44 → ~44–52 pts (mid table)
-  //   82-84 rated, diverse, in position    → ~9–10  → winProb ~0.44–0.55 → ~52–64 pts (Europa/3rd)
-  //   86-88 rated, all eras, balanced      → ~10–11 → winProb ~0.55–0.66 → ~64–75 pts (Champion)
-  const winProb  = Math.min(0.70, Math.max(0.18, 0.11 * totalPower - 0.58));
+  // Win probability per game. With slot-based weights, typical totalPower ranges:
+  //   74-76 rated, mostly OOP              → ~7.5–8.5 → winProb ~0.27–0.39 → ~35–47 pts (mid/relegation)
+  //   74-78 rated, in position, mixed eras → ~8.5–9.5 → winProb ~0.39–0.51 → ~47–59 pts (Europa fight)
+  //   82-84 rated, diverse, in position    → ~9.5–10  → winProb ~0.51–0.57 → ~59–66 pts (3rd/Europa)
+  //   86-88 rated, all eras, in position   → ~10–11   → winProb ~0.57–0.69 → ~66–78 pts (Champion)
+  const winProb  = Math.min(0.70, Math.max(0.18, 0.12 * totalPower - 0.63));
   const drawProb = 0.22;
   const lossProb = 1 - winProb - drawProb;
 
@@ -164,14 +165,14 @@ function simulateSeason(players) {
 }
 
 function estimatePosition(points) {
-  if (points >= 75) return 1;
-  if (points >= 67) return 2;
-  if (points >= 60) return 3;
-  if (points >= 53) return 4;
-  if (points >= 46) return 6;
-  if (points >= 38) return 9;
-  if (points >= 30) return 13;
-  if (points >= 22) return 16;
+  if (points >= 72) return 1;
+  if (points >= 64) return 2;
+  if (points >= 57) return 3;
+  if (points >= 50) return 4;
+  if (points >= 43) return 6;
+  if (points >= 35) return 10;
+  if (points >= 27) return 14;
+  if (points >= 20) return 16;
   return 18;
 }
 
