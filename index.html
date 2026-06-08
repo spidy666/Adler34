@@ -586,17 +586,19 @@ const FORMATIONS = {
 };
 
 // Which player positions fit which slot positions (compatible = green, else gold)
+// Kept deliberately tight — only positions genuinely interchangeable at Bundesliga level.
+// Alt positions on individual players handle further historical flexibility.
 const POS_COMPAT = {
   GK:  ['GK'],
-  RB:  ['RB','CB','LB','MF'],
+  RB:  ['RB','CB','LB'],
   CB:  ['CB','RB','LB','DM'],
-  LB:  ['LB','CB','RB','MF'],
-  DM:  ['DM','MF','CB'],
-  MF:  ['MF','DM','AM','RW','LW','RB','LB'],
-  AM:  ['AM','MF','CF','RW','LW'],
-  RW:  ['RW','AM','MF','CF','LW'],
-  LW:  ['LW','AM','MF','CF','RW'],
-  CF:  ['CF','AM','RW','LW'],
+  LB:  ['LB','CB','RB'],
+  DM:  ['DM','CB','MF'],
+  MF:  ['MF','DM','AM'],
+  AM:  ['AM','MF','RW','LW'],
+  RW:  ['RW','AM','LW'],
+  LW:  ['LW','AM','RW'],
+  CF:  ['CF','AM'],
 };
 function isCompatible(playerPos, slotPos) {
   return (POS_COMPAT[playerPos] || []).includes(slotPos);
