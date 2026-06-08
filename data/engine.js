@@ -89,11 +89,13 @@ function simulateSeason(players) {
   const totalPower = ((attackScore * 0.4 + midfieldScore * 0.3 + defenseScore * 0.3) 
                       * balancePenalty * diversityBonus);
 
-  // Convert to win probability per game (non-linear curve)
-  // Perfect team ~= winProb 0.85, average ~= 0.45, terrible ~= 0.20
-  const winProb = Math.min(0.88, Math.max(0.15, 0.18 + 0.09 * totalPower));
-  const drawProb = 0.18;
-  const lossProb = 1 - winProb - drawProb;
+  // Win probability per game — calibrated so a real elite squad (~84 rated, diverse)
+  // hits ~62% win rate (champion at ~70 pts), not 88%+ which made lossProb negative.
+  // totalPower typically ranges 6–13 for real Frankfurt squads.
+  // At 7 → ~35% wins (mid table), at 9 → ~49% (Europa), at 11 → ~63% (champion), at 13 → cap 0.68
+  const winProb  = Math.min(0.68, Math.max(0.18, 0.07 * totalPower - 0.14));
+  const drawProb = 0.22;
+  const lossProb = 1 - winProb - drawProb;  // always positive now
 
   let wins = 0, draws = 0, losses = 0;
   let goalsFor = 0, goalsAgainst = 0;
@@ -150,23 +152,21 @@ function simulateSeason(players) {
     totalPower: Math.round(totalPower * 100),
     diversityBonus: Math.round((diversityBonus - 1) * 100),
     isChampion: points >= 68,
-    isPerfect: points === 102,
-    isEuropa: points >= 54,
-    isRelegated: points < 34
+    isPerfect:  wins >= 28,
+    isEuropa:   points >= 50,
+    isRelegated: points < 28
   };
 }
 
 function estimatePosition(points) {
-  if (points >= 80) return 1;
-  if (points >= 73) return 2;
-  if (points >= 66) return 3;
-  if (points >= 60) return 4;
-  if (points >= 54) return 5;
-  if (points >= 48) return 6;
-  if (points >= 42) return 7;
-  if (points >= 36) return 10;
-  if (points >= 34) return 14;
-  if (points >= 28) return 16;
+  if (points >= 78) return 1;
+  if (points >= 70) return 2;
+  if (points >= 63) return 3;
+  if (points >= 56) return 4;
+  if (points >= 50) return 5;
+  if (points >= 43) return 7;
+  if (points >= 36) return 11;
+  if (points >= 28) return 15;
   return 18;
 }
 
