@@ -12,20 +12,20 @@ const OPPONENT_DIFFICULTY = {
   'Bayern München':       0.22,
   'Borussia Dortmund':    0.15,
   'Bayer Leverkusen':     0.14,
-  'RB Leipzig':           0.14,
   'VfB Stuttgart':        0.08,
   "Borussia M'gladbach":  0.07,
   'SC Freiburg':          0.05,
   'Union Berlin':         0.05,
-  'TSG Hoffenheim':       0.03,
-  'Wolfsburg':            0.01,
   'Mainz 05':             0.00,
   'Werder Bremen':        0.00,
+  'Kaiserslautern':      -0.01,
   'Augsburg':            -0.02,
   'Köln':                -0.01,
   'Hamburger SV':        -0.02,
+  '1.FC Nürnberg':       -0.02,
   'Hertha BSC':          -0.03,
   'Schalke 04':          -0.03,
+  'VfL Bochum':          -0.03,
 };
 
 /**
@@ -271,14 +271,14 @@ function seededRng(seed) {
  */
 function generateOpponents() {
   return [
-    "Bayern München", "Borussia Dortmund", "Bayer Leverkusen", "RB Leipzig",
+    "Bayern München", "Borussia Dortmund", "Bayer Leverkusen", "Kaiserslautern",
     "Borussia M'gladbach", "SC Freiburg", "Union Berlin", "VfB Stuttgart",
-    "TSG Hoffenheim", "Mainz 05", "Werder Bremen", "Augsburg",
-    "Wolfsburg", "Köln", "Hertha BSC", "Schalke 04",
+    "VfL Bochum", "Mainz 05", "Werder Bremen", "Augsburg",
+    "1.FC Nürnberg", "Köln", "Hertha BSC", "Schalke 04",
     "Hamburger SV", "Bayern München", "Borussia Dortmund", "Bayer Leverkusen",
-    "RB Leipzig", "Borussia M'gladbach", "SC Freiburg", "Union Berlin",
-    "VfB Stuttgart", "TSG Hoffenheim", "Mainz 05", "Werder Bremen",
-    "Augsburg", "Wolfsburg", "Köln", "Hertha BSC",
+    "Kaiserslautern", "Borussia M'gladbach", "SC Freiburg", "Union Berlin",
+    "VfB Stuttgart", "VfL Bochum", "Mainz 05", "Werder Bremen",
+    "Augsburg", "1.FC Nürnberg", "Köln", "Hertha BSC",
     "Schalke 04", "Hamburger SV"
   ];
 }
