@@ -805,6 +805,34 @@ const PLAYERS = [
     bio: "Creative midfielder with Italian flair and technical elegance. Son of a Frankfurt legend. Had a spell at Man City between Frankfurt stints.",
     trophy: "1992 DFB-Pokal"
   },
+  {
+    id: "thomas-sobotzik",
+    name: "Thomas Sobotzik",
+    season: "1998/99", decade: "1990s",
+    activeFrom: 1994, activeTo: 2000,
+    position: "MF", positionLabel: "Mittelfeldspieler",
+    altPositions: ["DM", "AM"],
+    nationality: "🇩🇪 Germany",
+    years: "1994–2001",
+    bundesligaApps: 66, bundesligaGoals: 12, rating: 76,
+    peakSeason: "1998/99",
+    bio: "Industrious midfielder who served Frankfurt in multiple stints. A reliable presence through the turbulent mid-1990s and part of the squad that fought back to the Bundesliga in 1998.",
+    trophy: "1998 Bundesliga-Aufstieg"
+  },
+  {
+    id: "horst-heldt",
+    name: "Horst Heldt",
+    season: "1999/00", decade: "1990s",
+    activeFrom: 1999, activeTo: 2000,
+    position: "MF", positionLabel: "Mittelfeldspieler",
+    altPositions: ["AM", "DM"],
+    nationality: "🇩🇪 Germany",
+    years: "1999–2001",
+    bundesligaApps: 64, bundesligaGoals: 9, rating: 75,
+    peakSeason: "1999/00",
+    bio: "German international midfielder who brought experience and vision to Frankfurt's post-return era. Earned two caps for the national team during his two seasons at the club.",
+    trophy: "Bundesliga-Rückkehr 1998"
+  },
 
   // ─────────────────────────────────────────
   // 2000s
@@ -1236,7 +1264,7 @@ const PLAYERS = [
   {
     id: "rafael-borre",
     name: "Rafael Borré",
-    season: "2021/22", decade: "2010s",
+    season: "2021/22", decade: "2020s",
     activeFrom: 2021, activeTo: 2022,
     position: "CF", positionLabel: "Mittelstürmer",
     altPositions: ["RW", "LW", "AM"],
@@ -1418,6 +1446,20 @@ const PLAYERS = [
     peakSeason: "2024/25",
     bio: "German international centre-back who joined Frankfurt to anchor the defence. Intelligent reader of the game with strong aerial presence.",
     trophy: "Bundesliga-Etablierung 2024"
+  },
+  {
+    id: "ansgar-knauff",
+    name: "Ansgar Knauff",
+    season: "2023/24", decade: "2020s",
+    activeFrom: 2021, activeTo: 2024,
+    position: "RW", positionLabel: "Rechtsaußen",
+    altPositions: ["MF", "AM"],
+    nationality: "🇩🇪 Germany",
+    years: "2021–present",
+    bundesligaApps: 96, bundesligaGoals: 13, rating: 79,
+    peakSeason: "2023/24",
+    bio: "Pacey German winger who burst onto the scene during the 2022 Europa League run and grew into one of the Bundesliga's most dangerous wide players. Voted UEFA Europa League Young Player of the Season 2021/22.",
+    trophy: "2022 UEFA Europa League"
   },
 
 ].filter(p => !p.hide);

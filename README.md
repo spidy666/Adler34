@@ -67,17 +67,17 @@ The power rating drives a **base win probability** (max 70 %), which is then adj
 
 ## Player Database
 
-**99 historical SGE players** covering all six Bundesliga decades the club has competed in, from the inaugural 1963/64 season to 2024/25. Only players with meaningful Bundesliga careers at Frankfurt are included.
+**102 historical SGE players** covering all six Bundesliga decades the club has competed in, from the inaugural 1963/64 season to 2024/25. Only players with meaningful Bundesliga careers at Frankfurt are included. Every decade has at least 13 players, guaranteeing a full unique deal every round.
 
-| Decade | Notable players |
-|--------|----------------|
-| **1960s** | Egon Loy, Alfred Pfaff, Erwin Stein, Jürgen Grabowski, Fahrudin Jusufi, Wolfgang Solz, Dieter Stinka |
-| **1970s** | Bernd Hölzenbein, Karl-Heinz Körbel, Bernd Nickel, Jürgen Pahl, Peter Kunter, Gert Trinklein, Helmut Müller, Werner Lorant |
-| **1980s** | Cha Bum-kun, Bruno Pezzey, Uwe Bein, Andreas Köpke, Frank Poth, Bernd Tretter, Ralf Sievers, Uli Stein |
-| **1990s** | Tony Yeboah, Jay-Jay Okocha, Andreas Möller, Axel Kruse, Dietmar Roth, Slobodan Komljenović, Ralf Weber |
-| **2000s** | Alexander Meier, Marco Russ, Pirmin Schwegler, Jermaine Jones, Alexander Schur, Benjamin Köhler |
-| **2010s** | Kevin Trapp, Filip Kostić, André Silva, Daichi Kamada, Sebastian Jung, Bastian Oczipka, Marc Stendera |
-| **2020s** | Djibril Sow, Faride Alidou, Mario Götze, Omar Marmoush |
+| Decade | Players | Notable players |
+|--------|---------|----------------|
+| **1960s** | 14 | Egon Loy, Alfred Pfaff, Erwin Stein, Jürgen Grabowski, Fahrudin Jusufi, Wolfgang Solz, Dieter Stinka |
+| **1970s** | 18 | Bernd Hölzenbein, Karl-Heinz Körbel, Bernd Nickel, Jürgen Pahl, Peter Kunter, Gert Trinklein, Helmut Müller, Werner Lorant |
+| **1980s** | 13 | Cha Bum-kun, Bruno Pezzey, Uwe Bein, Andreas Köpke, Frank Poth, Bernd Tretter, Ralf Sievers, Uli Stein, Manfred Binz |
+| **1990s** | 13 | Tony Yeboah, Jay-Jay Okocha, Andreas Möller, Axel Kruse, Dietmar Roth, Slobodan Komljenović, Ralf Weber, Thomas Sobotzik, Horst Heldt |
+| **2000s** | 13 | Alexander Meier, Marco Russ, Pirmin Schwegler, Jermaine Jones, Alexander Schur, Benjamin Köhler |
+| **2010s** | 18 | Kevin Trapp, Filip Kostić, André Silva, Daichi Kamada, Sebastian Jung, Bastian Oczipka, Marc Stendera |
+| **2020s** | 13 | Djibril Sow, Mario Götze, Omar Marmoush, Rafael Borré, Ansgar Knauff |
 
 Each player object includes:
 - Rating (70–92), Bundesliga appearances and goals at SGE

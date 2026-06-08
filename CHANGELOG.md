@@ -4,6 +4,18 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.15.0] — 2026-06-08
+
+### Added
+- **All decades padded to 13 players** — each decade now has enough depth to guarantee 13 unique cards per deal
+  - **1990s (+2):** Thomas Sobotzik (MF, 66 BL apps, 12 goals, 1994–2001, two stints) and Horst Heldt (MF, 64 BL apps, 9 goals, 1999–2001, 2 Germany caps) — selected based on Bundesliga appearances and goals/assists at SGE
+  - **2020s (+1):** Ansgar Knauff (RW, 96 BL apps, 13 goals, 2021–present) — UEFA Europa League Young Player of the Season 2021/22; developed into one of the Bundesliga's most dangerous wide players
+
+### Fixed
+- **Rafael Borré decade corrected** — changed from `"2010s"` to `"2020s"`; his entire SGE Bundesliga career ran from 2021/22 to 2022/23
+
+---
+
 ## [0.14.0] — 2026-06-08
 
 ### Fixed
