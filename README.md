@@ -16,7 +16,7 @@ Build the greatest Eintracht Frankfurt XI of all time and simulate a complete 34
    - **Green slot** = player's natural (main) position — no penalty
    - **Yellow slot** = one of the player's historically documented alternate positions — small penalty (~12 %)
    - **Red slot** = incompatible position — hefty penalty (~35 %)
-   - Click an empty pitch slot while in draft mode to highlight which players fit it
+   - **Tip:** click an empty pitch slot *before* selecting a card to highlight every player who fits that position — green border for main fit, gold border for alternate fit, dimmed for incompatible
 4. **Fill all 11 positions**, then click **SAISON SIMULIEREN**
 5. Watch all 34 match results appear one by one (or click **ÜBERSPRINGEN** to skip). Each result shows the scorer name(s) and minute(s) when Frankfurt scored. After the final match, your points, goal difference, and finishing position are revealed
    - Click **KADER ANZEIGEN** to review your squad — sorted goalkeeper-first, with each player's season goal tally alongside their rating. Position fit is colour-coded: green (main), yellow (alternate), red (out of position)

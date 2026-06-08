@@ -370,6 +370,35 @@
     }
     .btn-cancel-pick:hover { border-color: var(--red); color: var(--red); }
 
+    /* ── INFO BUTTON ── */
+    .btn-info { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; padding: 6px 14px; cursor: pointer; background: none; color: var(--dim); border: 1px solid var(--gray); transition: all 0.12s; }
+    .btn-info:hover { color: var(--white); border-color: var(--white); }
+    /* ── INFO MODAL ── */
+    .info-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1200; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+    .info-overlay.open { opacity: 1; pointer-events: all; }
+    .info-popup { background: var(--black); border: 1px solid var(--gray); border-top: 4px solid var(--red); max-width: 680px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; transform: translateY(20px); transition: transform 0.25s; }
+    .info-overlay.open .info-popup { transform: translateY(0); }
+    .info-popup-top { padding: 18px 24px; border-bottom: 1px solid var(--gray); font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.15em; display: flex; justify-content: space-between; align-items: center; }
+    .info-popup-close { background: none; border: none; color: var(--dim); font-size: 1.3rem; cursor: pointer; padding: 0 4px; line-height: 1; }
+    .info-popup-close:hover { color: var(--white); }
+    .info-popup-body { padding: 20px 28px; overflow-y: auto; flex: 1; font-size: 0.8rem; line-height: 1.65; color: var(--dim); }
+    .info-popup-body h1 { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.08em; color: var(--red); margin: 0 0 10px; }
+    .info-popup-body h2 { font-family: var(--font-display); font-size: 0.9rem; letter-spacing: 0.1em; color: var(--gold); border-bottom: 1px solid var(--gray); padding-bottom: 5px; margin: 22px 0 8px; }
+    .info-popup-body h3 { font-size: 0.8rem; color: var(--white); letter-spacing: 0.05em; margin: 14px 0 4px; }
+    .info-popup-body p { margin: 5px 0; }
+    .info-popup-body ul, .info-popup-body ol { padding-left: 18px; margin: 5px 0; }
+    .info-popup-body li { margin: 3px 0; }
+    .info-popup-body strong { color: var(--white); }
+    .info-popup-body code { font-family: var(--font-mono); font-size: 0.72rem; background: #111; padding: 1px 5px; border-radius: 2px; color: var(--gold); }
+    .info-popup-body pre { background: #080808; border: 1px solid var(--gray); padding: 12px; overflow-x: auto; margin: 8px 0; }
+    .info-popup-body pre code { background: none; padding: 0; color: var(--dim); font-size: 0.7rem; }
+    .info-popup-body table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+    .info-popup-body th { color: var(--gold); padding: 5px 10px; border-bottom: 1px solid var(--gray); text-align: left; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.05em; }
+    .info-popup-body td { padding: 4px 10px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .info-popup-body tr:last-child td { border-bottom: none; }
+    .info-popup-body hr { border: none; border-top: 1px solid var(--gray); margin: 16px 0; }
+    .info-popup-body blockquote { border-left: 3px solid var(--gold); padding-left: 12px; font-style: italic; margin: 8px 0; }
+    .info-popup-body a { color: var(--gold); }
     /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: var(--black); }
@@ -396,6 +425,7 @@
       <div class="logo-sub">Eintracht Frankfurt · Bundesliga</div>
     </div>
   </div>
+  <button class="btn-info" id="btnInfo">ANLEITUNG</button>
   <div class="header-right" id="headerRight">
     <strong>SGE</strong>
     Traumelf bauen
@@ -469,6 +499,19 @@
       </div>
 
     </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     INFO / README MODAL
+══════════════════════════════════════════ -->
+<div class="info-overlay" id="infoOverlay">
+  <div class="info-popup">
+    <div class="info-popup-top">
+      <span>SPIELANLEITUNG</span>
+      <button class="info-popup-close" id="btnCloseInfo">×</button>
+    </div>
+    <div class="info-popup-body" id="infoPopupBody">Wird geladen…</div>
   </div>
 </div>
 
@@ -1141,6 +1184,86 @@ btnReset.addEventListener('click', () => {
 modalOverlay.addEventListener('click', e => {
   if (e.target === modalOverlay) { stopAnimation(); modalOverlay.classList.remove('open'); }
 });
+
+// ── INFO / README MODAL ───────────────────────────────────────────────────
+function renderMarkdown(md) {
+  const lines = md.split('\n');
+  const out = [];
+  let inPre = false, inOl = false, inUl = false, inTable = false;
+  let preLines = [];
+
+  const flush = () => {
+    if (inOl)    { out.push('</ol>');              inOl    = false; }
+    if (inUl)    { out.push('</ul>');              inUl    = false; }
+    if (inTable) { out.push('</tbody></table>');   inTable = false; }
+  };
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const fmt = s => esc(s)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+
+  for (const raw of lines) {
+    const line = raw.trimEnd();
+    if (line.startsWith('```')) {
+      if (!inPre) { flush(); inPre = true; preLines = []; }
+      else { out.push(`<pre><code>${esc(preLines.join('\n'))}</code></pre>`); inPre = false; }
+      continue;
+    }
+    if (inPre) { preLines.push(raw); continue; }
+
+    if (line.startsWith('|')) {
+      const cells = line.split('|').slice(1,-1).map(c => c.trim());
+      if (cells.every(c => /^[-:| ]+$/.test(c))) continue;
+      if (!inTable) { flush(); out.push('<table><thead><tr>' + cells.map(c=>`<th>${fmt(c)}</th>`).join('') + '</tr></thead><tbody>'); inTable = true; }
+      else          { out.push('<tr>' + cells.map(c=>`<td>${fmt(c)}</td>`).join('') + '</tr>'); }
+      continue;
+    }
+    if (inTable) flush();
+
+    if (line === '---')          { flush(); out.push('<hr>'); continue; }
+    if (line.startsWith('### ')) { flush(); out.push(`<h3>${fmt(line.slice(4))}</h3>`); continue; }
+    if (line.startsWith('## '))  { flush(); out.push(`<h2>${fmt(line.slice(3))}</h2>`); continue; }
+    if (line.startsWith('# '))   { flush(); out.push(`<h1>${fmt(line.slice(2))}</h1>`); continue; }
+    if (line.startsWith('> '))   { flush(); out.push(`<blockquote>${fmt(line.slice(2))}</blockquote>`); continue; }
+
+    const olMatch = line.match(/^(\d+)\. (.+)/);
+    if (olMatch) {
+      if (inUl) { out.push('</ul>'); inUl = false; }
+      if (!inOl) { out.push('<ol>'); inOl = true; }
+      out.push(`<li>${fmt(olMatch[2])}</li>`);
+      continue;
+    }
+    const ulMatch = line.match(/^ *[-*] (.+)/);
+    if (ulMatch) {
+      if (inOl) { out.push('</ol>'); inOl = false; }
+      if (!inUl) { out.push('<ul>'); inUl = true; }
+      out.push(`<li>${fmt(ulMatch[1])}</li>`);
+      continue;
+    }
+    if (line.trim() === '') { flush(); continue; }
+    flush();
+    out.push(`<p>${fmt(line)}</p>`);
+  }
+  flush();
+  return out.join('\n');
+}
+
+const infoOverlay = document.getElementById('infoOverlay');
+document.getElementById('btnInfo').addEventListener('click', async () => {
+  infoOverlay.classList.add('open');
+  const body = document.getElementById('infoPopupBody');
+  if (body.dataset.loaded) return;
+  try {
+    const text = await fetch('./README.md').then(r => r.text());
+    body.innerHTML = renderMarkdown(text);
+    body.dataset.loaded = '1';
+  } catch {
+    body.innerHTML = '<p>README konnte nicht geladen werden.</p>';
+  }
+});
+document.getElementById('btnCloseInfo').addEventListener('click', () => infoOverlay.classList.remove('open'));
+infoOverlay.addEventListener('click', e => { if (e.target === infoOverlay) infoOverlay.classList.remove('open'); });
 
 // ── INIT ──────────────────────────────────────────────────────────────────
 buildFormationGrid();
