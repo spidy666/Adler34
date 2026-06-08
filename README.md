@@ -18,7 +18,8 @@ Build the greatest Eintracht Frankfurt XI of all time and simulate a complete 34
    - **Red slot** = incompatible position — hefty penalty (~35 %)
    - Click an empty pitch slot while in draft mode to highlight which players fit it
 4. **Fill all 11 positions**, then click **SAISON SIMULIEREN**
-5. See your 34-game results: points, goal difference, finishing position, and the full match ticker
+5. Watch all 34 match results appear one by one (or click **ÜBERSPRINGEN** to skip). After the final match, your points, goal difference, and finishing position are revealed
+   - Click **KADER ANZEIGEN** to review your squad — each player shows whether they played in their main position (green), an alternate position (yellow), or out of position (red)
 
 ### Scoring tips
 - **Era diversity matters** — a squad drawn from 4+ decades gets a chemistry bonus; single-era squads are penalised
@@ -66,7 +67,7 @@ The power rating drives a **base win probability** (max 70 %), which is then adj
 
 ## Player Database
 
-**100 historical SGE players** covering all six Bundesliga decades the club has competed in, from the inaugural 1963/64 season to 2024/25. Only players with meaningful Bundesliga careers at Frankfurt are included.
+**99 historical SGE players** covering all six Bundesliga decades the club has competed in, from the inaugural 1963/64 season to 2024/25. Only players with meaningful Bundesliga careers at Frankfurt are included.
 
 | Decade | Notable players |
 |--------|----------------|
@@ -92,7 +93,7 @@ Each player object includes:
 Adler34/
 ├── index.html        ← All UI, game logic, formations, draft engine
 ├── data/
-│   ├── players.js    ← Player database (100 players, ES module)
+│   ├── players.js    ← Player database (99 players, ES module)
 │   └── engine.js     ← 34-game season simulation engine
 ├── CHANGELOG.md
 └── README.md

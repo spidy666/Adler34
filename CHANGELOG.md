@@ -4,6 +4,31 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.12.0] — 2026-06-08
+
+### Changed
+- **Draft list sorted by position** — players are now ordered CF → RW/LW → AM → MF → DM → RB/LB → CB → GK so strikers always appear at the top and the goalkeeper at the bottom
+
+### Fixed
+- **Replaced Randal Kolo Muani with Omar Marmoush** — Kolo Muani's entry removed; Marmoush (58 apps, 32 goals, rating 89, 2022–2024) was already in the database and supersedes him as the representative 2022/23 attacking option
+
+---
+
+## [0.11.0] — 2026-06-08
+
+### Added
+- **Animated match ticker** — results now appear one per second over 34 seconds instead of all at once
+  - Ticker enlarged (420 px) during animation so multiple recent results are visible
+  - Each row slides in from the left as it appears
+  - Ticker auto-scrolls to keep the latest match in view
+  - **ÜBERSPRINGEN** button dumps all remaining matches instantly and triggers the stat reveal
+  - Final stats (headline, points, position, goal difference) are hidden until all 34 matches have been shown, then fade in from above
+- **Squad popup** — squad removed from the main results modal and moved to a separate gold-bordered popup opened via **KADER ANZEIGEN**
+  - Each player's slot label is colour-coded: green (main position), gold (alternate position), red (incompatible)
+  - Footer buttons (SCHLIESSEN, NEUES SPIEL) are hidden during animation and revealed alongside KADER ANZEIGEN once the season is complete
+
+---
+
 ## [0.10.0] — 2026-06-08
 
 ### Added
