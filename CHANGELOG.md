@@ -4,6 +4,32 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.17.0] — 2026-06-09
+
+### Changed
+- **Opponent list updated to reflect Bundesliga eternal table** — three clubs with limited Bundesliga history replaced by historically prominent sides (source: transfermarkt.de ewige Tabelle)
+  - TSG Hoffenheim (not in top 23) → **VfL Bochum** (#13, 1,296 Bundesliga games)
+  - RB Leipzig (not in top 23) → **Kaiserslautern** (#11, 1,492 Bundesliga games)
+  - Wolfsburg (#14, 986 games) → **1.FC Nürnberg** (#15, 1,118 Bundesliga games)
+  - Difficulty modifiers: Kaiserslautern −0.01, Nürnberg −0.02, VfL Bochum −0.03
+
+---
+
+## [0.16.0] — 2026-06-09
+
+### Added
+- **Goalscorers in match ticker** — each result row now shows the scorer name(s) and minute(s) below the score line when Frankfurt scored (e.g. `Meier 23', Hölzenbein 67'`)
+  - Scorers are assigned using position-weighted random selection: CF weight 3.0, LW/RW 2.0, AM 1.5, MF 0.8, DM 0.3, CB 0.12, GK 0.02
+  - Each scorer's minute is randomised 1–90 and sorted chronologically per match
+  - Uses a separate seeded RNG so existing match results are completely unchanged
+  - Skip button also renders scorers for all dumped matches
+- **Goals per player in Kader anzeigen** — each player's season goal tally shown in gold below their rating (only displayed when goals > 0)
+
+### Changed
+- **Squad popup sorted GK → CF** — Kader anzeigen now lists players goalkeeper-first (GK → CB → RB/LB → DM → MF → AM → LW/RW → CF), matching a standard match-day lineup sheet; previously used the draft's CF-first order
+
+---
+
 ## [0.15.0] — 2026-06-08
 
 ### Added

@@ -18,8 +18,8 @@ Build the greatest Eintracht Frankfurt XI of all time and simulate a complete 34
    - **Red slot** = incompatible position — hefty penalty (~35 %)
    - Click an empty pitch slot while in draft mode to highlight which players fit it
 4. **Fill all 11 positions**, then click **SAISON SIMULIEREN**
-5. Watch all 34 match results appear one by one (or click **ÜBERSPRINGEN** to skip). After the final match, your points, goal difference, and finishing position are revealed
-   - Click **KADER ANZEIGEN** to review your squad — each player shows whether they played in their main position (green), an alternate position (yellow), or out of position (red)
+5. Watch all 34 match results appear one by one (or click **ÜBERSPRINGEN** to skip). Each result shows the scorer name(s) and minute(s) when Frankfurt scored. After the final match, your points, goal difference, and finishing position are revealed
+   - Click **KADER ANZEIGEN** to review your squad — sorted goalkeeper-first, with each player's season goal tally alongside their rating. Position fit is colour-coded: green (main), yellow (alternate), red (out of position)
 
 ### Scoring tips
 - **Era diversity matters** — a squad drawn from 4+ decades gets a chemistry bonus; single-era squads are penalised
@@ -43,7 +43,7 @@ The three scores feed a **power rating** modified by:
 - **Era diversity bonus** — squads from 1–6 different decades get a multiplier from 0.90 to 1.04
 - **Three-tier position penalty** — main position: 100 % effectiveness; historically documented alternate position: 88 %; fully incompatible: 65 %
 
-The power rating drives a **base win probability** (max 70 %), which is then adjusted per game by opponent difficulty — beating Bayern München is substantially harder than beating Schalke. Results are deterministic per squad (seeded RNG), so the same XI always produces the same table.
+The power rating drives a **base win probability** (max 70 %), which is then adjusted per game by opponent difficulty — beating Bayern München is substantially harder than beating Bochum. Results are deterministic per squad (seeded RNG), so the same XI always produces the same table. Opponents are drawn from the Bundesliga eternal table (transfermarkt.de) — all 17 opponents have at least 884 Bundesliga seasons of history.
 
 ### Finishing position thresholds *(calibrated to Bundesliga 2014/15–2023/24)*
 
