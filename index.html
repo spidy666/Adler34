@@ -923,7 +923,14 @@ btnBack.addEventListener('click', () => {
 
 // ── SIMULATE ──────────────────────────────────────────────────────────────
 btnSimulate.addEventListener('click', () => {
-  const squad = Object.values(slotFills);
+  const formation = FORMATIONS[formationKey];
+  const squad = Object.entries(slotFills)
+    .filter(([, p]) => p)
+    .map(([slotId, player]) => {
+      const slot = formation.slots.find(s => s.id === slotId);
+      const fits = slot ? playerFitsSlot(player, slot.pos) : true;
+      return { ...player, inPosition: fits };
+    });
   showResults(simulateSeason(squad));
 });
 
