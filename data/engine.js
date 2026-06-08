@@ -189,7 +189,7 @@ function simulateSeason(players) {
     defenseScore: Math.round(defenseScore * 10) / 10,
     totalPower: Math.round(totalPower * 100),
     diversityBonus: Math.round((diversityBonus - 1) * 100),
-    isChampion:  points >= 68,   // 2nd or better → "Meister"-level display
+    isChampion:  points >= 78,   // 1st place → Meister
     isPerfect:   wins >= 28,
     isEuropa:    points >= 50,   // 5th or better → Europa
     isRelegated: points < 27    // 16th or worse → Abstiegskampf display

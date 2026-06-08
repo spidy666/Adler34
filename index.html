@@ -980,26 +980,31 @@ function showResults(result) {
 
   // Pre-fill stat elements (hidden until animation completes)
   let headline, cls, sub;
+  const perfectBanner = document.getElementById('perfectBanner');
   if (result.isPerfect) {
     headline = '34 – 0'; cls = 'champion';
     sub = 'PERFEKTE SAISON · MEISTER · DIE ADLER SIND UNBEZWINGBAR';
-    document.getElementById('perfectBanner').classList.add('show');
-  } else if (result.isChampion) {
+    perfectBanner.classList.add('show');
+  } else if (result.position === 1) {
     headline = `${result.wins}–${result.losses}`; cls = 'champion';
     sub = `BUNDESLIGA-MEISTER · ${result.points} PUNKTE · PLATZ 1`;
-    document.getElementById('perfectBanner').classList.remove('show');
+    perfectBanner.classList.remove('show');
+  } else if (result.position === 2) {
+    headline = `${result.wins}–${result.losses}`; cls = 'champion';
+    sub = `VIZEMEISTER · ${result.points} PUNKTE · PLATZ 2`;
+    perfectBanner.classList.remove('show');
   } else if (result.isEuropa) {
     headline = `${result.wins}–${result.losses}`; cls = 'europa';
     sub = `EUROPACUP · ${result.points} PUNKTE · PLATZ ${result.position}`;
-    document.getElementById('perfectBanner').classList.remove('show');
+    perfectBanner.classList.remove('show');
   } else if (result.isRelegated) {
     headline = `${result.wins}–${result.losses}`; cls = 'relegated';
     sub = `ABSTIEG · ${result.points} PUNKTE · PLATZ ${result.position}`;
-    document.getElementById('perfectBanner').classList.remove('show');
+    perfectBanner.classList.remove('show');
   } else {
     headline = `${result.wins}–${result.losses}`; cls = 'mid';
     sub = `${result.points} PUNKTE · PLATZ ${result.position} · MITTELFELD`;
-    document.getElementById('perfectBanner').classList.remove('show');
+    perfectBanner.classList.remove('show');
   }
   document.getElementById('resultHeadline').textContent = headline;
   document.getElementById('resultHeadline').className   = `result-headline ${cls}`;
