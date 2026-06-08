@@ -671,8 +671,8 @@ let formationKey  = null;
 let slotFills     = {};        // slotId → player
 let placedIds     = new Set();
 let phase         = 'deal';   // 'deal' | 'place'
-let teamYear      = null;      // currently shown season start year
-let teamPlayers   = [];        // players in current deal
+let teamDecade    = null;      // decade string of current deal, e.g. '1980s'
+let teamPlayers   = [];        // 13 randomly sampled players for current deal
 let selectedCard  = null;      // player chosen from deal
 let activeFilterSlot = null;  // slot being filtered during deal phase
 
@@ -807,26 +807,28 @@ function handleSlotClick(slotId) {
 }
 
 // ── TEAM DEAL ─────────────────────────────────────────────────────────────
+const ALL_DECADES = ['1960s','1970s','1980s','1990s','2000s','2010s','2020s'];
+
 function dealNewTeam() {
-  // Build pools: seasons with enough available players
-  const viable = SGE_SEASONS.filter(y =>
-    PLAYERS.filter(p => p.activeFrom <= y && p.activeTo >= y && !placedIds.has(p.id)).length >= 5
-  );
-  const fallback = SGE_SEASONS.filter(y =>
-    PLAYERS.filter(p => p.activeFrom <= y && p.activeTo >= y && !placedIds.has(p.id)).length >= 1
-  );
+  const deckPool = d => PLAYERS.filter(p => p.decade === d && !placedIds.has(p.id));
 
-  const pool = viable.length > 0 ? viable : fallback;
-  if (pool.length === 0) return;
+  // Prefer decades with 5+ unplaced players; fall back to any non-empty decade
+  const viable   = ALL_DECADES.filter(d => deckPool(d).length >= 5);
+  const fallback = ALL_DECADES.filter(d => deckPool(d).length >= 1);
+  const eligible = viable.length > 0 ? viable : fallback;
+  if (eligible.length === 0) return;
 
-  // Diversity bias: prefer decades not yet in squad
-  const usedDecades = new Set(Object.values(slotFills).map(p => p.decade));
-  const biased = pool.filter(y => !usedDecades.has(decadeForYear(y)));
-  const chooseFrom = (biased.length > 0 && Math.random() < 0.65) ? biased : pool;
+  // Diversity bias: prefer decades not yet represented in the squad
+  const usedDecades = new Set(Object.values(slotFills).filter(Boolean).map(p => p.decade));
+  const biased      = eligible.filter(d => !usedDecades.has(d));
+  const chooseFrom  = (biased.length > 0 && Math.random() < 0.65) ? biased : eligible;
 
-  teamYear     = chooseFrom[Math.floor(Math.random() * chooseFrom.length)];
-  teamPlayers  = PLAYERS
-    .filter(p => p.decade === decadeForYear(teamYear) && !placedIds.has(p.id))
+  teamDecade = chooseFrom[Math.floor(Math.random() * chooseFrom.length)];
+
+  // Randomly sample 13 players from the chosen decade, then sort by position
+  const pool     = deckPool(teamDecade);
+  const shuffled = pool.slice().sort(() => Math.random() - 0.5);
+  teamPlayers    = shuffled.slice(0, 13)
     .sort((a, b) => (POS_ORDER[a.position] ?? 5) - (POS_ORDER[b.position] ?? 5));
   phase        = 'deal';
   selectedCard = null;
@@ -837,7 +839,12 @@ function dealNewTeam() {
 
 function renderSidebar() {
   if (phase === 'deal') {
-    const label = teamYear ? decadeDE(teamYear) : '—';
+    let label = '—';
+    if (teamPlayers.length > 0) {
+      const minYear = Math.min(...teamPlayers.map(p => p.activeFrom));
+      const maxYear = Math.max(...teamPlayers.map(p => p.activeTo));
+      label = `${seasonLabel(minYear)} – ${seasonLabel(maxYear)}`;
+    }
 
     let html = `
       <div class="team-deal-header">
