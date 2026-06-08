@@ -656,6 +656,16 @@ function decadeForYear(y) {
   return '2020s';
 }
 
+function decadeDE(y) {
+  if (y < 1970) return '60er Jahre';
+  if (y < 1980) return '70er Jahre';
+  if (y < 1990) return '80er Jahre';
+  if (y < 2000) return '90er Jahre';
+  if (y < 2010) return '2000er Jahre';
+  if (y < 2020) return '2010er Jahre';
+  return '2020er Jahre';
+}
+
 // ── STATE ────────────────────────────────────────────────────────────────
 let formationKey  = null;
 let slotFills     = {};        // slotId → player
@@ -827,12 +837,12 @@ function dealNewTeam() {
 
 function renderSidebar() {
   if (phase === 'deal') {
-    const label = teamYear ? `Saison ${seasonLabel(teamYear)}` : '—';
+    const label = teamYear ? decadeDE(teamYear) : '—';
 
     let html = `
       <div class="team-deal-header">
         <div class="team-era">${label}</div>
-        <div class="team-era-sub">Eintracht Frankfurt · Saisonkader</div>
+        <div class="team-era-sub">Eintracht Frankfurt · Kader dieser Ära</div>
       </div>
       <div class="deal-cards">
     `;
