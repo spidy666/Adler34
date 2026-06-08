@@ -29,6 +29,30 @@ const OPPONENT_DIFFICULTY = {
 };
 
 /**
+ * Goal-scoring likelihood by slot position.
+ * Used to assign scorers to Frankfurt goals after the main simulation.
+ */
+const SCORING_WEIGHT = {
+  GK: 0.02, CB: 0.12, RB: 0.20, LB: 0.20,
+  DM: 0.30, MF: 0.80, AM: 1.50,
+  RW: 2.00, LW: 2.00, CF: 3.00,
+};
+
+function pickScorer(players, rng) {
+  const weights = players.map(p => {
+    const pos = p.slotPos || p.position;
+    return (SCORING_WEIGHT[pos] ?? 0.50) * (p.rating / 80);
+  });
+  const total = weights.reduce((a, b) => a + b, 0);
+  let rand = rng() * total;
+  for (let i = 0; i < players.length; i++) {
+    rand -= weights[i];
+    if (rand <= 0) return players[i];
+  }
+  return players[players.length - 1];
+}
+
+/**
  * Position weights for squad balance rating
  * Positions that matter more for different stat categories
  */
@@ -132,6 +156,8 @@ function simulateSeason(players) {
   let wins = 0, draws = 0, losses = 0;
   let goalsFor = 0, goalsAgainst = 0;
   const games = [];
+  const playerGoals = {};
+  players.forEach(p => { playerGoals[p.id] = 0; });
 
   // Seed so same team always gets same result (deterministic based on ratings)
   const seed = players.reduce((acc, p) => acc + p.rating * 7 + p.bundesligaApps, 0);
@@ -169,7 +195,19 @@ function simulateSeason(players) {
 
     goalsFor += gf;
     goalsAgainst += ga;
-    games.push({ matchday: i + 1, opponent, result, gf, ga });
+    games.push({ matchday: i + 1, opponent, result, gf, ga, scorers: [] });
+  }
+
+  // Assign scorers using a separate seeded RNG so main match outcomes are unchanged.
+  const scorerRng = seededRng(seed + 999983);
+  for (const game of games) {
+    for (let k = 0; k < game.gf; k++) {
+      const scorer = pickScorer(players, scorerRng);
+      const minute = Math.floor(scorerRng() * 90) + 1;
+      game.scorers.push({ name: scorer.name, id: scorer.id, minute });
+      playerGoals[scorer.id]++;
+    }
+    game.scorers.sort((a, b) => a.minute - b.minute);
   }
 
   const points = wins * 3 + draws;
@@ -184,6 +222,7 @@ function simulateSeason(players) {
     goalDifference: goalsFor - goalsAgainst,
     games,
     position,
+    playerGoals,
     attackScore: Math.round(attackScore * 10) / 10,
     midfieldScore: Math.round(midfieldScore * 10) / 10,
     defenseScore: Math.round(defenseScore * 10) / 10,

@@ -288,6 +288,8 @@
     .match-score.W { color: #4caf50; }
     .match-score.D { color: var(--gold); }
     .match-score.L { color: var(--red); }
+    .match-scorers { grid-column: 2 / 4; font-size: 0.58rem; color: var(--gold); opacity: 0.65; padding-bottom: 3px; }
+    .recap-goals { font-size: 0.65rem; color: var(--gold); opacity: 0.75; margin-top: 2px; }
     .squad-recap { margin-top: 18px; }
     .recap-player { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.72rem; }
     .recap-player:last-child { border-bottom: none; }
@@ -617,7 +619,8 @@ const FORMATIONS = {
 
 // English position codes → German abbreviations used on pitch
 const POS_DE    = { GK:'TW', RB:'RV', LB:'LV', CB:'IV', DM:'DM', MF:'MF', AM:'OM', RW:'RA', LW:'LA', CF:'ST' };
-const POS_ORDER = { CF:0, RW:1, LW:2, AM:3, MF:4, DM:5, RB:6, LB:7, CB:8, GK:9 };
+const POS_ORDER       = { CF:0, RW:1, LW:2, AM:3, MF:4, DM:5, RB:6, LB:7, CB:8, GK:9 };
+const SQUAD_POS_ORDER = { GK:0, CB:1, RB:2, LB:3, DM:4, MF:5, AM:6, LW:7, RW:8, CF:9 };
 function posDE(code) { return POS_DE[code] || code; }
 
 // Three-tier fit check based strictly on player data:
@@ -1049,13 +1052,20 @@ function showResults(result) {
       revealFinalStats();
       return;
     }
-    const g = result.games[idx++];
-    const row = document.createElement('div');
-    row.className = 'match-row appear';
-    row.innerHTML = `<span class="match-md">${g.matchday}</span><span class="match-opp">${g.opponent}</span><span class="match-score ${g.result}">${g.gf}:${g.ga}</span>`;
-    ticker.appendChild(row);
+    ticker.appendChild(renderMatchRow(result.games[idx++], true));
     ticker.scrollTop = ticker.scrollHeight;
   }, 1000);
+}
+
+function renderMatchRow(g, animate) {
+  const row = document.createElement('div');
+  row.className = 'match-row' + (animate ? ' appear' : '');
+  const lastName = n => n.split(' ').pop();
+  const scorersHTML = g.scorers && g.scorers.length > 0
+    ? `<span class="match-scorers">${g.scorers.map(s => `${lastName(s.name)} ${s.minute}'`).join(', ')}</span>`
+    : '';
+  row.innerHTML = `<span class="match-md">${g.matchday}</span><span class="match-opp">${g.opponent}</span><span class="match-score ${g.result}">${g.gf}:${g.ga}</span>${scorersHTML}`;
+  return row;
 }
 
 function revealFinalStats() {
@@ -1080,10 +1090,7 @@ btnSkip.addEventListener('click', () => {
   const ticker = document.getElementById('matchTicker');
   const shown  = ticker.children.length;
   (lastResult?.games || []).slice(shown).forEach(g => {
-    const row = document.createElement('div');
-    row.className = 'match-row';
-    row.innerHTML = `<span class="match-md">${g.matchday}</span><span class="match-opp">${g.opponent}</span><span class="match-score ${g.result}">${g.gf}:${g.ga}</span>`;
-    ticker.appendChild(row);
+    ticker.appendChild(renderMatchRow(g, false));
   });
   ticker.scrollTop = ticker.scrollHeight;
   revealFinalStats();
@@ -1092,11 +1099,17 @@ btnSkip.addEventListener('click', () => {
 btnShowSquad.addEventListener('click', () => {
   const body = document.getElementById('squadPopupBody');
   body.innerHTML = '';
-  Object.entries(slotFills).forEach(([slotId, p]) => {
-    const slot = FORMATIONS[formationKey]?.slots.find(s => s.id === slotId);
-    const fit  = slot ? playerFitLevel(p, slot.pos) : 'main';
+  const sorted = Object.entries(slotFills).sort(([idA], [idB]) => {
+    const posA = FORMATIONS[formationKey]?.slots.find(s => s.id === idA)?.pos ?? 'MF';
+    const posB = FORMATIONS[formationKey]?.slots.find(s => s.id === idB)?.pos ?? 'MF';
+    return (SQUAD_POS_ORDER[posA] ?? 5) - (SQUAD_POS_ORDER[posB] ?? 5);
+  });
+  sorted.forEach(([slotId, p]) => {
+    const slot     = FORMATIONS[formationKey]?.slots.find(s => s.id === slotId);
+    const fit      = slot ? playerFitLevel(p, slot.pos) : 'main';
     const fitColor = fit === 'main' ? '#4caf50' : fit === 'alt' ? 'var(--gold)' : 'var(--red)';
     const fitTag   = fit === 'alt' ? ' · ALT' : fit === 'out' ? ' · OOP' : '';
+    const goals    = lastResult?.playerGoals?.[p.id] || 0;
     const row = document.createElement('div');
     row.className = 'recap-player';
     row.innerHTML = `
@@ -1104,7 +1117,10 @@ btnShowSquad.addEventListener('click', () => {
         <div class="recap-name">${p.name}</div>
         <div class="recap-detail"><span style="color:${fitColor}">${slot ? slot.label : posDE(p.position)}${fitTag}</span> · ${p.years}</div>
       </div>
-      <div class="recap-rating">${p.rating}</div>
+      <div style="text-align:right">
+        <div class="recap-rating">${p.rating}</div>
+        ${goals > 0 ? `<div class="recap-goals">${goals} Tore</div>` : ''}
+      </div>
     `;
     body.appendChild(row);
   });
