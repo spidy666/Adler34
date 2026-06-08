@@ -303,6 +303,23 @@
     .perfect-banner { display: none; text-align: center; padding: 18px; background: linear-gradient(135deg, rgba(212,160,23,0.1), rgba(225,0,26,0.1)); border: 1px solid var(--gold); margin: 16px 0; }
     .perfect-banner.show { display: block; }
     .perfect-text { font-family: var(--font-display); font-size: 2rem; color: var(--gold); letter-spacing: 0.1em; }
+    /* animation states */
+    .match-ticker.animating { height: 420px; }
+    .modal-top.hidden { display: none; }
+    @keyframes rowAppear { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
+    .match-row.appear { animation: rowAppear 0.3s ease-out; }
+    @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-top.revealed { animation: fadeSlideIn 0.45s ease-out; }
+    /* squad popup */
+    .btn-squad { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; padding: 10px 20px; cursor: pointer; transition: all 0.12s; background: none; color: var(--gold); border: 1px solid var(--gold); }
+    .btn-squad:hover { background: rgba(212,160,23,0.12); }
+    .squad-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+    .squad-overlay.open { opacity: 1; pointer-events: all; }
+    .squad-popup { background: var(--black); border: 1px solid var(--gray); border-top: 4px solid var(--gold); max-width: 480px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; transform: translateY(20px); transition: transform 0.25s; }
+    .squad-overlay.open .squad-popup { transform: translateY(0); }
+    .squad-popup-top { padding: 20px 24px 16px; border-bottom: 1px solid var(--gray); font-family: var(--font-display); font-size: 1.1rem; letter-spacing: 0.15em; }
+    .squad-popup-body { padding: 16px 24px; overflow-y: auto; flex: 1; }
+    .squad-popup-footer { padding: 12px 24px; border-top: 1px solid var(--gray); display: flex; justify-content: flex-end; }
 
     /* ── TEAM DEAL ── */
     .team-deal { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
@@ -458,7 +475,7 @@
 ══════════════════════════════════════════ -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
-    <div class="modal-top">
+    <div class="modal-top" id="modalTop">
       <div class="result-headline" id="resultHeadline">—</div>
       <div class="result-sub" id="resultSub">—</div>
       <div class="result-stats">
@@ -474,12 +491,22 @@
     <div class="modal-body">
       <div class="ticker-title">Spielergebnisse</div>
       <div class="match-ticker" id="matchTicker"></div>
-      <div class="ticker-title">Deine Traumelf</div>
-      <div class="squad-recap" id="squadRecap"></div>
     </div>
     <div class="modal-footer">
+      <button class="btn-squad" id="btnShowSquad">KADER ANZEIGEN</button>
+      <button class="btn-close" id="btnSkip">ÜBERSPRINGEN</button>
       <button class="btn-close" id="btnClose">SCHLIESSEN</button>
       <button class="btn-reset" id="btnReset">NEUES SPIEL</button>
+    </div>
+  </div>
+</div>
+
+<div class="squad-overlay" id="squadOverlay">
+  <div class="squad-popup">
+    <div class="squad-popup-top">DEINE TRAUMELF</div>
+    <div class="squad-popup-body" id="squadPopupBody"></div>
+    <div class="squad-popup-footer">
+      <button class="btn-close" id="btnCloseSquad">SCHLIESSEN</button>
     </div>
   </div>
 </div>
@@ -651,7 +678,12 @@ const btnSimulate        = document.getElementById('btnSimulate');
 const modalOverlay       = document.getElementById('modalOverlay');
 const btnClose           = document.getElementById('btnClose');
 const btnReset           = document.getElementById('btnReset');
+const btnSkip            = document.getElementById('btnSkip');
+const btnShowSquad       = document.getElementById('btnShowSquad');
+const squadOverlay       = document.getElementById('squadOverlay');
 const headerRight        = document.getElementById('headerRight');
+let tickerInterval = null;
+let lastResult     = null;
 
 // ── SCREEN MANAGEMENT ────────────────────────────────────────────────────
 function showScreen(id) {
@@ -931,6 +963,9 @@ btnSimulate.addEventListener('click', () => {
 });
 
 function showResults(result) {
+  lastResult = result;
+
+  // Pre-fill stat elements (hidden until animation completes)
   let headline, cls, sub;
   if (result.isPerfect) {
     headline = '34 – 0'; cls = 'champion';
@@ -953,7 +988,6 @@ function showResults(result) {
     sub = `${result.points} PUNKTE · PLATZ ${result.position} · MITTELFELD`;
     document.getElementById('perfectBanner').classList.remove('show');
   }
-
   document.getElementById('resultHeadline').textContent = headline;
   document.getElementById('resultHeadline').className   = `result-headline ${cls}`;
   document.getElementById('resultSub').textContent      = sub;
@@ -962,47 +996,109 @@ function showResults(result) {
   document.getElementById('rGD').textContent            = (result.goalDifference >= 0 ? '+' : '') + result.goalDifference;
   document.getElementById('rPos').textContent           = result.position === 1 ? '🥇 1.' : result.position + '.';
 
+  // Set up modal for animation phase
+  const modalTop = document.getElementById('modalTop');
+  modalTop.classList.add('hidden');
+  modalTop.classList.remove('revealed');
+
   const ticker = document.getElementById('matchTicker');
   ticker.innerHTML = '';
-  result.games.forEach(g => {
+  ticker.classList.add('animating');
+
+  btnSkip.style.display      = '';
+  btnClose.style.display     = 'none';
+  btnReset.style.display     = 'none';
+  btnShowSquad.style.display = 'none';
+
+  modalOverlay.classList.add('open');
+
+  // Cancel any leftover animation from a previous run
+  if (tickerInterval) { clearInterval(tickerInterval); tickerInterval = null; }
+
+  // Reveal one match row per second
+  let idx = 0;
+  tickerInterval = setInterval(() => {
+    if (idx >= result.games.length) {
+      clearInterval(tickerInterval);
+      tickerInterval = null;
+      revealFinalStats();
+      return;
+    }
+    const g = result.games[idx++];
+    const row = document.createElement('div');
+    row.className = 'match-row appear';
+    row.innerHTML = `<span class="match-md">${g.matchday}</span><span class="match-opp">${g.opponent}</span><span class="match-score ${g.result}">${g.gf}:${g.ga}</span>`;
+    ticker.appendChild(row);
+    ticker.scrollTop = ticker.scrollHeight;
+  }, 1000);
+}
+
+function revealFinalStats() {
+  const ticker  = document.getElementById('matchTicker');
+  const modalTop = document.getElementById('modalTop');
+  ticker.classList.remove('animating');
+  modalTop.classList.remove('hidden');
+  modalTop.classList.add('revealed');
+  btnSkip.style.display      = 'none';
+  btnClose.style.display     = '';
+  btnReset.style.display     = '';
+  btnShowSquad.style.display = '';
+}
+
+function stopAnimation() {
+  if (tickerInterval) { clearInterval(tickerInterval); tickerInterval = null; }
+}
+
+btnSkip.addEventListener('click', () => {
+  stopAnimation();
+  // Dump any remaining matches instantly
+  const ticker = document.getElementById('matchTicker');
+  const shown  = ticker.children.length;
+  (lastResult?.games || []).slice(shown).forEach(g => {
     const row = document.createElement('div');
     row.className = 'match-row';
-    row.innerHTML = `
-      <span class="match-md">${g.matchday}</span>
-      <span class="match-opp">${g.opponent}</span>
-      <span class="match-score ${g.result}">${g.gf}:${g.ga}</span>
-    `;
+    row.innerHTML = `<span class="match-md">${g.matchday}</span><span class="match-opp">${g.opponent}</span><span class="match-score ${g.result}">${g.gf}:${g.ga}</span>`;
     ticker.appendChild(row);
   });
+  ticker.scrollTop = ticker.scrollHeight;
+  revealFinalStats();
+});
 
-  const recap = document.getElementById('squadRecap');
-  recap.innerHTML = '';
+btnShowSquad.addEventListener('click', () => {
+  const body = document.getElementById('squadPopupBody');
+  body.innerHTML = '';
   Object.entries(slotFills).forEach(([slotId, p]) => {
-    const slot = FORMATIONS[formationKey].slots.find(s => s.id === slotId);
-    const row  = document.createElement('div');
+    const slot = FORMATIONS[formationKey]?.slots.find(s => s.id === slotId);
+    const fit  = slot ? playerFitLevel(p, slot.pos) : 'main';
+    const fitColor = fit === 'main' ? '#4caf50' : fit === 'alt' ? 'var(--gold)' : 'var(--red)';
+    const fitTag   = fit === 'alt' ? ' · ALT' : fit === 'out' ? ' · OOP' : '';
+    const row = document.createElement('div');
     row.className = 'recap-player';
     row.innerHTML = `
       <div>
         <div class="recap-name">${p.name}</div>
-        <div class="recap-detail">${slot ? slot.label : p.position} · ${p.years}</div>
+        <div class="recap-detail"><span style="color:${fitColor}">${slot ? slot.label : posDE(p.position)}${fitTag}</span> · ${p.years}</div>
       </div>
       <div class="recap-rating">${p.rating}</div>
     `;
-    recap.appendChild(row);
+    body.appendChild(row);
   });
+  squadOverlay.classList.add('open');
+});
 
-  modalOverlay.classList.add('open');
-}
+document.getElementById('btnCloseSquad').addEventListener('click', () => squadOverlay.classList.remove('open'));
+squadOverlay.addEventListener('click', e => { if (e.target === squadOverlay) squadOverlay.classList.remove('open'); });
 
-btnClose.addEventListener('click', () => modalOverlay.classList.remove('open'));
+btnClose.addEventListener('click', () => { stopAnimation(); modalOverlay.classList.remove('open'); });
 btnReset.addEventListener('click', () => {
+  stopAnimation();
   modalOverlay.classList.remove('open');
   showScreen('screenFormation');
   formationKey = null;
   headerRight.innerHTML = `<strong>SGE</strong> Traumelf bauen`;
 });
 modalOverlay.addEventListener('click', e => {
-  if (e.target === modalOverlay) modalOverlay.classList.remove('open');
+  if (e.target === modalOverlay) { stopAnimation(); modalOverlay.classList.remove('open'); }
 });
 
 // ── INIT ──────────────────────────────────────────────────────────────────
