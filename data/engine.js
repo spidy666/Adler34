@@ -35,8 +35,10 @@ function calculateSquadStrength(players) {
     const effectivePos = player.slotPos || player.position;
     const weights = POSITION_WEIGHTS[effectivePos] || { defense: 1, attack: 1, midfield: 1 };
 
-    // 25% effectiveness penalty for playing outside a compatible position
-    const posFactor = (player.inPosition === false) ? 0.75 : 1.0;
+    // main = no penalty, alt position = 12% reduction, fully incompatible = 35% reduction
+    const posFactor = player.positionFit === 'main' ? 1.0
+                    : player.positionFit === 'alt'  ? 0.88
+                    : 0.65;
     const base = (player.rating * posFactor) / 100;
 
     const goalBonus = Math.min(player.bundesligaGoals / 15, 3);
@@ -94,11 +96,11 @@ function simulateSeason(players) {
   const totalPower = ((attackScore * 0.4 + midfieldScore * 0.3 + defenseScore * 0.3) 
                       * balancePenalty * diversityBonus);
 
-  // Win probability per game. With slot-based weights, typical totalPower ranges:
-  //   74-76 rated, mostly OOP              → ~7.5–8.5 → winProb ~0.27–0.39 → ~35–47 pts (mid/relegation)
-  //   74-78 rated, in position, mixed eras → ~8.5–9.5 → winProb ~0.39–0.51 → ~47–59 pts (Europa fight)
-  //   82-84 rated, diverse, in position    → ~9.5–10  → winProb ~0.51–0.57 → ~59–66 pts (3rd/Europa)
-  //   86-88 rated, all eras, in position   → ~10–11   → winProb ~0.57–0.69 → ~66–78 pts (Champion)
+  // Win probability per game. Three-tier position penalties (main 1.0, alt 0.88, out 0.65)
+  // push OOP squads down significantly. Typical ranges:
+  //   74-78 rated, mostly red OOP          → low power  → ~25–38 pts (relegation zone)
+  //   74-78 rated, in position, mixed eras → mid power  → ~40–52 pts (midtable)
+  //   82-86 rated, diverse, in position    → high power → ~58–70 pts (Europa/title race)
   const winProb  = Math.min(0.70, Math.max(0.18, 0.12 * totalPower - 0.63));
   const drawProb = 0.22;
   const lossProb = 1 - winProb - drawProb;

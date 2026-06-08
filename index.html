@@ -162,7 +162,9 @@
     .p-slot:hover { border-color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.6); }
     .p-slot.compatible { border-style: solid; border-color: #4caf50; background: rgba(76,175,80,0.18); }
     .p-slot.compatible:hover { background: rgba(76,175,80,0.32); }
-    .p-slot.incompatible { border-style: solid; border-color: var(--gold); background: rgba(212,160,23,0.1); }
+    .p-slot.alt-compat { border-style: solid; border-color: var(--gold); background: rgba(212,160,23,0.1); }
+    .p-slot.alt-compat:hover { background: rgba(212,160,23,0.2); }
+    .p-slot.incompatible { border-style: solid; border-color: #e53935; background: rgba(229,57,53,0.1); }
     .p-slot.filled { border-style: solid; border-color: rgba(255,255,255,0.2); background: rgba(10,10,10,0.82); }
     .p-slot.filled:hover { border-color: var(--red); }
     .slot-pos-label { font-family: var(--font-display); font-size: 0.85rem; color: var(--red); line-height: 1; }
@@ -197,6 +199,7 @@
     .dc-pos { font-family: var(--font-display); font-size: 0.82rem; color: var(--red); letter-spacing: 0.12em; grid-column: 1; display: flex; align-items: baseline; gap: 6px; }
     .dc-alt { font-size: 0.62rem; color: #999; letter-spacing: 0.08em; font-family: var(--font-mono); }
     .draft-card.slot-match { border-left-color: #4caf50; background: rgba(76,175,80,0.07); }
+    .draft-card.slot-alt   { border-left-color: var(--gold); background: rgba(212,160,23,0.05); }
     .draft-card.slot-dim   { opacity: 0.28; pointer-events: none; }
     .p-slot.slot-active    { border-style: solid; border-color: var(--gold); background: rgba(212,160,23,0.22); }
     .dc-name { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; line-height: 1.2; grid-column: 1; }
@@ -585,33 +588,22 @@ const FORMATIONS = {
   }
 };
 
-// Which player positions fit which slot positions (compatible = green, else gold)
-// Kept deliberately tight — only positions genuinely interchangeable at Bundesliga level.
-// Alt positions on individual players handle further historical flexibility.
-const POS_COMPAT = {
-  GK:  ['GK'],
-  RB:  ['RB','CB','LB'],
-  CB:  ['CB','RB','LB','DM'],
-  LB:  ['LB','CB','RB'],
-  DM:  ['DM','CB','MF'],
-  MF:  ['MF','DM','AM'],
-  AM:  ['AM','MF','RW','LW'],
-  RW:  ['RW','AM','LW'],
-  LW:  ['LW','AM','RW'],
-  CF:  ['CF','AM'],
-};
-function isCompatible(playerPos, slotPos) {
-  return (POS_COMPAT[playerPos] || []).includes(slotPos);
-}
-
 // English position codes → German abbreviations used on pitch
 const POS_DE = { GK:'TW', RB:'RV', LB:'LV', CB:'IV', DM:'DM', MF:'MF', AM:'OM', RW:'RA', LW:'LA', CF:'ST' };
 function posDE(code) { return POS_DE[code] || code; }
 
-// Returns true if player (using main or alt positions) can fill slotPos
+// Three-tier fit check based strictly on player data:
+//   'main' = player's natural position matches slot exactly   → green, no penalty
+//   'alt'  = slot is in player's altPositions array           → yellow, small penalty
+//   'out'  = no match                                         → red, hefty penalty
+function playerFitLevel(player, slotPos) {
+  if (player.position === slotPos) return 'main';
+  if ((player.altPositions || []).includes(slotPos)) return 'alt';
+  return 'out';
+}
+
 function playerFitsSlot(player, slotPos) {
-  if (isCompatible(player.position, slotPos)) return true;
-  return (player.altPositions || []).some(ap => isCompatible(ap, slotPos));
+  return playerFitLevel(player, slotPos) !== 'out';
 }
 
 // ── SEASON DATA ────────────────────────────────────────────────────────
@@ -725,7 +717,7 @@ function renderPitch() {
     const el = document.getElementById('slot-' + slot.id);
     if (!el) return;
     const player = slotFills[slot.id];
-    el.classList.remove('filled','compatible','incompatible','slot-active');
+    el.classList.remove('filled','compatible','alt-compat','incompatible','slot-active');
 
     if (player) {
       el.classList.add('filled');
@@ -737,7 +729,8 @@ function renderPitch() {
       `;
     } else {
       if (phase === 'place' && selectedCard) {
-        el.classList.add(playerFitsSlot(selectedCard, slot.pos) ? 'compatible' : 'incompatible');
+        const fit = playerFitLevel(selectedCard, slot.pos);
+        el.classList.add(fit === 'main' ? 'compatible' : fit === 'alt' ? 'alt-compat' : 'incompatible');
       } else if (phase === 'deal' && activeFilterSlot === slot.id) {
         el.classList.add('slot-active');
       }
@@ -821,7 +814,8 @@ function renderSidebar() {
         ? `<span class="dc-alt">· ${p.altPositions.map(posDE).join(' ')}</span>` : '';
       let filterClass = '';
       if (filterSlotPos) {
-        filterClass = playerFitsSlot(p, filterSlotPos) ? ' slot-match' : ' slot-dim';
+        const fit = playerFitLevel(p, filterSlotPos);
+        filterClass = fit === 'main' ? ' slot-match' : fit === 'alt' ? ' slot-alt' : ' slot-dim';
       }
       html += `
         <div class="draft-card${filterClass}" data-pid="${p.id}" style="animation-delay:${i * 0.04}s">
@@ -930,8 +924,8 @@ btnSimulate.addEventListener('click', () => {
     .filter(([, p]) => p)
     .map(([slotId, player]) => {
       const slot = formation.slots.find(s => s.id === slotId);
-      const fits = slot ? playerFitsSlot(player, slot.pos) : true;
-      return { ...player, inPosition: fits, slotPos: slot ? slot.pos : player.position };
+      const fit = slot ? playerFitLevel(player, slot.pos) : 'main';
+      return { ...player, positionFit: fit, slotPos: slot ? slot.pos : player.position };
     });
   showResults(simulateSeason(squad));
 });

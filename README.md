@@ -13,8 +13,9 @@ Build the greatest Eintracht Frankfurt XI of all time and simulate a complete 34
 1. **Choose a formation** — six classic shapes available (4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 5-3-2, 4-1-4-1)
 2. **Draft your squad** — each round deals you a full season's worth of Frankfurt players. Pick one; the rest are discarded
 3. **Place players on the pitch** — click a card, then click an empty slot
-   - **Green slot** = natural or compatible position (no penalty)
-   - **Gold slot** = out-of-position (18–25 % effectiveness penalty in simulation)
+   - **Green slot** = player's natural (main) position — no penalty
+   - **Yellow slot** = one of the player's historically documented alternate positions — small penalty (~12 %)
+   - **Red slot** = incompatible position — hefty penalty (~35 %)
    - Click an empty pitch slot while in draft mode to highlight which players fit it
 4. **Fill all 11 positions**, then click **SAISON SIMULIEREN**
 5. See your 34-game results: points, goal difference, finishing position, and the full match ticker
@@ -39,7 +40,7 @@ Each player's contribution is calculated across three dimensions using their **s
 The three scores feed a **power rating** modified by:
 - **Balance penalty** — heavily lopsided squads (e.g. all attackers) take up to a 25 % penalty
 - **Era diversity bonus** — squads from 1–6 different decades get a multiplier from 0.90 to 1.04
-- **Out-of-position penalty** — players in incompatible slots contribute at 75 % effectiveness
+- **Three-tier position penalty** — main position: 100 % effectiveness; historically documented alternate position: 88 %; fully incompatible: 65 %
 
 The power rating drives a per-game **win probability** (max 70 %). Results are deterministic per squad (seeded RNG), so the same XI always produces the same table.
 

@@ -4,6 +4,20 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.9.0] — 2026-06-08
+
+### Changed
+- **Three-tier position compatibility system** replaces the old binary compatible/incompatible model
+  - **Green** = player's natural position exactly matches the slot — no penalty (factor 1.0)
+  - **Yellow** = slot is in the player's historically documented `altPositions` array — small penalty (factor 0.88, −12 %)
+  - **Red** = no match at all — hefty penalty (factor 0.65, −35 %)
+  - Removed `POS_COMPAT` broad-compatibility matrix. Slot colour is now derived purely from each player's individual `position` and `altPositions` data, not a generic positional adjacency table
+  - Draft filter (click a slot during deal phase) now shows green cards (main fit), yellow cards (alt fit), and dims non-fitting players
+  - `positionFit` property (`'main'` | `'alt'` | `'out'`) replaces the old boolean `inPosition` flag
+  - Engine penalty increased for fully incompatible placements (was 25 %, now 35 %)
+
+---
+
 ## [0.8.0] — 2026-06-08
 
 ### Fixed
