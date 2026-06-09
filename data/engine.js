@@ -148,9 +148,10 @@ function simulateSeason(players) {
   // Base win probability from squad strength. Adjusted per-game by opponent difficulty.
   // Typical base ranges:
   //   74-78 rated, mostly red OOP          → ~0.18 base → drops further vs strong opponents
-  //   74-78 rated, in position, mixed eras → ~0.30–0.42 base
-  //   82-86 rated, diverse, in position    → ~0.50–0.62 base
-  const winProb  = Math.min(0.70, Math.max(0.18, 0.12 * totalPower - 0.63));
+  //   74-78 rated, in position, mixed eras → ~0.30–0.44 base
+  //   82-86 rated, diverse, in position    → ~0.54–0.66 base
+  //   88-91 strikers/GK, 82-85 def, 79-80 MF → ~0.70 base → expected ~79 pts
+  const winProb  = Math.min(0.74, Math.max(0.18, 0.12 * totalPower - 0.58));
   const drawProb = 0.22;
 
   let wins = 0, draws = 0, losses = 0;

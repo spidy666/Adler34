@@ -1000,7 +1000,7 @@ const PLAYERS = [
     altPositions: ["MF", "CB"],
     nationality: "🇨🇭 Switzerland",
     years: "2010–2014",
-    bundesligaApps: 108, bundesligaGoals: 4, rating: 79,
+    bundesligaApps: 108, bundesligaGoals: 4, rating: 81,
     peakSeason: "2012/13",
     bio: "Swiss international defensive midfielder crucial in Frankfurt's stabilisation after returning to the Bundesliga.",
     trophy: "2012 Bundesliga Aufstieg"
@@ -1130,7 +1130,7 @@ const PLAYERS = [
     altPositions: ["DM", "AM"],
     nationality: "🇩🇪 Germany",
     years: "2009–2016",
-    bundesligaApps: 84, bundesligaGoals: 6, rating: 73,
+    bundesligaApps: 84, bundesligaGoals: 6, rating: 76,
     peakSeason: "2013/14",
     bio: "Hard-working and disciplined midfielder who made over 100 competitive appearances for Frankfurt. A reliable squad member through promotion, relegation and return.",
     trophy: "2012 Bundesliga Aufstieg"
