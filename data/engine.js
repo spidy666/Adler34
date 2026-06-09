@@ -102,18 +102,18 @@ function calculateSquadStrength(players) {
 }
 
 /**
- * Balance penalty: teams heavily skewed in one area suffer
+ * Balance penalty: teams heavily skewed in one area suffer.
+ * Smooth curve — no penalty up to 1.8, then grows linearly to ~25% at extreme 4.0+.
+ * The GK+2CB defensive weight is structurally high, so the no-penalty zone is set
+ * at 1.8 to avoid penalising well-built squads for the inherent defensive foundation.
  */
 function getBalancePenalty(attackScore, midfieldScore, defenseScore) {
   const scores = [attackScore, midfieldScore, defenseScore];
   const max = Math.max(...scores);
   const min = Math.min(...scores);
   const imbalance = max / (min + 0.01);
-  // imbalance > 2 = moderate penalty, > 3 = severe
-  if (imbalance < 1.6) return 1.0;
-  if (imbalance < 2.6) return 0.93;
-  if (imbalance < 3.6) return 0.85;
-  return 0.75;
+  if (imbalance <= 1.8) return 1.0;
+  return Math.max(0.75, 1.0 - (imbalance - 1.8) * 0.115);
 }
 
 /**

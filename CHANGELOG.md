@@ -4,6 +4,17 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.27.0] — 2026-06-09
+
+### Changed
+- **Balance penalty replaced with smooth curve** — the previous step-function (flat 7% at imbalance > 1.6, flat 15% at > 2.6, flat 25% at > 3.6) is replaced with a continuous formula: no penalty up to 1.8, then `penalty = (imbalance − 1.8) × 11.5%`, capped at 25%
+  - Five seasons of debug data showed that every squad — from star-studded to all-out-of-position — produces a structural defenseScore > midfieldScore imbalance in the 1.5–1.75 range, caused by the inherent weight of the GK + 2 CB defensive foundation (8.0 combined weight vs midfield)
+  - The old threshold was penalising well-built squads for the position-weight structure, not for genuinely unbalanced squad decisions
+  - New curve: at 2.0 imbalance ~2.3% hit, at 2.5 ~8% hit, at 3.0 ~14% hit, at 4.0+ 25% (maximum)
+  - The debug overlay's local penalty recalculation is updated to match
+
+---
+
 ## [0.26.0] — 2026-06-09
 
 ### Added

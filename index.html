@@ -1256,7 +1256,7 @@ btnDebug.addEventListener('click', () => {
   const atk = r.attackScore, mid = r.midfieldScore, def = r.defenseScore;
   const maxS = Math.max(atk, mid, def), minS = Math.min(atk, mid, def);
   const imbalance = maxS / (minS + 0.01);
-  const bp = imbalance < 1.6 ? 1.0 : imbalance < 2.6 ? 0.93 : imbalance < 3.6 ? 0.85 : 0.75;
+  const bp = imbalance <= 1.8 ? 1.0 : Math.max(0.75, 1.0 - (imbalance - 1.8) * 0.115);
   const tp = r.totalPower / 100;
   const wp = Math.min(0.74, Math.max(0.18, 0.12 * tp - 0.58));
   const decades = [...new Set(Object.values(slotFills).map(p => p.decade))].sort();
