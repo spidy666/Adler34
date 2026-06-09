@@ -672,6 +672,16 @@ const POS_ORDER       = { CF:0, RW:1, LW:2, AM:3, MF:4, DM:5, RB:6, LB:7, CB:8, 
 const SQUAD_POS_ORDER = { GK:0, CB:1, RB:2, LB:3, DM:4, MF:5, AM:6, LW:7, RW:8, CF:9 };
 function posDE(code) { return POS_DE[code] || code; }
 
+// Convert a flag emoji nationality string to a flagcdn.com img tag.
+// Flag emoji (two Regional Indicator chars) don't render on Windows desktop —
+// this swaps them for small PNGs that work everywhere.
+function flagImg(natStr) {
+  const m = natStr.match(/([\u{1F1E6}-\u{1F1FF}]{2})(.*)/u);
+  if (!m) return natStr;
+  const cc = [...m[1]].map(c => String.fromCodePoint(c.codePointAt(0) - 0x1F1E6 + 65)).join('').toLowerCase();
+  return `<img src="https://flagcdn.com/16x12/${cc}.png" width="16" height="12" alt="${cc.toUpperCase()}" style="vertical-align:middle;margin-right:4px;">${m[2].trim()}`;
+}
+
 // Three-tier fit check based strictly on player data:
 //   'main' = player's natural position matches slot exactly   → green, no penalty
 //   'alt'  = slot is in player's altPositions array           → yellow, small penalty
@@ -925,7 +935,7 @@ function renderSidebar() {
         <div class="draft-card${filterClass}" data-pid="${p.id}" style="animation-delay:${i * 0.04}s">
           <div class="dc-pos">${posDE(p.position)}${altStr}</div>
           <div class="dc-name">${p.name}</div>
-          <div class="dc-meta">${p.nationality} · ${p.peakSeason || p.years}</div>
+          <div class="dc-meta">${flagImg(p.nationality)} · ${p.peakSeason || p.years}</div>
           <div class="dc-stats">
             <span>${p.bundesligaGoals} <small>Tore</small></span>
             <span>${p.bundesligaApps} <small>Sp.</small></span>
@@ -955,7 +965,7 @@ function renderSidebar() {
         <div class="spv-rating">${p.rating}</div>
         <div class="spv-name">${p.name}</div>
         <div class="spv-pos">${posDE(p.position)} — ${p.positionLabel}${p.altPositions && p.altPositions.length ? `<br><span style="font-size:0.75rem;color:var(--dim);letter-spacing:0.08em;">auch: ${p.altPositions.map(posDE).join(' · ')}</span>` : ''}</div>
-        <div class="spv-meta">${p.nationality} · ${p.peakSeason || p.years}</div>
+        <div class="spv-meta">${flagImg(p.nationality)} · ${p.peakSeason || p.years}</div>
         <div class="spv-instruction">Klicke jetzt auf einen freien Platz im Feld um diesen Spieler zu platzieren</div>
       </div>
       <button class="btn-cancel-pick" id="btnCancelPick">← Andere Wahl</button>
