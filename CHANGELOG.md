@@ -4,6 +4,17 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.30.0] — 2026-06-10
+
+### Added
+- **Fireworks animation on league title** — a canvas-based fireworks display launches automatically when the final stats are revealed after winning the Bundesliga (1st place or perfect season)
+  - 14 rockets rise from the bottom of the screen to random heights, each trailing sparks and bursting into ~75 particles on arrival
+  - Uses the Eintracht Frankfurt colour palette: Rot, Gold, Weiß, Orange
+  - Rendered on a fixed canvas (`z-index: 1050`) with `pointer-events: none` so all modal buttons remain clickable during the animation
+  - Stops and clears automatically when all particles fade out, or immediately on modal close / reset
+
+---
+
 ## [0.29.0] — 2026-06-10
 
 ### Changed

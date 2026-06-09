@@ -395,6 +395,7 @@
     .btn-info:hover { color: #FFD700; border-color: #FFD700; }
     /* ── INFO MODAL ── */
     .info-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1200; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+    #fireworksCanvas { position: fixed; inset: 0; z-index: 1050; pointer-events: none; display: none; }
     .info-overlay.open { opacity: 1; pointer-events: all; }
     .info-popup { background: var(--black); border: 1px solid var(--gray); border-top: 4px solid var(--red); max-width: 680px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; transform: translateY(20px); transition: transform 0.25s; }
     .info-overlay.open .info-popup { transform: translateY(0); }
@@ -534,6 +535,8 @@
     <div class="info-popup-body" id="infoPopupBody">Wird geladen…</div>
   </div>
 </div>
+
+<canvas id="fireworksCanvas"></canvas>
 
 <!-- ══════════════════════════════════════════
      RESULTS MODAL
@@ -1170,10 +1173,12 @@ function revealFinalStats() {
   btnReset.style.display     = '';
   btnShowSquad.style.display = '';
   btnDebug.style.display     = '';
+  if (lastResult?.position === 1 || lastResult?.isPerfect) launchFireworks();
 }
 
 function stopAnimation() {
   if (tickerInterval) { clearInterval(tickerInterval); tickerInterval = null; }
+  stopFireworks();
 }
 
 btnSkip.addEventListener('click', () => {
@@ -1316,7 +1321,7 @@ document.getElementById('btnCopyDebug').addEventListener('click', () => {
   });
 });
 
-btnClose.addEventListener('click', () => { stopAnimation(); modalOverlay.classList.remove('open'); });
+btnClose.addEventListener('click', () => { stopAnimation(); stopFireworks(); modalOverlay.classList.remove('open'); });
 btnReset.addEventListener('click', () => {
   stopAnimation();
   modalOverlay.classList.remove('open');
@@ -1407,6 +1412,124 @@ document.getElementById('btnInfo').addEventListener('click', async () => {
 });
 document.getElementById('btnCloseInfo').addEventListener('click', () => infoOverlay.classList.remove('open'));
 infoOverlay.addEventListener('click', e => { if (e.target === infoOverlay) infoOverlay.classList.remove('open'); });
+
+// ── FIREWORKS ─────────────────────────────────────────────────────────────
+const FW_COLORS = ['#e3001a', '#f5c518', '#ffffff', '#ff6b00', '#cc0015', '#ffd700'];
+
+function launchFireworks() {
+  const canvas = document.getElementById('fireworksCanvas');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = 'block';
+  const ctx = canvas.getContext('2d');
+
+  const particles = [];
+  const rockets   = [];
+  let   frameId   = null;
+  let   launching = true;
+  let   launchTimer = null;
+
+  function spawnRocket() {
+    rockets.push({
+      x:       canvas.width  * (0.1 + Math.random() * 0.8),
+      y:       canvas.height + 10,
+      targetY: canvas.height * (0.08 + Math.random() * 0.42),
+      color:   FW_COLORS[Math.floor(Math.random() * FW_COLORS.length)],
+      speed:   9 + Math.random() * 6,
+      trail:   [],
+      done:    false,
+    });
+  }
+
+  let launched = 0;
+  function scheduleLaunch() {
+    if (launched >= 14) { launching = false; return; }
+    spawnRocket();
+    launched++;
+    launchTimer = setTimeout(scheduleLaunch, 250 + Math.random() * 350);
+  }
+  scheduleLaunch();
+
+  function burst(x, y, color) {
+    const count = 55 + Math.floor(Math.random() * 25);
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.3;
+      const speed = 1.5 + Math.random() * 4;
+      particles.push({ x, y, color,
+        vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+        alpha: 1, decay: 0.013 + Math.random() * 0.012,
+        size: 1.5 + Math.random() * 2.5, gravity: 0.07 });
+    }
+    for (let i = 0; i < 18; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 2;
+      particles.push({ x, y, color: '#ffffff',
+        vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+        alpha: 0.9, decay: 0.02 + Math.random() * 0.015,
+        size: 1 + Math.random() * 1.5, gravity: 0.05 });
+    }
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // update rockets
+    for (let i = rockets.length - 1; i >= 0; i--) {
+      const r = rockets[i];
+      if (r.done) { rockets.splice(i, 1); continue; }
+      r.y -= r.speed;
+      r.trail.push({ x: r.x, y: r.y });
+      if (r.trail.length > 10) r.trail.shift();
+      if (r.y <= r.targetY) { burst(r.x, r.y, r.color); r.done = true; continue; }
+      // draw trail
+      r.trail.forEach((t, j) => {
+        ctx.globalAlpha = 0.6 * ((j + 1) / r.trail.length);
+        ctx.fillStyle = r.color;
+        ctx.beginPath(); ctx.arc(t.x, t.y, 2, 0, Math.PI * 2); ctx.fill();
+      });
+      // draw head
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.arc(r.x, r.y, 3, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // update particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy;
+      p.vy += p.gravity; p.vx *= 0.98;
+      p.alpha -= p.decay;
+      if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    if (particles.length > 0 || rockets.length > 0 || launching) {
+      frameId = requestAnimationFrame(tick);
+    } else {
+      canvas.style.display = 'none';
+    }
+  }
+
+  frameId = requestAnimationFrame(tick);
+
+  canvas._stopFW = () => {
+    clearTimeout(launchTimer);
+    launching = false;
+    if (frameId) cancelAnimationFrame(frameId);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.display = 'none';
+    particles.length = 0;
+    rockets.length   = 0;
+  };
+}
+
+function stopFireworks() {
+  const canvas = document.getElementById('fireworksCanvas');
+  if (canvas?._stopFW) { canvas._stopFW(); canvas._stopFW = null; }
+}
 
 // ── INIT ──────────────────────────────────────────────────────────────────
 buildFormationGrid();
