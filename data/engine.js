@@ -110,9 +110,9 @@ function getBalancePenalty(attackScore, midfieldScore, defenseScore) {
   const min = Math.min(...scores);
   const imbalance = max / (min + 0.01);
   // imbalance > 2 = moderate penalty, > 3 = severe
-  if (imbalance < 1.5) return 1.0;
-  if (imbalance < 2.5) return 0.93;
-  if (imbalance < 3.5) return 0.85;
+  if (imbalance < 1.6) return 1.0;
+  if (imbalance < 2.6) return 0.93;
+  if (imbalance < 3.6) return 0.85;
   return 0.75;
 }
 
