@@ -1178,7 +1178,7 @@ btnShowSquad.addEventListener('click', () => {
       </div>
       <div style="text-align:right">
         <div class="recap-rating">${p.rating}</div>
-        ${goals > 0 ? `<div class="recap-goals">${goals} Tore</div>` : ''}
+        ${goals > 0 ? `<div class="recap-goals">${goals} ${goals === 1 ? 'Tor' : 'Tore'}</div>` : ''}
       </div>
     `;
     body.appendChild(row);
