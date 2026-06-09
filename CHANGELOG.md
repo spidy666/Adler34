@@ -4,6 +4,19 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.20.0] — 2026-06-09
+
+### Changed
+- **ANLEITUNG button visibility** — button is now white with a white border at rest (was barely visible `--dim` grey); hover colour changed to bright yellow (`#FFD700`) for stronger visual feedback
+- **Pitch player slots doubled in size** — slot diameter increased from 64 px to 128 px; inner text scaled proportionally (position label 0.85 → 1.05 rem, player name 0.58 → 0.72 rem, rating 1.1 → 1.4 rem)
+- **Formation positions spread out for 128 px slots** — all six formations repositioned to prevent circles from touching
+  - Back-4 rows: outer fullbacks moved to x = 12 % / 88 %, inner CBs to 37 % / 63 % (was 18/39/61/82) — ~150 px gap between centres at typical pitch widths
+  - Wide players (wingers, wingbacks) pushed to x = 10–16 % and 84–90 % to use the full pitch width
+  - 3-player midfield rows use 26/50/74 spacing (~24 % gaps); 4-player rows use the same 12/37/63/88 pattern as the back line
+  - 5-player rows (3-5-2 midfield, 5-3-2 defence) use 10/30/50/70/90 — the maximum possible spread for five equal-spaced players
+
+---
+
 ## [0.19.0] — 2026-06-09
 
 ### Fixed
