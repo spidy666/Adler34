@@ -4,6 +4,28 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.23.0] — 2026-06-09
+
+### Fixed
+- **"Tore" pluralisation in squad recap** — a player with exactly 1 season goal now correctly shows "1 Tor" instead of "1 Tore"
+
+---
+
+## [0.22.0] — 2026-06-09
+
+### Fixed
+- **Broken flag image for Yugoslav players** — the `yu` ISO country code is retired and has no image on flagcdn.com; Fahrudin Jusufi and Slobodan Komljenović now display `"Yugoslavia"` as plain text instead of a broken icon
+
+---
+
+## [0.21.0] — 2026-06-09
+
+### Fixed
+- **Nationality flags not shown on Windows desktop (Brave/Chrome)** — Windows system fonts do not include flag emoji; all nationality strings are now rendered via `flagImg()`, a helper that converts the Regional Indicator emoji pair to a 16×12 px PNG from flagcdn.com, working consistently on all platforms
+- **Pitch slots too large on mobile** — added `@media (max-width: 600px)` rule that resets slot size to 64×64 px (the original size) with proportionally scaled inner text; slots remain 128 px on tablet and desktop
+
+---
+
 ## [0.20.0] — 2026-06-09
 
 ### Changed
