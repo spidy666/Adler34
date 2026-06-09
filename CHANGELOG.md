@@ -4,6 +4,23 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.26.0] — 2026-06-09
+
+### Added
+- **DEBUG button on result screen** — a new "DEBUG" button appears in the modal footer (far left, visually distinct with a dashed border) after the season animation completes, alongside KADER ANZEIGEN
+  - Opens an overlay with a monospace pre-formatted text dump of the full season, designed to be pasted into Claude for analysis
+  - Includes: squad (slot label, player, rating, fit level, effective rating for alt/oop, decade, season goals), engine intermediate values (attackScore / midfieldScore / defenseScore, imbalance, balance penalty and %, diversity bonus, totalPower, baseWinProb), season summary (points, placement, W/D/L, GF/GA/GD), per-player goal tally, and all 34 match results with scorer names and minutes
+  - KOPIEREN button copies the text to clipboard with confirmation feedback
+
+---
+
+## [0.25.0] — 2026-06-09
+
+### Fixed
+- **Balance penalty threshold raised** — the threshold for the first balance penalty tier was raised from `1.5` to `1.6`; squads near the old boundary (e.g. strong CB inflating defenseScore vs a midfield with several alt-position players) were receiving a 7 % hit despite being reasonably balanced, keeping top squads 10–12 points below expectation
+
+---
+
 ## [0.24.0] — 2026-06-09
 
 ### Changed

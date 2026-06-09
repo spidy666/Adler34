@@ -321,6 +321,17 @@
     /* squad popup */
     .btn-squad { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; padding: 10px 20px; cursor: pointer; transition: all 0.12s; background: none; color: var(--gold); border: 1px solid var(--gold); }
     .btn-squad:hover { background: rgba(212,160,23,0.12); }
+    .btn-debug { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; padding: 10px 20px; cursor: pointer; background: none; color: var(--dim); border: 1px dashed var(--gray); transition: all 0.12s; margin-right: auto; }
+    .btn-debug:hover { color: var(--white); border-color: var(--white); border-style: solid; }
+    .debug-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.80); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+    .debug-overlay.open { display: flex; }
+    .debug-popup { background: var(--black); border: 1px solid var(--gray); border-top: 3px solid var(--dim); max-width: 720px; width: 100%; max-height: 85vh; display: flex; flex-direction: column; }
+    .debug-popup-top { padding: 10px 16px; border-bottom: 1px solid var(--gray); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; color: var(--dim); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .btn-copy-debug { font-family: var(--font-mono); font-size: 0.65rem; padding: 4px 10px; cursor: pointer; background: none; color: var(--dim); border: 1px solid var(--gray); transition: all 0.12s; letter-spacing: 0.08em; }
+    .btn-copy-debug:hover { color: var(--white); border-color: var(--white); }
+    .debug-popup-close { background: none; border: none; color: var(--dim); cursor: pointer; font-size: 1rem; padding: 0 4px; transition: color 0.12s; }
+    .debug-popup-close:hover { color: var(--white); }
+    .debug-textarea { flex: 1; background: #050505; color: #8a8a8a; border: none; padding: 14px 16px; font-family: var(--font-mono); font-size: 0.62rem; line-height: 1.65; resize: none; outline: none; white-space: pre; overflow-wrap: normal; overflow-x: auto; }
     .squad-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
     .squad-overlay.open { opacity: 1; pointer-events: all; }
     .squad-popup { background: var(--black); border: 1px solid var(--gray); border-top: 4px solid var(--gold); max-width: 480px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; transform: translateY(20px); transition: transform 0.25s; }
@@ -544,6 +555,7 @@
       <div class="match-ticker" id="matchTicker"></div>
     </div>
     <div class="modal-footer">
+      <button class="btn-debug" id="btnDebug">DEBUG</button>
       <button class="btn-squad" id="btnShowSquad">KADER ANZEIGEN</button>
       <button class="btn-close" id="btnSkip">ÜBERSPRINGEN</button>
       <button class="btn-close" id="btnClose">SCHLIESSEN</button>
@@ -559,6 +571,19 @@
     <div class="squad-popup-footer">
       <button class="btn-close" id="btnCloseSquad">SCHLIESSEN</button>
     </div>
+  </div>
+</div>
+
+<div class="debug-overlay" id="debugOverlay">
+  <div class="debug-popup">
+    <div class="debug-popup-top">
+      <span>SAISON DEBUG</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn-copy-debug" id="btnCopyDebug">KOPIEREN</button>
+        <button class="debug-popup-close" id="btnCloseDebug">✕</button>
+      </div>
+    </div>
+    <textarea class="debug-textarea" id="debugTextarea" readonly></textarea>
   </div>
 </div>
 
@@ -753,7 +778,9 @@ const btnClose           = document.getElementById('btnClose');
 const btnReset           = document.getElementById('btnReset');
 const btnSkip            = document.getElementById('btnSkip');
 const btnShowSquad       = document.getElementById('btnShowSquad');
+const btnDebug           = document.getElementById('btnDebug');
 const squadOverlay       = document.getElementById('squadOverlay');
+const debugOverlay       = document.getElementById('debugOverlay');
 const headerRight        = document.getElementById('headerRight');
 let tickerInterval = null;
 let lastResult     = null;
@@ -1096,6 +1123,7 @@ function showResults(result) {
   btnClose.style.display     = 'none';
   btnReset.style.display     = 'none';
   btnShowSquad.style.display = 'none';
+  btnDebug.style.display     = 'none';
 
   modalOverlay.classList.add('open');
 
@@ -1137,6 +1165,7 @@ function revealFinalStats() {
   btnClose.style.display     = '';
   btnReset.style.display     = '';
   btnShowSquad.style.display = '';
+  btnDebug.style.display     = '';
 }
 
 function stopAnimation() {
@@ -1188,6 +1217,100 @@ btnShowSquad.addEventListener('click', () => {
 
 document.getElementById('btnCloseSquad').addEventListener('click', () => squadOverlay.classList.remove('open'));
 squadOverlay.addEventListener('click', e => { if (e.target === squadOverlay) squadOverlay.classList.remove('open'); });
+
+// ── DEBUG OVERLAY ─────────────────────────────────────────────────────────
+btnDebug.addEventListener('click', () => {
+  const r = lastResult;
+  if (!r) return;
+
+  const pad  = (s, n) => String(s).padEnd(n);
+  const rpad = (s, n) => String(s).padStart(n);
+  const lines = [];
+
+  lines.push('=== SAISON DEBUG ===');
+  lines.push(`Formation: ${formationKey}`);
+  lines.push('');
+
+  // Squad
+  const formation = FORMATIONS[formationKey];
+  const posOrder  = { GK: 0, CB: 1, RB: 2, LB: 3, DM: 4, MF: 5, AM: 6, RW: 7, LW: 8, CF: 9 };
+  const slotEntries = Object.entries(slotFills).sort(([a], [b]) => {
+    const sa = formation?.slots.find(s => s.id === a), sb = formation?.slots.find(s => s.id === b);
+    return (posOrder[sa?.pos] ?? 5) - (posOrder[sb?.pos] ?? 5);
+  });
+
+  lines.push('KADER (11 Spieler):');
+  slotEntries.forEach(([slotId, p]) => {
+    const slot = formation?.slots.find(s => s.id === slotId);
+    const fit  = slot ? playerFitLevel(p, slot.pos) : 'main';
+    const eff  = fit === 'alt' ? (p.rating * 0.88).toFixed(1) : fit === 'out' ? (p.rating * 0.65).toFixed(1) : null;
+    const goals = r.playerGoals?.[p.id] || 0;
+    const label = slot?.label ?? posDE(p.position);
+    let line = `${pad(label, 5)} ${pad(p.name, 24)} rat:${p.rating}  ${pad(fit, 4)}  dec:${p.decade}  goals:${rpad(goals, 2)}`;
+    if (eff) line += `  (eff:${eff})`;
+    lines.push(line);
+  });
+  lines.push('');
+
+  // Engine values
+  const atk = r.attackScore, mid = r.midfieldScore, def = r.defenseScore;
+  const maxS = Math.max(atk, mid, def), minS = Math.min(atk, mid, def);
+  const imbalance = maxS / (minS + 0.01);
+  const bp = imbalance < 1.6 ? 1.0 : imbalance < 2.6 ? 0.93 : imbalance < 3.6 ? 0.85 : 0.75;
+  const tp = r.totalPower / 100;
+  const wp = Math.min(0.74, Math.max(0.18, 0.12 * tp - 0.58));
+  const decades = [...new Set(Object.values(slotFills).map(p => p.decade))].sort();
+
+  lines.push('ENGINE:');
+  lines.push(`attackScore:     ${rpad(atk.toFixed(1), 5)}   midfieldScore: ${rpad(mid.toFixed(1), 5)}   defenseScore: ${rpad(def.toFixed(1), 5)}`);
+  lines.push(`imbalance:       ${rpad(imbalance.toFixed(3), 5)}   balancePenalty: ${bp.toFixed(2)}${bp < 1.0 ? '  (' + Math.round((1 - bp) * 100) + '% hit)' : '  (no penalty)'}`);
+  lines.push(`diversityBonus:  +${r.diversityBonus}%   (${decades.length} decades: ${decades.join(' ')})`);
+  lines.push(`totalPower:      ${rpad(tp.toFixed(2), 5)}   baseWinProb: ${wp.toFixed(3)}`);
+  lines.push('');
+
+  // Season summary
+  lines.push('SAISON:');
+  const gd = r.goalDifference >= 0 ? '+' + r.goalDifference : String(r.goalDifference);
+  lines.push(`Punkte: ${r.points}   Platz: ${r.position}.   W:${r.wins}  D:${r.draws}  L:${r.losses}   GF:${r.goalsFor}  GA:${r.goalsAgainst}  GD:${gd}`);
+  lines.push('');
+
+  // Scorers
+  const scorerList = Object.entries(r.playerGoals || {})
+    .filter(([, g]) => g > 0)
+    .sort(([, a], [, b]) => b - a);
+  if (scorerList.length > 0) {
+    lines.push('TORSCHÜTZEN:');
+    scorerList.forEach(([id, goals]) => {
+      const p = Object.values(slotFills).find(pl => pl.id === id);
+      lines.push(`  ${pad(p ? p.name : id, 26)} ${goals}`);
+    });
+    lines.push('');
+  }
+
+  // All 34 match results
+  lines.push('ERGEBNISSE (34 Spiele):');
+  r.games.forEach(g => {
+    const lastName = n => n.split(' ').pop();
+    const sc = g.scorers.length ? '  [' + g.scorers.map(s => `${lastName(s.name)} ${s.minute}'`).join(', ') + ']' : '';
+    lines.push(` ${rpad(g.matchday, 2)}  ${g.result}  ${pad(g.opponent, 24)} ${rpad(g.gf + ':' + g.ga, 4)}${sc}`);
+  });
+
+  document.getElementById('debugTextarea').value = lines.join('\n');
+  debugOverlay.classList.add('open');
+});
+
+document.getElementById('btnCloseDebug').addEventListener('click', () => debugOverlay.classList.remove('open'));
+debugOverlay.addEventListener('click', e => { if (e.target === debugOverlay) debugOverlay.classList.remove('open'); });
+
+document.getElementById('btnCopyDebug').addEventListener('click', () => {
+  const ta = document.getElementById('debugTextarea');
+  navigator.clipboard.writeText(ta.value).then(() => {
+    const btn = document.getElementById('btnCopyDebug');
+    const orig = btn.textContent;
+    btn.textContent = 'KOPIERT ✓';
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  });
+});
 
 btnClose.addEventListener('click', () => { stopAnimation(); modalOverlay.classList.remove('open'); });
 btnReset.addEventListener('click', () => {
