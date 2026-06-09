@@ -171,7 +171,7 @@ function simulateSeason(players) {
 
   for (let i = 0; i < 34; i++) {
     const roll = rng();
-    const opponent = opponents[i];
+    const { opponent, home } = opponents[i];
     let result, gf, ga;
 
     // Per-game probability adjusted for opponent strength.
@@ -202,7 +202,7 @@ function simulateSeason(players) {
 
     goalsFor += gf;
     goalsAgainst += ga;
-    games.push({ matchday: i + 1, opponent, result, gf, ga, scorers: [] });
+    games.push({ matchday: i + 1, opponent, home, result, gf, ga, scorers: [] });
   }
 
   // Assign scorers using a separate seeded RNG so main match outcomes are unchanged.
@@ -274,27 +274,29 @@ function seededRng(seed) {
 }
 
 /**
- * Generate a seeded-shuffled 34-game Bundesliga schedule.
- * Each of the 17 opponents appears exactly twice; order varies per squad seed.
+ * Generate a seeded 34-game Bundesliga schedule.
+ * First 17 games (Hinrunde): each opponent once in shuffled order, strictly alternating H/A.
+ * Second 17 games (Rückrunde): same order, home/away flipped.
+ * Because the second half mirrors the first, home/away alternates perfectly across all 34 games
+ * with no consecutive same-venue pairs.
+ * Returns array of { opponent, home } objects.
  */
 function generateOpponents(seed) {
-  const schedule = [
+  const teams = [
     "Bayern München", "Borussia Dortmund", "Bayer Leverkusen", "Kaiserslautern",
     "Borussia M'gladbach", "SC Freiburg", "Union Berlin", "VfB Stuttgart",
     "VfL Bochum", "Mainz 05", "Werder Bremen", "Augsburg",
-    "1.FC Nürnberg", "Köln", "Hertha BSC", "Schalke 04",
-    "Hamburger SV", "Bayern München", "Borussia Dortmund", "Bayer Leverkusen",
-    "Kaiserslautern", "Borussia M'gladbach", "SC Freiburg", "Union Berlin",
-    "VfB Stuttgart", "VfL Bochum", "Mainz 05", "Werder Bremen",
-    "Augsburg", "1.FC Nürnberg", "Köln", "Hertha BSC",
-    "Schalke 04", "Hamburger SV"
+    "1.FC Nürnberg", "Köln", "Hertha BSC", "Schalke 04", "Hamburger SV"
   ];
   const rng = seededRng(seed + 777777);
-  for (let i = schedule.length - 1; i > 0; i--) {
+  for (let i = teams.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    [schedule[i], schedule[j]] = [schedule[j], schedule[i]];
+    [teams[i], teams[j]] = [teams[j], teams[i]];
   }
-  return schedule;
+  const startHome  = rng() < 0.5;
+  const firstHalf  = teams.map((t, i) => ({ opponent: t, home: (i % 2 === 0) === startHome }));
+  const secondHalf = firstHalf.map(({ opponent, home }) => ({ opponent, home: !home }));
+  return [...firstHalf, ...secondHalf];
 }
 
 export { simulateSeason, calculateSquadStrength };

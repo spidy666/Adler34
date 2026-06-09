@@ -4,6 +4,16 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.29.0] — 2026-06-10
+
+### Changed
+- **Strict home/away alternation in fixture schedule** — the 34-game schedule now guarantees H and A matches alternate throughout the entire season with no consecutive same-venue games
+  - Previously each of the 17 Hinrunde games was assigned a random home/away via a per-team coin flip, which could produce long runs of consecutive home or away fixtures
+  - Now a single seeded coin flip determines whether the season opens at home or away, then positions 1–17 strictly alternate (H/A/H/A/… or A/H/A/H/…). The mirrored Rückrunde (same order, venues flipped) continues the alternation seamlessly, so the full 34-game sequence is perfectly alternating with zero exceptions
+  - Schedule remains fully deterministic; the squad seed still determines both opponent order and opening venue
+
+---
+
 ## [0.28.0] — 2026-06-10
 
 ### Changed

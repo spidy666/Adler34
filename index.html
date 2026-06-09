@@ -286,15 +286,18 @@
     .modal-body { padding: 0 28px 28px; }
     .ticker-title { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--dim); text-transform: uppercase; margin: 20px 0 10px; }
     .match-ticker { height: 200px; overflow-y: auto; border: 1px solid var(--gray); background: #080808; }
-    .match-row { display: grid; grid-template-columns: 28px 1fr 52px; gap: 8px; padding: 5px 10px; font-size: 0.67rem; border-bottom: 1px solid rgba(255,255,255,0.04); align-items: center; }
+    .match-row { display: grid; grid-template-columns: 28px 20px 1fr 52px; gap: 8px; padding: 5px 10px; font-size: 0.67rem; border-bottom: 1px solid rgba(255,255,255,0.04); align-items: center; }
     .match-row:last-child { border-bottom: none; }
     .match-md { color: var(--dim); }
+    .match-ha { font-size: 0.58rem; letter-spacing: 0.05em; text-align: center; }
+    .match-ha.home { color: var(--white); }
+    .match-ha.away { color: var(--dim); }
     .match-opp { color: var(--white); }
     .match-score { font-weight: 600; text-align: right; }
     .match-score.W { color: #4caf50; }
     .match-score.D { color: var(--gold); }
     .match-score.L { color: var(--red); }
-    .match-scorers { grid-column: 2 / 4; font-size: 0.58rem; color: var(--gold); opacity: 0.65; padding-bottom: 3px; }
+    .match-scorers { grid-column: 2 / 5; font-size: 0.58rem; color: var(--gold); opacity: 0.65; padding-bottom: 3px; }
     .recap-goals { font-size: 0.65rem; color: var(--gold); opacity: 0.75; margin-top: 2px; }
     .squad-recap { margin-top: 18px; }
     .recap-player { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.72rem; }
@@ -1151,7 +1154,8 @@ function renderMatchRow(g, animate) {
   const scorersHTML = g.scorers && g.scorers.length > 0
     ? `<span class="match-scorers">${g.scorers.map(s => `${lastName(s.name)} ${s.minute}'`).join(', ')}</span>`
     : '';
-  row.innerHTML = `<span class="match-md">${g.matchday}</span><span class="match-opp">${g.opponent}</span><span class="match-score ${g.result}">${g.gf}:${g.ga}</span>${scorersHTML}`;
+  const ha = g.home ? 'H' : 'A';
+  row.innerHTML = `<span class="match-md">${g.matchday}</span><span class="match-ha ${g.home ? 'home' : 'away'}">${ha}</span><span class="match-opp">${g.opponent}</span><span class="match-score ${g.result}">${g.gf}:${g.ga}</span>${scorersHTML}`;
   return row;
 }
 
@@ -1292,7 +1296,7 @@ btnDebug.addEventListener('click', () => {
   r.games.forEach(g => {
     const lastName = n => n.split(' ').pop();
     const sc = g.scorers.length ? '  [' + g.scorers.map(s => `${lastName(s.name)} ${s.minute}'`).join(', ') + ']' : '';
-    lines.push(` ${rpad(g.matchday, 2)}  ${g.result}  ${pad(g.opponent, 24)} ${rpad(g.gf + ':' + g.ga, 4)}${sc}`);
+    lines.push(` ${rpad(g.matchday, 2)}  ${g.result} ${g.home ? 'H' : 'A'}  ${pad(g.opponent, 24)} ${rpad(g.gf + ':' + g.ga, 4)}${sc}`);
   });
 
   document.getElementById('debugTextarea').value = lines.join('\n');
