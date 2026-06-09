@@ -4,6 +4,20 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.24.0] — 2026-06-09
+
+### Changed
+- **Difficulty reduced — strong squads can now win the title** — the win-probability formula has been shifted upward
+  - Constant adjusted from `−0.63` to `−0.58`; cap raised from `0.70` to `0.74`
+  - A squad with 88–91 rated strikers, 90 GK, 82–85 defenders and 79–80 midfielders now produces `winProb ≈ 0.70`, giving an expected ~79 points per season (title range)
+  - Previously the same squad averaged ~70 expected points (2nd–4th place) regardless of quality
+  - Weak squads are unaffected — the minimum floor of `0.18` is unchanged
+- **Player rating corrections — midfield pool** — pure `MF`-position players were systematically the lowest-rated group in the database (best was 83), making the midfield the hardest position to fill effectively
+  - Michael Fink (MF, 2010s): **73 → 76** — 84 Bundesliga apps across six seasons, reliable squad regular through promotion and relegation
+  - Pirmin Schwegler (DM, 2000s): **79 → 81** — Swiss international with 108 apps, key figure in Frankfurt's post-2012 stabilisation
+
+---
+
 ## [0.23.0] — 2026-06-09
 
 ### Fixed
