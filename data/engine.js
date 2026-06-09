@@ -178,8 +178,8 @@ function simulateSeason(players) {
 
     if (roll < gameLoss) {
       result = "L";
-      gf = Math.floor(rng() * 2);
-      ga = Math.floor(rng() * 2) + 1;
+      ga = Math.floor(rng() * 2) + 1;   // opponent scores 1 or 2
+      gf = Math.floor(rng() * ga);       // Frankfurt scores 0 to ga-1 (always less)
       losses++;
     } else if (roll < gameLoss + drawProb) {
       result = "D";
@@ -188,8 +188,8 @@ function simulateSeason(players) {
       draws++;
     } else {
       result = "W";
-      gf = Math.floor(rng() * 3) + 1;
-      ga = Math.floor(rng() * 2);
+      gf = Math.floor(rng() * 3) + 1;   // Frankfurt scores 1, 2, or 3
+      ga = Math.floor(rng() * gf);       // opponent scores 0 to gf-1 (always less)
       wins++;
     }
 
