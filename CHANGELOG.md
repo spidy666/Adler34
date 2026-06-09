@@ -4,6 +4,27 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.19.0] — 2026-06-09
+
+### Fixed
+- **1:1 draw displayed in green (win colour)** — score generation for wins and losses could produce equal scorelines
+  - Root cause: for a win, `ga = Math.floor(rng() * 2)` could return 1, paired with `gf = 1` giving a genuine 1:1 tagged `result = "W"`
+  - Fix: wins now use `ga = Math.floor(rng() * gf)` so opponent goals are always strictly less than Frankfurt's; losses use `ga` first (1 or 2) then `gf = Math.floor(rng() * ga)` so Frankfurt goals are always strictly less than opponent's
+  - Draws are unchanged — equal scores remain only when `result = "D"`
+
+---
+
+## [0.18.0] — 2026-06-09
+
+### Added
+- **ANLEITUNG button in header** — persistent button between the logo and the status text opens a styled overlay displaying the full README
+  - README.md is fetched and rendered as formatted HTML (headings, bold, tables, code blocks, lists, blockquotes, links)
+  - Red top-border to match the game's colour scheme; cached after first load so subsequent opens are instant
+  - Click outside the popup or × to close
+- **How to Play — slot-click tip expanded** — README now explicitly explains that clicking an empty pitch slot before selecting a card highlights compatible players: green border for main-position fit, gold border for alternate-position fit, dimmed for incompatible
+
+---
+
 ## [0.17.0] — 2026-06-09
 
 ### Changed

@@ -43,7 +43,7 @@ The three scores feed a **power rating** modified by:
 - **Era diversity bonus** — squads from 1–6 different decades get a multiplier from 0.90 to 1.04
 - **Three-tier position penalty** — main position: 100 % effectiveness; historically documented alternate position: 88 %; fully incompatible: 65 %
 
-The power rating drives a **base win probability** (max 70 %), which is then adjusted per game by opponent difficulty — beating Bayern München is substantially harder than beating Bochum. Results are deterministic per squad (seeded RNG), so the same XI always produces the same table. Opponents are drawn from the Bundesliga eternal table (transfermarkt.de) — all 17 opponents have at least 884 Bundesliga seasons of history.
+The power rating drives a **base win probability** (max 70 %), which is then adjusted per game by opponent difficulty — beating Bayern München is substantially harder than beating Bochum. Results are deterministic per squad (seeded RNG), so the same XI always produces the same table. Win scores always have more Frankfurt goals than opponent goals; draw scores are always equal; loss scores always have fewer — ties like 1:1 only appear as draws. Opponents are drawn from the Bundesliga eternal table (transfermarkt.de) — all 17 opponents have at least 884 Bundesliga seasons of history.
 
 ### Finishing position thresholds *(calibrated to Bundesliga 2014/15–2023/24)*
 
