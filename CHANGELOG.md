@@ -4,6 +4,25 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.28.0] — 2026-06-10
+
+### Changed
+- **Score distribution weighted by squad strength** — goal counts in wins and losses now reflect attackScore and defenseScore rather than being uniformly random
+  - In wins: a bias factor shifts probability between 1-goal and 3-goal results while keeping 2-goal wins fixed at 33%. Strong attacks (attackScore ≥ ~10) raise P(3 goals) to 48% and lower P(1 goal) to 18%; weak attacks flip these. Bias saturates at ±0.15 (calibrated over attackScore range 7–11)
+  - In losses: a symmetric bias controls whether the opponent scores 1 or 2. Strong defense (defenseScore ≥ ~14.5) raises P(concede 1) to 65%; weak defense (defenseScore ≈ 9) lowers it to 35%
+  - Win/draw/loss outcomes and total expected points are completely unchanged — only the scorelines within each result type are affected
+  - Corrects the 19-season finding that GF and GA were explained almost entirely by W/D/L counts and were insensitive to actual squad quality
+- **Fixture schedule shuffled per squad** — the 34-game opponent list is now randomised using a Fisher-Yates shuffle seeded from the squad seed (`seed + 777777`), so each squad faces a unique fixture order
+  - Each of the 17 opponents still appears exactly twice
+  - Eliminates the fixed front-loading of Bayern / Dortmund / Leverkusen in MD1–3 that caused strong squads to accumulate early losses in every season
+  - Schedule remains fully deterministic: the same squad always sees the same fixture order
+- **Draw probability varies per game** — `drawProb` is now computed per fixture as `0.22 + (0.5 − gameWin) × 0.05` instead of a fixed 22%
+  - Balanced matchups (gameWin ≈ 0.50, e.g. vs Bayern for a strong squad) draw slightly more often (~24%)
+  - Lopsided fixtures (gameWin ≈ 0.76, e.g. vs Schalke) draw slightly less (~21%)
+  - Average across a full season remains ~22%; the change only affects the distribution of draws across opponent tiers, not the season total
+
+---
+
 ## [0.27.0] — 2026-06-09
 
 ### Changed

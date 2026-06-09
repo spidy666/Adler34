@@ -151,8 +151,11 @@ function simulateSeason(players) {
   //   74-78 rated, in position, mixed eras → ~0.30–0.44 base
   //   82-86 rated, diverse, in position    → ~0.54–0.66 base
   //   88-91 strikers/GK, 82-85 def, 79-80 MF → ~0.70 base → expected ~79 pts
-  const winProb  = Math.min(0.74, Math.max(0.18, 0.12 * totalPower - 0.58));
-  const drawProb = 0.22;
+  const winProb = Math.min(0.74, Math.max(0.18, 0.12 * totalPower - 0.58));
+
+  // Score distribution biases: stronger attack → more 3-goal wins; stronger defense → more 1-goal losses
+  const attackBias  = Math.min(Math.max((attackScore  -  9.0) / 6.0, -0.15), 0.15);
+  const defenseBias = Math.min(Math.max((defenseScore - 12.5) / 5.0, -0.15), 0.15);
 
   let wins = 0, draws = 0, losses = 0;
   let goalsFor = 0, goalsAgainst = 0;
@@ -164,7 +167,7 @@ function simulateSeason(players) {
   const seed = players.reduce((acc, p) => acc + p.rating * 7 + p.bundesligaApps, 0);
   let rng = seededRng(seed);
 
-  const opponents = generateOpponents();
+  const opponents = generateOpponents(seed);
 
   for (let i = 0; i < 34; i++) {
     const roll = rng();
@@ -172,15 +175,17 @@ function simulateSeason(players) {
     let result, gf, ga;
 
     // Per-game probability adjusted for opponent strength.
-    // gameWin clamped to [0.04, 0.76] so lossProb stays positive and upsets remain possible.
+    // drawProb peaks at balanced matchups (gameWin ≈ 0.50) and dips for mismatches.
+    // gameWin clamped to [0.04, 0.76] so gameLoss stays positive and upsets remain possible.
     const oppMod    = OPPONENT_DIFFICULTY[opponent] ?? 0;
     const gameWin   = Math.max(0.04, Math.min(0.76, winProb - oppMod));
+    const drawProb  = 0.22 + (0.5 - gameWin) * 0.05;
     const gameLoss  = 1 - gameWin - drawProb;
 
     if (roll < gameLoss) {
       result = "L";
-      ga = Math.floor(rng() * 2) + 1;   // opponent scores 1 or 2
-      gf = Math.floor(rng() * ga);       // Frankfurt scores 0 to ga-1 (always less)
+      ga = rng() < (0.5 + defenseBias) ? 1 : 2;
+      gf = Math.floor(rng() * ga);
       losses++;
     } else if (roll < gameLoss + drawProb) {
       result = "D";
@@ -189,8 +194,9 @@ function simulateSeason(players) {
       draws++;
     } else {
       result = "W";
-      gf = Math.floor(rng() * 3) + 1;   // Frankfurt scores 1, 2, or 3
-      ga = Math.floor(rng() * gf);       // opponent scores 0 to gf-1 (always less)
+      const r = rng();
+      gf = r < (1/3 - attackBias) ? 1 : r < (2/3 - attackBias) ? 2 : 3;
+      ga = Math.floor(rng() * gf);
       wins++;
     }
 
@@ -268,10 +274,11 @@ function seededRng(seed) {
 }
 
 /**
- * Generate 34 Bundesliga opponents
+ * Generate a seeded-shuffled 34-game Bundesliga schedule.
+ * Each of the 17 opponents appears exactly twice; order varies per squad seed.
  */
-function generateOpponents() {
-  return [
+function generateOpponents(seed) {
+  const schedule = [
     "Bayern München", "Borussia Dortmund", "Bayer Leverkusen", "Kaiserslautern",
     "Borussia M'gladbach", "SC Freiburg", "Union Berlin", "VfB Stuttgart",
     "VfL Bochum", "Mainz 05", "Werder Bremen", "Augsburg",
@@ -282,6 +289,12 @@ function generateOpponents() {
     "Augsburg", "1.FC Nürnberg", "Köln", "Hertha BSC",
     "Schalke 04", "Hamburger SV"
   ];
+  const rng = seededRng(seed + 777777);
+  for (let i = schedule.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [schedule[i], schedule[j]] = [schedule[j], schedule[i]];
+  }
+  return schedule;
 }
 
 export { simulateSeason, calculateSquadStrength };
