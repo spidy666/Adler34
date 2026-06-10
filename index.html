@@ -932,9 +932,18 @@ function dealNewTeam() {
   teamDecade = chooseFrom[Math.floor(Math.random() * chooseFrom.length)];
 
   // Randomly sample 13 players from the chosen decade, then sort by position
+  // In Frauen mode cap GKs at 1 — 11 keepers in a 69-player pool causes multi-GK deals
   const pool     = deckPool(teamDecade);
   const shuffled = pool.slice().sort(() => Math.random() - 0.5);
-  teamPlayers    = shuffled.slice(0, 13)
+  let deal;
+  if (gameMode === 'frauen') {
+    const gks     = shuffled.filter(p => p.position === 'GK');
+    const outfield = shuffled.filter(p => p.position !== 'GK');
+    deal = [...gks.slice(0, 1), ...outfield].slice(0, 13);
+  } else {
+    deal = shuffled.slice(0, 13);
+  }
+  teamPlayers    = deal
     .sort((a, b) => (POS_ORDER[a.position] ?? 5) - (POS_ORDER[b.position] ?? 5));
   phase        = 'deal';
   selectedCard = null;

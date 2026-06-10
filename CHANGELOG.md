@@ -4,6 +4,20 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.33.2] — 2026-06-10
+
+### Fixed
+- **Frauen deal: max 1 GK per round** — with 11 keepers in a 69-player pool, random sampling regularly produced 4–5 GK offers; Frauen mode now caps GKs at 1 per deal (outfield players fill the remaining 12 slots). Men's mode unchanged.
+- **Alternate positions added for 5 Frauen players** (sourced from Fotmob, Footballcritic, Soccerdonna):
+  - Amanda Ilestedt (CB) → alt `RB` (Footballcritic: documented right-back appearances)
+  - Verena Hanshaw (LB) → alt `CB` (Fotmob: CB listed as secondary position)
+  - Leonie Köster (MF) → alt `DM` (Soccerdonna: registered as defensives Mittelfeld)
+  - Pernille Sanvig (MF) → alt `DM` (Fotmob: primary listed as DM with CM secondary)
+  - Lara Prašnikar (CF) → alt `RW` (Fotmob: right winger documented as secondary)
+- Remaining players with empty `altPositions` have no documented secondary position in any of the checked sources (Soccerdonna, Fotmob, Footballcritic, Wikipedia)
+
+---
+
 ## [0.33.1] — 2026-06-10
 
 ### Changed
