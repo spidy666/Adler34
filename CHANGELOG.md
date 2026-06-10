@@ -4,6 +4,65 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.32.1] — 2026-06-10
+
+### Changed
+- **Frauen-BL opponent list corrected** — RB Leipzig replaced with Hamburger SV
+  - Leipzig were not a consistent Frauen-Bundesliga presence across the covered window
+  - HSV's women's team is the more appropriate fixture for the era; assigned difficulty −0.02 (lower-half away side)
+
+---
+
+## [0.32.0] — 2026-06-10
+
+### Added
+- **Frauen-Bundesliga season engine** — simulation now runs a proper 26-game season in Frauen mode
+  - 13 opponents (FC Bayern München, VfL Wolfsburg, Bayer 04 Leverkusen, SC Freiburg, TSG Hoffenheim, Hamburger SV, SGS Essen, SV Werder Bremen, Turbine Potsdam, MSV Duisburg, 1. FC Köln, SC Sand, Carl Zeiss Jena) instead of the men's 17
+  - Separate `OPPONENT_DIFFICULTY_FRAUEN` table calibrated to recent Frauen-BL form: Bayern +0.22, Wolfsburg +0.18, Leverkusen +0.10 at the top; Jena −0.05, Sand −0.04 at the bottom
+  - `estimatePositionFrauen()` calibrated to 2023/24 actual table: 1st ≥60 pts, UWCL direct ≥48, UWCL qualifying ≥38, relegation zone <20
+  - `isChampion` threshold 60 pts (was 78), `isPerfect` 22 wins (was 28), `isEuropa` 39 pts (was 50), `isRelegated` <20 pts (was <27)
+  - `simulateSeason()` accepts a `mode` parameter (`'men'` | `'frauen'`); index.html passes `gameMode` through
+
+---
+
+## [0.31.3] — 2026-06-10
+
+### Fixed
+- **Women's roster corrected from soccerdonna historical squad pages** (5 missing players, 6 position/timeline errors)
+  - Added: Bryane Heaberlin (GK/USA, 2020/21), Jessica Reiß (GK, 2022/23), Loreen Bender (RW, 2022/23), Tomke Schneider (CB, 2024/25), Marlene Wild (MF, 2024/25)
+  - Sophie Nachtigall: `CB` → `AM` (soccerdonna lists her as OM / offensive midfielder throughout)
+  - Carlotta Wamser: `RW` → `RB` (soccerdonna confirms RV in all seasons at Frankfurt)
+  - Johanna Berg: `MF` → `CF` (listed as Angriff in 2024/25)
+  - Jella Veit: `activeFrom` 2021 → 2022 (first appears in 2022/23 squad, not 2021/22)
+  - Remina Chiba: `activeFrom` 2024 → 2023 (joined January 2024 = 2023/24 season)
+  - Nadine Riesen: `RB` → `LB` (deployed as LV at Frankfurt in every season recorded)
+  - Total: 69 verified players
+
+---
+
+## [0.31.2] — 2026-06-10
+
+### Added
+- **2025/26 squad added to women's database** — 16 new players from the current Frauen-Bundesliga squad (via soccerdonna.de)
+  - GK: Sophia Winkler, Janne Krumme, Ylvi Eisenbeiß
+  - CB: Amanda Ilestedt (Sweden), Marthine Østenstad (Norway), Emily Wallrabenstein, Mina Matijević
+  - MF/DM/AM: Eleni Markou (Greece), Noemi Ivelj, Jarne Teulings (Belgium), Ainhoa Alguacil (Spain), Georgia Stanti, Tessa Zimmermann
+  - FW: Hayley Raso (Australia), Rebecka Blomqvist (Sweden), Erëleta Memeti (Kosovo)
+  - Coverage extended to 2020/21–2025/26
+
+---
+
+## [0.31.1] — 2026-06-10
+
+### Fixed
+- **Women's roster replaced with fully verified data** — initial placeholder entries removed; all 42 players confirmed against Wikipedia, Transfermarkt, official club sources, and season-by-season sport.de squad pages
+  - Corrected GK timelines: Merle Frohms 2020–2022 (first post-merger signing), Stina Johannes 2022–2025 (not 2019–2022 as initially stated)
+  - Removed ~15 unverified invented players (Cecilia Ran, Anna Klink, Lisi Mayr, Blázquez, Feldkamp, Haug, Islacker, Fölmli, Büchler, etc.)
+  - Added 20+ verified players missing from the initial version (Hechler, Hanshaw, Santos, Kirchberger, Feiersinger, Panfil, Mauron/Gaillard, Martinez, Wamser, Riesen, Chiba, and more)
+  - Decade corrected to `2010s` for all players who joined before 2020 (Kleinherne, Nüsken, Dunst, Reuteler, Freigang, Feiersinger, Matheis, Pawollek)
+
+---
+
 ## [0.31.0] — 2026-06-10
 
 ### Added
