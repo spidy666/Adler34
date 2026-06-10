@@ -1102,7 +1102,7 @@ btnSimulate.addEventListener('click', () => {
       const fit = slot ? playerFitLevel(player, slot.pos) : 'main';
       return { ...player, positionFit: fit, slotPos: slot ? slot.pos : player.position };
     });
-  showResults(simulateSeason(squad));
+  showResults(simulateSeason(squad, gameMode));
 });
 
 function showResults(result) {

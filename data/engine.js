@@ -8,6 +8,24 @@
  * Positive = harder to beat (reduce winProb), negative = easier to beat (increase winProb).
  * Calibrated to approximate Bundesliga strength differences over the last decade.
  */
+// Frauen-Bundesliga (14 teams, 26 games). Bayern and Wolfsburg dominate;
+// the gap between top and bottom is larger than in the men's league.
+const OPPONENT_DIFFICULTY_FRAUEN = {
+  'FC Bayern München':   0.22,
+  'VfL Wolfsburg':       0.18,
+  'Bayer 04 Leverkusen': 0.10,
+  'SC Freiburg':         0.06,
+  'TSG Hoffenheim':      0.03,
+  'RB Leipzig':          0.02,
+  'SGS Essen':           0.00,
+  'SV Werder Bremen':   -0.01,
+  'Turbine Potsdam':    -0.02,
+  'MSV Duisburg':       -0.03,
+  '1. FC Köln':         -0.03,
+  'SC Sand':            -0.04,
+  'Carl Zeiss Jena':    -0.05,
+};
+
 const OPPONENT_DIFFICULTY = {
   'Bayern München':       0.22,
   'Borussia Dortmund':    0.15,
@@ -131,11 +149,15 @@ function getDiversityBonus(players) {
 }
 
 /**
- * Run a 34-game Bundesliga season simulation
+ * Run a Bundesliga season simulation.
+ * mode = 'men'    → 18 opponents, 34 games (Männer-Bundesliga)
+ * mode = 'frauen' → 13 opponents, 26 games (Frauen-Bundesliga)
  * Returns: { wins, draws, losses, points, goalsFor, goalsAgainst, games }
  */
-function simulateSeason(players) {
+function simulateSeason(players, mode = 'men') {
   if (!players || players.length === 0) return null;
+  const isFrauen  = mode === 'frauen';
+  const totalGames = isFrauen ? 26 : 34;
 
   const { attackScore, midfieldScore, defenseScore } = calculateSquadStrength(players);
   const balancePenalty = getBalancePenalty(attackScore, midfieldScore, defenseScore);
@@ -167,9 +189,10 @@ function simulateSeason(players) {
   const seed = players.reduce((acc, p) => acc + p.rating * 7 + p.bundesligaApps, 0);
   let rng = seededRng(seed);
 
-  const opponents = generateOpponents(seed);
+  const opponents = generateOpponents(seed, isFrauen);
+  const diffTable  = isFrauen ? OPPONENT_DIFFICULTY_FRAUEN : OPPONENT_DIFFICULTY;
 
-  for (let i = 0; i < 34; i++) {
+  for (let i = 0; i < totalGames; i++) {
     const roll = rng();
     const { opponent, home } = opponents[i];
     let result, gf, ga;
@@ -177,7 +200,7 @@ function simulateSeason(players) {
     // Per-game probability adjusted for opponent strength.
     // drawProb peaks at balanced matchups (gameWin ≈ 0.50) and dips for mismatches.
     // gameWin clamped to [0.04, 0.76] so gameLoss stays positive and upsets remain possible.
-    const oppMod    = OPPONENT_DIFFICULTY[opponent] ?? 0;
+    const oppMod    = diffTable[opponent] ?? 0;
     const gameWin   = Math.max(0.04, Math.min(0.76, winProb - oppMod));
     const drawProb  = 0.22 + (0.5 - gameWin) * 0.05;
     const gameLoss  = 1 - gameWin - drawProb;
@@ -217,11 +240,8 @@ function simulateSeason(players) {
     game.scorers.sort((a, b) => a.minute - b.minute);
   }
 
-  const points = wins * 3 + draws;
-  const record34 = wins === 34; // perfect season
-
-  // Determine finishing position based on points
-  const position = estimatePosition(points);
+  const points   = wins * 3 + draws;
+  const position = isFrauen ? estimatePositionFrauen(points) : estimatePosition(points);
 
   return {
     wins, draws, losses, points,
@@ -230,16 +250,34 @@ function simulateSeason(players) {
     games,
     position,
     playerGoals,
-    attackScore: Math.round(attackScore * 10) / 10,
-    midfieldScore: Math.round(midfieldScore * 10) / 10,
-    defenseScore: Math.round(defenseScore * 10) / 10,
-    totalPower: Math.round(totalPower * 100),
+    attackScore:    Math.round(attackScore   * 10) / 10,
+    midfieldScore:  Math.round(midfieldScore * 10) / 10,
+    defenseScore:   Math.round(defenseScore  * 10) / 10,
+    totalPower:     Math.round(totalPower    * 100),
     diversityBonus: Math.round((diversityBonus - 1) * 100),
-    isChampion:  points >= 78,   // 1st place → Meister
-    isPerfect:   wins >= 28,
-    isEuropa:    points >= 50,   // 5th or better → Europa
-    isRelegated: points < 27    // 16th or worse → Abstiegskampf display
+    // Frauen: 26 games, max 78 pts. Men: 34 games, max 102 pts.
+    isChampion:  isFrauen ? points >= 60 : points >= 78,
+    isPerfect:   isFrauen ? wins >= 22   : wins >= 28,
+    isEuropa:    isFrauen ? points >= 39 : points >= 50,
+    isRelegated: isFrauen ? points < 20  : points < 27,
   };
+}
+
+// Calibrated to Frauen-Bundesliga 2023/24–2024/25 (14 teams, 26 games).
+// Examples: Bayern 60 → 1st, Wolfsburg 57 → 2nd, Frankfurt 50 → 3rd, Leverkusen 48 → 4th,
+//           Hoffenheim 39 → 5th, Essen 35 → 7th, Potsdam 28 → 10th, Sand 14 → 14th.
+function estimatePositionFrauen(points) {
+  if (points >= 60) return 1;   // Meisterin
+  if (points >= 54) return 2;   // UWCL direkt
+  if (points >= 48) return 3;   // UWCL direkt
+  if (points >= 43) return 4;   // UWCL Quali
+  if (points >= 38) return 5;   // UWCL Quali
+  if (points >= 33) return 6;
+  if (points >= 28) return 8;
+  if (points >= 23) return 10;
+  if (points >= 19) return 12;
+  if (points >= 13) return 13;
+  return 14;                    // Abstieg
 }
 
 // Calibrated to Bundesliga 2014/15–2023/24 average final standings.
@@ -274,15 +312,19 @@ function seededRng(seed) {
 }
 
 /**
- * Generate a seeded 34-game Bundesliga schedule.
- * First 17 games (Hinrunde): each opponent once in shuffled order, strictly alternating H/A.
- * Second 17 games (Rückrunde): same order, home/away flipped.
- * Because the second half mirrors the first, home/away alternates perfectly across all 34 games
- * with no consecutive same-venue pairs.
+ * Generate a seeded Bundesliga schedule.
+ * Männer: 17 opponents × 2 = 34 games. Frauen: 13 opponents × 2 = 26 games.
+ * First half: each opponent once, strictly alternating H/A.
+ * Second half: mirrors first half with home/away flipped.
  * Returns array of { opponent, home } objects.
  */
-function generateOpponents(seed) {
-  const teams = [
+function generateOpponents(seed, isFrauen = false) {
+  const teams = isFrauen ? [
+    'FC Bayern München', 'VfL Wolfsburg', 'Bayer 04 Leverkusen', 'SC Freiburg',
+    'TSG Hoffenheim', 'RB Leipzig', 'SGS Essen',
+    'SV Werder Bremen', 'Turbine Potsdam', 'MSV Duisburg',
+    '1. FC Köln', 'SC Sand', 'Carl Zeiss Jena',
+  ] : [
     "Bayern München", "Borussia Dortmund", "Bayer Leverkusen", "Kaiserslautern",
     "Borussia M'gladbach", "SC Freiburg", "Union Berlin", "VfB Stuttgart",
     "VfL Bochum", "Mainz 05", "Werder Bremen", "Augsburg",
