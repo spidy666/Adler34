@@ -256,10 +256,12 @@ function simulateSeason(players, mode = 'men') {
     totalPower:     Math.round(totalPower    * 100),
     diversityBonus: Math.round((diversityBonus - 1) * 100),
     // Frauen: 26 games, max 78 pts. Men: 34 games, max 102 pts.
+    // Frauen Europa: only 2nd–3rd reach CL qualification; no direct Europa Cup slot.
+    // Frauen relegation: bottom 2 (13th & 14th) go down; position 12 is safe (≥19 pts).
     isChampion:  isFrauen ? points >= 60 : points >= 78,
     isPerfect:   isFrauen ? wins >= 22   : wins >= 28,
-    isEuropa:    isFrauen ? points >= 39 : points >= 50,
-    isRelegated: isFrauen ? points < 20  : points < 27,
+    isEuropa:    isFrauen ? points >= 48 : points >= 50,
+    isRelegated: isFrauen ? points < 19  : points < 27,
   };
 }
 

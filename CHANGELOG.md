@@ -4,6 +4,23 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.33.1] — 2026-06-10
+
+### Changed
+- **Frauen-BL qualification corrected** — removed erroneous Europa Cup slot; reflects actual competition rules
+  - 1st place → Champions League (direct group stage)
+  - 2nd–3rd place → CL qualification round (`isEuropa` threshold raised to 48 pts, was 39)
+  - No direct Europa Cup slot; Europa Cup is only accessible if CL qualification fails (not modelled)
+  - Relegation: bottom 2 teams (13th and 14th) go down; `isRelegated` tightened to `< 19 pts` (was `< 20`)
+- **Results screen labels mode-aware** — Frauen outcomes now use correct German feminine forms and competition names
+  - Perfect season: "26 – 0 · MEISTERIN · DIE ADLERINNEN SIND UNBESIEGBAR"
+  - 1st place: "MEISTERIN · CHAMPIONS LEAGUE"
+  - 2nd place: "VIZEMEISTERIN · CL-QUALIFIKATION"
+  - 3rd place (isEuropa): "CL-QUALIFIKATION" instead of "EUROPACUP"
+- **Spielanleitung Frauen table updated** — points table now shows CL-Qualifikation for 2nd–3rd, Abstieg for 13th–14th, no Europa Cup entry
+
+---
+
 ## [0.33.0] — 2026-06-10
 
 ### Added

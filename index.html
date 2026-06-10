@@ -1111,21 +1111,30 @@ function showResults(result) {
   // Pre-fill stat elements (hidden until animation completes)
   let headline, cls, sub;
   const perfectBanner = document.getElementById('perfectBanner');
+  const frauen = gameMode === 'frauen';
   if (result.isPerfect) {
-    headline = '34 – 0'; cls = 'champion';
-    sub = 'PERFEKTE SAISON · MEISTER · DIE ADLER SIND UNBEZWINGBAR';
+    headline = frauen ? '26 – 0' : '34 – 0'; cls = 'champion';
+    sub = frauen
+      ? 'PERFEKTE SAISON · MEISTERIN · DIE ADLERINNEN SIND UNBESIEGBAR'
+      : 'PERFEKTE SAISON · MEISTER · DIE ADLER SIND UNBEZWINGBAR';
     perfectBanner.classList.add('show');
   } else if (result.position === 1) {
     headline = `${result.wins}–${result.losses}`; cls = 'champion';
-    sub = `BUNDESLIGA-MEISTER · ${result.points} PUNKTE · PLATZ 1`;
+    sub = frauen
+      ? `MEISTERIN · CHAMPIONS LEAGUE · ${result.points} PUNKTE`
+      : `BUNDESLIGA-MEISTER · ${result.points} PUNKTE · PLATZ 1`;
     perfectBanner.classList.remove('show');
   } else if (result.position === 2) {
     headline = `${result.wins}–${result.losses}`; cls = 'champion';
-    sub = `VIZEMEISTER · ${result.points} PUNKTE · PLATZ 2`;
+    sub = frauen
+      ? `VIZEMEISTERIN · CL-QUALIFIKATION · ${result.points} PUNKTE · PLATZ 2`
+      : `VIZEMEISTER · ${result.points} PUNKTE · PLATZ 2`;
     perfectBanner.classList.remove('show');
   } else if (result.isEuropa) {
     headline = `${result.wins}–${result.losses}`; cls = 'europa';
-    sub = `EUROPACUP · ${result.points} PUNKTE · PLATZ ${result.position}`;
+    sub = frauen
+      ? `CL-QUALIFIKATION · ${result.points} PUNKTE · PLATZ ${result.position}`
+      : `EUROPACUP · ${result.points} PUNKTE · PLATZ ${result.position}`;
     perfectBanner.classList.remove('show');
   } else if (result.isRelegated) {
     headline = `${result.wins}–${result.losses}`; cls = 'relegated';
@@ -1369,16 +1378,16 @@ function buildInfoHTML(mode) {
     <table>
       <thead><tr><th>Punkte</th><th>Tabellenplatz</th></tr></thead>
       <tbody>
-        <tr><td>60+</td><td>🥇 1. Platz — Meisterin</td></tr>
-        <tr><td>54–59</td><td>2. Platz</td></tr>
-        <tr><td>48–53</td><td>3. Platz</td></tr>
-        <tr><td>43–47</td><td>4. Platz (Champions League)</td></tr>
-        <tr><td>39–42</td><td>5. Platz (UEFA Women's Cup)</td></tr>
-        <tr><td>33–38</td><td>6. Platz</td></tr>
+        <tr><td>60+</td><td>🥇 1. Platz — Meisterin (Champions League direkt)</td></tr>
+        <tr><td>54–59</td><td>2. Platz (CL-Qualifikation)</td></tr>
+        <tr><td>48–53</td><td>3. Platz (CL-Qualifikation)</td></tr>
+        <tr><td>43–47</td><td>4. Platz</td></tr>
+        <tr><td>38–42</td><td>5. Platz</td></tr>
+        <tr><td>33–37</td><td>6. Platz</td></tr>
         <tr><td>28–32</td><td>8. Platz</td></tr>
         <tr><td>23–27</td><td>10. Platz</td></tr>
         <tr><td>19–22</td><td>12. Platz</td></tr>
-        <tr><td>13–18</td><td>13. Platz</td></tr>
+        <tr><td>13–18</td><td>13. Platz (Abstieg)</td></tr>
         <tr><td>&lt; 13</td><td>14. Platz (Abstieg)</td></tr>
       </tbody>
     </table>` : `
