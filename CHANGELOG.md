@@ -1,483 +1,420 @@
-# Changelog
+# Änderungsprotokoll
 
-All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** are documented here.
+Alle wesentlichen Änderungen an **34-0 — Eintracht Frankfurt Bundesliga Dream Team** sind hier dokumentiert.
 
 ---
 
 ## [0.33.2] — 2026-06-10
 
-### Fixed
-- **Frauen deal: max 1 GK per round** — with 11 keepers in a 69-player pool, random sampling regularly produced 4–5 GK offers; Frauen mode now caps GKs at 1 per deal (outfield players fill the remaining 12 slots). Men's mode unchanged.
-- **Alternate positions added for 5 Frauen players** (sourced from Fotmob, Footballcritic, Soccerdonna):
-  - Amanda Ilestedt (CB) → alt `RB` (Footballcritic: documented right-back appearances)
-  - Verena Hanshaw (LB) → alt `CB` (Fotmob: CB listed as secondary position)
-  - Leonie Köster (MF) → alt `DM` (Soccerdonna: registered as defensives Mittelfeld)
-  - Pernille Sanvig (MF) → alt `DM` (Fotmob: primary listed as DM with CM secondary)
-  - Lara Prašnikar (CF) → alt `RW` (Fotmob: right winger documented as secondary)
-- Remaining players with empty `altPositions` have no documented secondary position in any of the checked sources (Soccerdonna, Fotmob, Footballcritic, Wikipedia)
+### Behoben
+- **Frauen-Deal: max. 1 TW pro Runde** — mit 11 Torhüterinnen in einem 69-Spielerinnen-Pool ergaben zufällige Ziehungen regelmäßig 4–5 TW-Angebote; der Frauen-Modus begrenzt TW nun auf 1 pro Deal (Feldspielerinnen füllen die verbleibenden 12 Plätze). Männer-Modus unverändert.
+- **Ausweichpositionen für 5 Frauen-Spielerinnen ergänzt** (Quellen: Fotmob, Footballcritic, Soccerdonna):
+  - Amanda Ilestedt (IV) → Alt `RV` (Footballcritic: dokumentierte Einsätze als Rechtsverteidigerin)
+  - Verena Hanshaw (LV) → Alt `IV` (Fotmob: IV als Nebenposition aufgeführt)
+  - Leonie Köster (MF) → Alt `DM` (Soccerdonna: als defensives Mittelfeld registriert)
+  - Pernille Sanvig (MF) → Alt `DM` (Fotmob: primär als DM mit ZM als Nebenposition)
+  - Lara Prašnikar (ST) → Alt `RA` (Fotmob: Rechtsaußen als Nebenposition dokumentiert)
+- Verbleibende Spielerinnen mit leerem `altPositions` haben keine dokumentierte Nebenposition in den geprüften Quellen (Soccerdonna, Fotmob, Footballcritic, Wikipedia)
+- **Katharina Rust entfernt** — verifiziert als Spielerin von Eintracht Frankfurt II (2. Frauen-Bundesliga), nicht des Bundesliga-Erstligakaders; keine verifizierten Erstliga-Einsätze
 
 ---
 
 ## [0.33.1] — 2026-06-10
 
-### Changed
-- **Frauen-BL qualification corrected** — removed erroneous Europa Cup slot; reflects actual competition rules
-  - 1st place → Champions League (direct group stage)
-  - 2nd–3rd place → CL qualification round (`isEuropa` threshold raised to 48 pts, was 39)
-  - No direct Europa Cup slot; Europa Cup is only accessible if CL qualification fails (not modelled)
-  - Relegation: bottom 2 teams (13th and 14th) go down; `isRelegated` tightened to `< 19 pts` (was `< 20`)
-- **Results screen labels mode-aware** — Frauen outcomes now use correct German feminine forms and competition names
-  - Perfect season: "26 – 0 · MEISTERIN · DIE ADLERINNEN SIND UNBESIEGBAR"
-  - 1st place: "MEISTERIN · CHAMPIONS LEAGUE"
-  - 2nd place: "VIZEMEISTERIN · CL-QUALIFIKATION"
-  - 3rd place (isEuropa): "CL-QUALIFIKATION" instead of "EUROPACUP"
-- **Spielanleitung Frauen table updated** — points table now shows CL-Qualifikation for 2nd–3rd, Abstieg for 13th–14th, no Europa Cup entry
+### Geändert
+- **Frauen-BL-Qualifikation korrigiert** — fehlerhafter Europa-Cup-Platz entfernt; entspricht nun den tatsächlichen Wettbewerbsregeln
+  - 1. Platz → Champions League (direkte Gruppenphase)
+  - 2.–3. Platz → CL-Qualifikationsrunde (`isEuropa`-Schwellenwert auf 48 Punkte angehoben, war 39)
+  - Kein direkter Europa-Cup-Platz; Europa Cup ist nur erreichbar, wenn die CL-Qualifikation scheitert (nicht modelliert)
+  - Abstieg: untere 2 Teams (13. und 14.) steigen ab; `isRelegated` auf `< 19 Pkt.` angepasst (war `< 20`)
+- **Ergebnisbildschirm-Bezeichnungen modusabhängig** — Frauen-Ergebnisse verwenden nun korrekte deutsche weibliche Formen und Wettbewerbsnamen
+  - Perfekte Saison: "26 – 0 · MEISTERIN · DIE ADLERINNEN SIND UNBESIEGBAR"
+  - 1. Platz: "MEISTERIN · CHAMPIONS LEAGUE"
+  - 2. Platz: "VIZEMEISTERIN · CL-QUALIFIKATION"
+  - 3. Platz (isEuropa): "CL-QUALIFIKATION" statt "EUROPACUP"
+- **Spielanleitung Frauen-Tabelle aktualisiert** — Punktetabelle zeigt nun CL-Qualifikation für 2.–3., Abstieg für 13.–14., kein Europa-Cup-Eintrag
 
 ---
 
 ## [0.33.0] — 2026-06-10
 
-### Added
-- **Ratings for all 69 Frauen players** — replaced placeholder `rating: 0` with calibrated values across four tiers
+### Hinzugefügt
+- **Bewertungen für alle 69 Frauen-Spielerinnen** — Platzhalter `rating: 0` durch kalibrierte Werte in vier Stufen ersetzt
   - Elite (88–91): Freigang 91, Nüsken/Reuteler 89, Prašnikar 88
-  - Strong (84–87): Anyomi 87, Frohms/Dunst 86/87, Johannes/Feiersinger/Kleinherne/Chiba 85, Martinez/Raso/Ilestedt 84
-  - Established (77–83): Hanshaw 83, Winkler 83, Hechler/Doorsoun/Kirchberger/Pawollek 82, Letícia Santos/Wolter/Gräwe/Senß/Verena 81–83, internationals 78–80
-  - Reserves/youth (72–77): backup GKs, 2025/26 newcomers with no Bundesliga data
-  - Ratings shifted ~2 pts higher than equivalent men's tier to compensate for the smaller era-diversity bonus (max 0.94 vs 1.04 for men)
-- **Mode-aware German Spielanleitung** — the info popup now renders dynamic German content based on the active mode
-  - Men: 34 Spiele, 18 Teams, men's points table, men's player database overview
-  - Frauen: 26 Spiele, 14 Teams, Frauen-BL points table, women's player database overview
-  - No longer fetches README.md; re-renders on every open so the content reflects any mode switch
+  - Stark (84–87): Anyomi 87, Frohms/Dunst 86/87, Johannes/Feiersinger/Kleinherne/Chiba 85, Martinez/Raso/Ilestedt 84
+  - Etabliert (77–83): Hanshaw 83, Winkler 83, Hechler/Doorsoun/Kirchberger/Pawollek 82, Santos/Wolter/Gräwe/Senß/Verena 81–83, Internationale 78–80
+  - Reserven/Jugend (72–77): Ersatz-TW, 2025/26-Neuzugänge ohne Bundesliga-Daten
+  - Bewertungen um ~2 Punkte höher als vergleichbare Männer-Stufe, um den geringeren Ären-Vielfalt-Bonus zu kompensieren (max. 0,94 vs. 1,04 bei Männern)
+- **Modusabhängige deutsche Spielanleitung** — das Info-Popup rendert nun dynamische deutsche Inhalte basierend auf dem aktiven Modus
+  - Männer: 34 Spiele, 18 Teams, Männer-Punktetabelle, Männer-Spielerdatenbank-Übersicht
+  - Frauen: 26 Spiele, 14 Teams, Frauen-BL-Punktetabelle, Frauen-Spielerdatenbank-Übersicht
+  - Lädt README.md nicht mehr; wird bei jedem Öffnen neu gerendert
 
-### Fixed
-- **Frauen card selection bug** — clicking a player card in Frauen mode did nothing because the handler used `PLAYERS.find()` (men's array) instead of `activePlayers.find()`. Corrected to `activePlayers.find()`.
-- **Season range label off-by-one** — the deck header showed e.g. "2020/21 – 2026/27" (one season too far) because `activeTo` is the end-year of the last season, not a start year. Fixed with `seasonLabel(maxYear - 1)`.
-- **Rebić nationality label** — `"🇭🇷 Croatia"` (English) corrected to `"🇭🇷 Kroatien"` (German), consistent with all other nationality strings.
+### Behoben
+- **Frauen-Kartenauswahl-Bug** — Klicken einer Spielerkarte im Frauen-Modus hatte keine Wirkung, da der Handler `PLAYERS.find()` (Männer-Array) statt `activePlayers.find()` verwendete
+- **Saisonbereichsangabe um ein Jahr verschoben** — die Deck-Überschrift zeigte z. B. "2020/21 – 2026/27" (eine Saison zu weit), da `activeTo` das Endjahr der letzten Saison ist. Behoben mit `seasonLabel(maxYear - 1)`
+- **Nationalitätslabel Rebić** — `"🇭🇷 Croatia"` (englisch) korrigiert zu `"🇭🇷 Kroatien"` (deutsch)
 
 ---
 
 ## [0.32.1] — 2026-06-10
 
-### Changed
-- **Frauen-BL opponent list corrected** — RB Leipzig replaced with Hamburger SV
-  - Leipzig were not a consistent Frauen-Bundesliga presence across the covered window
-  - HSV's women's team is the more appropriate fixture for the era; assigned difficulty −0.02 (lower-half away side)
+### Geändert
+- **Frauen-BL-Gegnerliste korrigiert** — RB Leipzig durch Hamburger SV ersetzt
+  - Leipzig war in der Frauen-Bundesliga im betrachteten Zeitraum nicht dauerhaft präsent
+  - HSV Frauen ist die angemessenere Begegnung für die Ära; Schwierigkeit −0,02
 
 ---
 
 ## [0.32.0] — 2026-06-10
 
-### Added
-- **Frauen-Bundesliga season engine** — simulation now runs a proper 26-game season in Frauen mode
-  - 13 opponents (FC Bayern München, VfL Wolfsburg, Bayer 04 Leverkusen, SC Freiburg, TSG Hoffenheim, Hamburger SV, SGS Essen, SV Werder Bremen, Turbine Potsdam, MSV Duisburg, 1. FC Köln, SC Sand, Carl Zeiss Jena) instead of the men's 17
-  - Separate `OPPONENT_DIFFICULTY_FRAUEN` table calibrated to recent Frauen-BL form: Bayern +0.22, Wolfsburg +0.18, Leverkusen +0.10 at the top; Jena −0.05, Sand −0.04 at the bottom
-  - `estimatePositionFrauen()` calibrated to 2023/24 actual table: 1st ≥60 pts, UWCL direct ≥48, UWCL qualifying ≥38, relegation zone <20
-  - `isChampion` threshold 60 pts (was 78), `isPerfect` 22 wins (was 28), `isEuropa` 39 pts (was 50), `isRelegated` <20 pts (was <27)
-  - `simulateSeason()` accepts a `mode` parameter (`'men'` | `'frauen'`); index.html passes `gameMode` through
+### Hinzugefügt
+- **Frauen-Bundesliga-Saison-Engine** — Simulation läuft im Frauen-Modus als reguläre 26-Spiele-Saison
+  - 13 Gegner (FC Bayern München, VfL Wolfsburg, Bayer 04 Leverkusen, SC Freiburg, TSG Hoffenheim, Hamburger SV, SGS Essen, SV Werder Bremen, Turbine Potsdam, MSV Duisburg, 1. FC Köln, SC Sand, Carl Zeiss Jena)
+  - Separate `OPPONENT_DIFFICULTY_FRAUEN`-Tabelle kalibriert an der aktuellen Frauen-BL-Form: Bayern +0,22, Wolfsburg +0,18, Leverkusen +0,10; Jena −0,05, Sand −0,04
+  - `estimatePositionFrauen()` kalibriert an der tatsächlichen Tabelle 2023/24: 1. ≥60 Pkt., UWCL direkt ≥48, UWCL-Qualifikation ≥38, Abstiegszone <20
+  - `isChampion`-Schwellenwert 60 Pkt. (war 78), `isPerfect` 22 Siege (war 28), `isEuropa` 39 Pkt. (war 50), `isRelegated` <20 Pkt. (war <27)
+  - `simulateSeason()` akzeptiert einen `mode`-Parameter (`'men'` | `'frauen'`)
 
 ---
 
 ## [0.31.3] — 2026-06-10
 
-### Fixed
-- **Women's roster corrected from soccerdonna historical squad pages** (5 missing players, 6 position/timeline errors)
-  - Added: Bryane Heaberlin (GK/USA, 2020/21), Jessica Reiß (GK, 2022/23), Loreen Bender (RW, 2022/23), Tomke Schneider (CB, 2024/25), Marlene Wild (MF, 2024/25)
-  - Sophie Nachtigall: `CB` → `AM` (soccerdonna lists her as OM / offensive midfielder throughout)
-  - Carlotta Wamser: `RW` → `RB` (soccerdonna confirms RV in all seasons at Frankfurt)
-  - Johanna Berg: `MF` → `CF` (listed as Angriff in 2024/25)
-  - Jella Veit: `activeFrom` 2021 → 2022 (first appears in 2022/23 squad, not 2021/22)
-  - Remina Chiba: `activeFrom` 2024 → 2023 (joined January 2024 = 2023/24 season)
-  - Nadine Riesen: `RB` → `LB` (deployed as LV at Frankfurt in every season recorded)
-  - Total: 69 verified players
+### Behoben
+- **Frauen-Kader korrigiert anhand soccerdonna-Kaderseiten** (5 fehlende Spielerinnen, 6 Positions-/Zeitfehler)
+  - Hinzugefügt: Bryane Heaberlin (TW/USA, 2020/21), Jessica Reiß (TW, 2022/23), Loreen Bender (RA, 2022/23), Tomke Schneider (IV, 2024/25), Marlene Wild (MF, 2024/25)
+  - Sophie Nachtigall: `IV` → `OM` (soccerdonna listet sie durchgehend als OM)
+  - Carlotta Wamser: `RA` → `RV` (soccerdonna bestätigt RV in allen Frankfurter Saisons)
+  - Johanna Berg: `MF` → `ST` (als Angriff in 2024/25 aufgeführt)
+  - Jella Veit: `activeFrom` 2021 → 2022
+  - Remina Chiba: `activeFrom` 2024 → 2023 (trat im Januar 2024 bei = Saison 2023/24)
+  - Nadine Riesen: `RV` → `LV` (in jeder aufgezeichneten Frankfurter Saison als LV eingesetzt)
+  - Gesamt: 69 verifizierte Spielerinnen
 
 ---
 
 ## [0.31.2] — 2026-06-10
 
-### Added
-- **2025/26 squad added to women's database** — 16 new players from the current Frauen-Bundesliga squad (via soccerdonna.de)
-  - GK: Sophia Winkler, Janne Krumme, Ylvi Eisenbeiß
-  - CB: Amanda Ilestedt (Sweden), Marthine Østenstad (Norway), Emily Wallrabenstein, Mina Matijević
-  - MF/DM/AM: Eleni Markou (Greece), Noemi Ivelj, Jarne Teulings (Belgium), Ainhoa Alguacil (Spain), Georgia Stanti, Tessa Zimmermann
-  - FW: Hayley Raso (Australia), Rebecka Blomqvist (Sweden), Erëleta Memeti (Kosovo)
-  - Coverage extended to 2020/21–2025/26
+### Hinzugefügt
+- **Kader 2025/26 zur Frauen-Datenbank hinzugefügt** — 16 neue Spielerinnen aus dem aktuellen Frauen-Bundesliga-Kader (via soccerdonna.de)
+  - TW: Sophia Winkler, Janne Krumme, Ylvi Eisenbeiß
+  - IV: Amanda Ilestedt (Schweden), Marthine Østenstad (Norwegen), Emily Wallrabenstein, Mina Matijević
+  - MF/DM/OM: Eleni Markou (Griechenland), Noemi Ivelj, Jarne Teulings (Belgien), Ainhoa Alguacil (Spanien), Georgia Stanti, Tessa Zimmermann
+  - STU: Hayley Raso (Australien), Rebecka Blomqvist (Schweden), Erëleta Memeti (Kosovo)
+  - Abdeckung erweitert auf 2020/21–2025/26
 
 ---
 
 ## [0.31.1] — 2026-06-10
 
-### Fixed
-- **Women's roster replaced with fully verified data** — initial placeholder entries removed; all 42 players confirmed against Wikipedia, Transfermarkt, official club sources, and season-by-season sport.de squad pages
-  - Corrected GK timelines: Merle Frohms 2020–2022 (first post-merger signing), Stina Johannes 2022–2025 (not 2019–2022 as initially stated)
-  - Removed ~15 unverified invented players (Cecilia Ran, Anna Klink, Lisi Mayr, Blázquez, Feldkamp, Haug, Islacker, Fölmli, Büchler, etc.)
-  - Added 20+ verified players missing from the initial version (Hechler, Hanshaw, Santos, Kirchberger, Feiersinger, Panfil, Mauron/Gaillard, Martinez, Wamser, Riesen, Chiba, and more)
-  - Decade corrected to `2010s` for all players who joined before 2020 (Kleinherne, Nüsken, Dunst, Reuteler, Freigang, Feiersinger, Matheis, Pawollek)
+### Behoben
+- **Frauen-Kader durch vollständig verifizierte Daten ersetzt** — anfängliche Platzhaltereinträge entfernt; alle 42 Spielerinnen gegen Wikipedia, Transfermarkt, offizielle Vereinsquellen und sport.de-Kaderseiten geprüft
+  - TW-Zeiträume korrigiert: Merle Frohms 2020–2022, Stina Johannes 2022–2025
+  - ~15 nicht verifizierte Spielerinnen entfernt (Cecilia Ran, Anna Klink, Lisi Mayr, Blázquez, Feldkamp, Haug, Islacker, Fölmli, Büchler u. a.)
+  - 20+ verifizierte fehlende Spielerinnen hinzugefügt (Hechler, Hanshaw, Santos, Kirchberger, Feiersinger, Panfil, Mauron/Gaillard, Martinez, Wamser, Riesen, Chiba und weitere)
+  - Jahrzehnt für alle Spielerinnen, die vor 2020 beigetreten sind, auf `2010s` korrigiert
 
 ---
 
 ## [0.31.0] — 2026-06-10
 
-### Added
-- **Frauen game mode** — new "Frauen" mode uses the Eintracht Frankfurt Women squad (2020/21–2024/25)
-  - Mode switcher buttons ("Männer" / "Frauen") appear under the formation grid on the start screen
-  - 32 players added across two eras (2010s, 2020s) covering GKs, defenders, midfielders, and forwards
-  - Key players include Laura Freigang, Nicole Anyomi, Sjoeke Nüsken, Barbara Dunst, Geraldine Reuteler, Sophia Kleinherne
-  - Ratings are placeholders (0) — to be calibrated in a future update
-  - Switching mode resets the current draft and returns to the formation screen
-  - All existing draft, simulation, and fireworks mechanics work identically in Frauen mode
+### Hinzugefügt
+- **Frauen-Spielmodus** — neuer "Frauen"-Modus verwendet den Eintracht Frankfurt Frauen-Kader (2020/21–2024/25)
+  - Modusumschalter ("Männer" / "Frauen") unter dem Formationsraster auf dem Startbildschirm
+  - 32 Spielerinnen aus zwei Ären (2010er, 2020er): Laura Freigang, Nicole Anyomi, Sjoeke Nüsken, Barbara Dunst, Geraldine Reuteler, Sophia Kleinherne
+  - Bewertungen sind Platzhalter (0) — in späterem Update kalibriert
+  - Moduswechsel setzt den aktuellen Draft zurück
+  - Alle bestehenden Draft-, Simulations- und Feuerwerks-Mechanismen funktionieren im Frauen-Modus identisch
 
 ---
 
 ## [0.30.0] — 2026-06-10
 
-### Added
-- **Fireworks animation on league title** — a canvas-based fireworks display launches automatically when the final stats are revealed after winning the Bundesliga (1st place or perfect season)
-  - 14 rockets rise from the bottom of the screen to random heights, each trailing sparks and bursting into ~75 particles on arrival
-  - Uses the Eintracht Frankfurt colour palette: Rot, Gold, Weiß, Orange
-  - Rendered on a fixed canvas (`z-index: 1050`) with `pointer-events: none` so all modal buttons remain clickable during the animation
-  - Stops and clears automatically when all particles fade out, or immediately on modal close / reset
+### Hinzugefügt
+- **Feuerwerksanimation beim Meistertitel** — canvas-basierte Feuerwerksdarstellung startet automatisch beim Titelgewinn (1. Platz oder perfekte Saison)
+  - 14 Raketen steigen vom unteren Bildschirmrand auf zufällige Höhen, hinterlassen Funken und explodieren in ~75 Partikel
+  - Eintracht-Frankfurt-Farbpalette: Rot, Gold, Weiß, Orange
+  - Gerendert auf einem festen Canvas (`z-index: 1050`) mit `pointer-events: none`
+  - Stoppt automatisch wenn alle Partikel ausblenden, oder sofort beim Modal-Schließen
 
 ---
 
 ## [0.29.0] — 2026-06-10
 
-### Changed
-- **Strict home/away alternation in fixture schedule** — the 34-game schedule now guarantees H and A matches alternate throughout the entire season with no consecutive same-venue games
-  - Previously each of the 17 Hinrunde games was assigned a random home/away via a per-team coin flip, which could produce long runs of consecutive home or away fixtures
-  - Now a single seeded coin flip determines whether the season opens at home or away, then positions 1–17 strictly alternate (H/A/H/A/… or A/H/A/H/…). The mirrored Rückrunde (same order, venues flipped) continues the alternation seamlessly, so the full 34-game sequence is perfectly alternating with zero exceptions
-  - Schedule remains fully deterministic; the squad seed still determines both opponent order and opening venue
+### Geändert
+- **Strenge Heim-/Auswärts-Abwechslung im Spielplan** — der Spielplan garantiert nun, dass Heim- und Auswärtsspiele während der gesamten Saison abwechseln
+  - Zuvor konnte ein zufälliger Münzwurf pro Team lange Serien aufeinanderfolgender Heim- oder Auswärtsspiele erzeugen
+  - Jetzt bestimmt ein einzelner geseedeter Münzwurf den Saisoneröffnungs-Schauplatz; alle weiteren Spiele wechseln strikt ab (H/A/H/A/…). Die gespiegelte Rückrunde setzt die Abwechslung nahtlos fort
+  - Spielplan bleibt vollständig deterministisch
 
 ---
 
 ## [0.28.0] — 2026-06-10
 
-### Changed
-- **Score distribution weighted by squad strength** — goal counts in wins and losses now reflect attackScore and defenseScore rather than being uniformly random
-  - In wins: a bias factor shifts probability between 1-goal and 3-goal results while keeping 2-goal wins fixed at 33%. Strong attacks (attackScore ≥ ~10) raise P(3 goals) to 48% and lower P(1 goal) to 18%; weak attacks flip these. Bias saturates at ±0.15 (calibrated over attackScore range 7–11)
-  - In losses: a symmetric bias controls whether the opponent scores 1 or 2. Strong defense (defenseScore ≥ ~14.5) raises P(concede 1) to 65%; weak defense (defenseScore ≈ 9) lowers it to 35%
-  - Win/draw/loss outcomes and total expected points are completely unchanged — only the scorelines within each result type are affected
-  - Corrects the 19-season finding that GF and GA were explained almost entirely by W/D/L counts and were insensitive to actual squad quality
-- **Fixture schedule shuffled per squad** — the 34-game opponent list is now randomised using a Fisher-Yates shuffle seeded from the squad seed (`seed + 777777`), so each squad faces a unique fixture order
-  - Each of the 17 opponents still appears exactly twice
-  - Eliminates the fixed front-loading of Bayern / Dortmund / Leverkusen in MD1–3 that caused strong squads to accumulate early losses in every season
-  - Schedule remains fully deterministic: the same squad always sees the same fixture order
-- **Draw probability varies per game** — `drawProb` is now computed per fixture as `0.22 + (0.5 − gameWin) × 0.05` instead of a fixed 22%
-  - Balanced matchups (gameWin ≈ 0.50, e.g. vs Bayern for a strong squad) draw slightly more often (~24%)
-  - Lopsided fixtures (gameWin ≈ 0.76, e.g. vs Schalke) draw slightly less (~21%)
-  - Average across a full season remains ~22%; the change only affects the distribution of draws across opponent tiers, not the season total
+### Geändert
+- **Torverteilung nach Kader-Stärke gewichtet** — Toranzahlen bei Siegen und Niederlagen spiegeln nun `attackScore` und `defenseScore` wider
+  - Bei Siegen: starke Angriffe (attackScore ≥ ~10) erhöhen P(3 Tore) auf 48%; schwache Angriffe senken es auf 18%
+  - Bei Niederlagen: starke Abwehr (defenseScore ≥ ~14,5) erhöht P(1 Gegentor) auf 65%; schwache Abwehr senkt es auf 35%
+  - Sieg/Unentschieden/Niederlage-Ergebnisse und erwartete Gesamtpunkte vollständig unverändert
+- **Spielplan pro Kader gemischt** — Fisher-Yates-Shuffle (geseedet mit `seed + 777777`); jeder Kader hat eine einzigartige Spielplanreihenfolge, jeder Gegner erscheint weiterhin genau zweimal
+- **Unentschieden-Wahrscheinlichkeit variiert pro Spiel** — `drawProb = 0,22 + (0,5 − gameWin) × 0,05`; ausgeglichene Begegnungen enden etwas häufiger unentschieden (~24%), einseitige etwas seltener (~21%)
 
 ---
 
 ## [0.27.0] — 2026-06-09
 
-### Changed
-- **Balance penalty replaced with smooth curve** — the previous step-function (flat 7% at imbalance > 1.6, flat 15% at > 2.6, flat 25% at > 3.6) is replaced with a continuous formula: no penalty up to 1.8, then `penalty = (imbalance − 1.8) × 11.5%`, capped at 25%
-  - Five seasons of debug data showed that every squad — from star-studded to all-out-of-position — produces a structural defenseScore > midfieldScore imbalance in the 1.5–1.75 range, caused by the inherent weight of the GK + 2 CB defensive foundation (8.0 combined weight vs midfield)
-  - The old threshold was penalising well-built squads for the position-weight structure, not for genuinely unbalanced squad decisions
-  - New curve: at 2.0 imbalance ~2.3% hit, at 2.5 ~8% hit, at 3.0 ~14% hit, at 4.0+ 25% (maximum)
-  - The debug overlay's local penalty recalculation is updated to match
+### Geändert
+- **Balancestrafe durch glatte Kurve ersetzt** — Stufenfunktion (fest 7%/15%/25%) ersetzt durch kontinuierliche Formel: keine Strafe bis Ungleichgewicht 1,8, dann `Strafe = (Ungleichgewicht − 1,8) × 11,5%`, max. 25%
+  - Fünf Saisons Debug-Daten zeigten, dass jeder Kader ein strukturelles defenseScore > midfieldScore-Ungleichgewicht (1,5–1,75) durch die inhärenten TW + 2 IV-Gewichte erzeugt
+  - Der alte Schwellenwert bestrafte gut aufgebaute Kader für die Positionsgewichtsstruktur, nicht für echte Ungleichgewichtsentscheidungen
 
 ---
 
 ## [0.26.0] — 2026-06-09
 
-### Added
-- **DEBUG button on result screen** — a new "DEBUG" button appears in the modal footer (far left, visually distinct with a dashed border) after the season animation completes, alongside KADER ANZEIGEN
-  - Opens an overlay with a monospace pre-formatted text dump of the full season, designed to be pasted into Claude for analysis
-  - Includes: squad (slot label, player, rating, fit level, effective rating for alt/oop, decade, season goals), engine intermediate values (attackScore / midfieldScore / defenseScore, imbalance, balance penalty and %, diversity bonus, totalPower, baseWinProb), season summary (points, placement, W/D/L, GF/GA/GD), per-player goal tally, and all 34 match results with scorer names and minutes
-  - KOPIEREN button copies the text to clipboard with confirmation feedback
+### Hinzugefügt
+- **DEBUG-Schaltfläche auf dem Ergebnisbildschirm** — erscheint nach Abschluss der Animation im Modal-Footer neben KADER ANZEIGEN
+  - Öffnet ein Overlay mit monospace-formatiertem Saisondump (Kader, Engine-Zwischenwerte, Saisonzusammenfassung, Tor-Gesamt, alle Spielergebnisse mit Torschützen/Minuten)
+  - KOPIEREN-Schaltfläche kopiert Text in die Zwischenablage
 
 ---
 
 ## [0.25.0] — 2026-06-09
 
-### Fixed
-- **Balance penalty threshold raised** — the threshold for the first balance penalty tier was raised from `1.5` to `1.6`; squads near the old boundary (e.g. strong CB inflating defenseScore vs a midfield with several alt-position players) were receiving a 7 % hit despite being reasonably balanced, keeping top squads 10–12 points below expectation
+### Behoben
+- **Balancestrafe-Schwellenwert angehoben** — von `1,5` auf `1,6`; Kader nahe der alten Grenze erhielten 7% Strafe trotz vernünftiger Balance, was Top-Kader 10–12 Punkte unter Erwartung hielt
 
 ---
 
 ## [0.24.0] — 2026-06-09
 
-### Changed
-- **Difficulty reduced — strong squads can now win the title** — the win-probability formula has been shifted upward
-  - Constant adjusted from `−0.63` to `−0.58`; cap raised from `0.70` to `0.74`
-  - A squad with 88–91 rated strikers, 90 GK, 82–85 defenders and 79–80 midfielders now produces `winProb ≈ 0.70`, giving an expected ~79 points per season (title range)
-  - Previously the same squad averaged ~70 expected points (2nd–4th place) regardless of quality
-  - Weak squads are unaffected — the minimum floor of `0.18` is unchanged
-- **Player rating corrections — midfield pool** — pure `MF`-position players were systematically the lowest-rated group in the database (best was 83), making the midfield the hardest position to fill effectively
-  - Michael Fink (MF, 2010s): **73 → 76** — 84 Bundesliga apps across six seasons, reliable squad regular through promotion and relegation
-  - Pirmin Schwegler (DM, 2000s): **79 → 81** — Swiss international with 108 apps, key figure in Frankfurt's post-2012 stabilisation
+### Geändert
+- **Schwierigkeit reduziert — starke Kader können nun den Titel gewinnen**
+  - Konstante von `−0,63` auf `−0,58` angepasst; Obergrenze von `0,70` auf `0,74` angehoben
+  - Ein Kader mit 88–91 bewerteten Stürmern, TW-90, 82–85 Verteidigern und 79–80 Mittelfeldspielern erzeugt `winProb ≈ 0,70` (~79 erwartete Punkte, Titelbereich)
+  - Schwache Kader unberührt — Mindestwert `0,18` bleibt unverändert
+- **Spielerbewertungskorrekturen — Mittelfeld-Pool**
+  - Michael Fink (MF, 2010er): **73 → 76** — 84 Bundesliga-Einsätze über sechs Saisons
+  - Pirmin Schwegler (DM, 2000er): **79 → 81** — Schweizer Nationalspieler mit 108 Einsätzen
 
 ---
 
 ## [0.23.0] — 2026-06-09
 
-### Fixed
-- **"Tore" pluralisation in squad recap** — a player with exactly 1 season goal now correctly shows "1 Tor" instead of "1 Tore"
+### Behoben
+- **"Tore"-Pluralisierung in Kaderübersicht** — ein Spieler mit genau 1 Saisontor zeigt nun korrekt "1 Tor" statt "1 Tore"
 
 ---
 
 ## [0.22.0] — 2026-06-09
 
-### Fixed
-- **Broken flag image for Yugoslav players** — the `yu` ISO country code is retired and has no image on flagcdn.com; Fahrudin Jusufi and Slobodan Komljenović now display `"Yugoslavia"` as plain text instead of a broken icon
+### Behoben
+- **Defektes Flaggenbild für jugoslawische Spieler** — ISO-Code `yu` ist eingestellt; Fahrudin Jusufi und Slobodan Komljenović zeigen nun `"Yugoslavia"` als reinen Text statt eines defekten Symbols
 
 ---
 
 ## [0.21.0] — 2026-06-09
 
-### Fixed
-- **Nationality flags not shown on Windows desktop (Brave/Chrome)** — Windows system fonts do not include flag emoji; all nationality strings are now rendered via `flagImg()`, a helper that converts the Regional Indicator emoji pair to a 16×12 px PNG from flagcdn.com, working consistently on all platforms
-- **Pitch slots too large on mobile** — added `@media (max-width: 600px)` rule that resets slot size to 64×64 px (the original size) with proportionally scaled inner text; slots remain 128 px on tablet and desktop
+### Behoben
+- **Nationalitätsflaggen nicht auf Windows-Desktop angezeigt (Brave/Chrome)** — Windows-Systemschriftarten enthalten keine Flaggen-Emojis; alle Nationalitätsstrings werden nun über `flagImg()` gerendert (Regionalindikator-Emoji-Paar → 16×12 px PNG von flagcdn.com)
+- **Feldplätze auf Mobilgeräten zu groß** — `@media (max-width: 600px)` setzt Slot-Größe auf 64×64 px zurück
 
 ---
 
 ## [0.20.0] — 2026-06-09
 
-### Changed
-- **ANLEITUNG button visibility** — button is now white with a white border at rest (was barely visible `--dim` grey); hover colour changed to bright yellow (`#FFD700`) for stronger visual feedback
-- **Pitch player slots doubled in size** — slot diameter increased from 64 px to 128 px; inner text scaled proportionally (position label 0.85 → 1.05 rem, player name 0.58 → 0.72 rem, rating 1.1 → 1.4 rem)
-- **Formation positions spread out for 128 px slots** — all six formations repositioned to prevent circles from touching
-  - Back-4 rows: outer fullbacks moved to x = 12 % / 88 %, inner CBs to 37 % / 63 % (was 18/39/61/82) — ~150 px gap between centres at typical pitch widths
-  - Wide players (wingers, wingbacks) pushed to x = 10–16 % and 84–90 % to use the full pitch width
-  - 3-player midfield rows use 26/50/74 spacing (~24 % gaps); 4-player rows use the same 12/37/63/88 pattern as the back line
-  - 5-player rows (3-5-2 midfield, 5-3-2 defence) use 10/30/50/70/90 — the maximum possible spread for five equal-spaced players
+### Geändert
+- **ANLEITUNG-Schaltfläche sichtbarkeit** — weiß mit weißem Rand im Ruhezustand (war kaum sichtbares `--dim`-Grau); Hover-Farbe zu leuchtendem Gelb (`#FFD700`) geändert
+- **Feldplatz-Spieler-Slots verdoppelt** — Slot-Durchmesser von 64 px auf 128 px vergrößert; innerer Text proportional skaliert
+- **Formationspositionen für 128 px-Slots auseinandergezogen** — alle sechs Formationen neu positioniert; Außenverteidiger auf x = 12 %/88 %, innere IVs auf 37 %/63 %; 5-Spieler-Reihen auf 10/30/50/70/90
 
 ---
 
 ## [0.19.0] — 2026-06-09
 
-### Fixed
-- **1:1 draw displayed in green (win colour)** — score generation for wins and losses could produce equal scorelines
-  - Root cause: for a win, `ga = Math.floor(rng() * 2)` could return 1, paired with `gf = 1` giving a genuine 1:1 tagged `result = "W"`
-  - Fix: wins now use `ga = Math.floor(rng() * gf)` so opponent goals are always strictly less than Frankfurt's; losses use `ga` first (1 or 2) then `gf = Math.floor(rng() * ga)` so Frankfurt goals are always strictly less than opponent's
-  - Draws are unchanged — equal scores remain only when `result = "D"`
+### Behoben
+- **1:1 Unentschieden in Grün (Siegfarbe) angezeigt** — Torgenerierung konnte gleiche Spielstände mit `result = "W"` erzeugen
+  - Fix: Siege verwenden `ga = Math.floor(rng() * gf)` (Gegner-Tore immer < Frankfurts); Niederlagen verwenden `ga` zuerst, dann `gf = Math.floor(rng() * ga)`
 
 ---
 
 ## [0.18.0] — 2026-06-09
 
-### Added
-- **ANLEITUNG button in header** — persistent button between the logo and the status text opens a styled overlay displaying the full README
-  - README.md is fetched and rendered as formatted HTML (headings, bold, tables, code blocks, lists, blockquotes, links)
-  - Red top-border to match the game's colour scheme; cached after first load so subsequent opens are instant
-  - Click outside the popup or × to close
-- **How to Play — slot-click tip expanded** — README now explicitly explains that clicking an empty pitch slot before selecting a card highlights compatible players: green border for main-position fit, gold border for alternate-position fit, dimmed for incompatible
+### Hinzugefügt
+- **ANLEITUNG-Schaltfläche in der Kopfzeile** — öffnet gestyltes Overlay mit vollständiger README; nach erster Ladung gecacht
+- **Spielanleitung — Slot-Klick-Tipp erweitert** — erklärt nun das Hervorheben kompatibler Spieler beim Klicken eines leeren Slots
 
 ---
 
 ## [0.17.0] — 2026-06-09
 
-### Changed
-- **Opponent list updated to reflect Bundesliga eternal table** — three clubs with limited Bundesliga history replaced by historically prominent sides (source: transfermarkt.de ewige Tabelle)
-  - TSG Hoffenheim (not in top 23) → **VfL Bochum** (#13, 1,296 Bundesliga games)
-  - RB Leipzig (not in top 23) → **Kaiserslautern** (#11, 1,492 Bundesliga games)
-  - Wolfsburg (#14, 986 games) → **1.FC Nürnberg** (#15, 1,118 Bundesliga games)
-  - Difficulty modifiers: Kaiserslautern −0.01, Nürnberg −0.02, VfL Bochum −0.03
+### Geändert
+- **Gegnerliste auf ewige Bundesliga-Tabelle aktualisiert** (Quelle: transfermarkt.de)
+  - TSG Hoffenheim → **VfL Bochum** (#13, 1.296 Spiele)
+  - RB Leipzig → **Kaiserslautern** (#11, 1.492 Spiele)
+  - Wolfsburg → **1. FC Nürnberg** (#15, 1.118 Spiele)
 
 ---
 
 ## [0.16.0] — 2026-06-09
 
-### Added
-- **Goalscorers in match ticker** — each result row now shows the scorer name(s) and minute(s) below the score line when Frankfurt scored (e.g. `Meier 23', Hölzenbein 67'`)
-  - Scorers are assigned using position-weighted random selection: CF weight 3.0, LW/RW 2.0, AM 1.5, MF 0.8, DM 0.3, CB 0.12, GK 0.02
-  - Each scorer's minute is randomised 1–90 and sorted chronologically per match
-  - Uses a separate seeded RNG so existing match results are completely unchanged
-  - Skip button also renders scorers for all dumped matches
-- **Goals per player in Kader anzeigen** — each player's season goal tally shown in gold below their rating (only displayed when goals > 0)
+### Hinzugefügt
+- **Torschützen im Spielticker** — Torschütze und Minute erscheinen unter jeder Ergebniszeile (z. B. `Meier 23', Hölzenbein 67'`)
+  - Positionsgewichtete Zufallsauswahl: ST 3,0, LA/RA 2,0, OM 1,5, MF 0,8, DM 0,3, IV 0,12, TW 0,02
+  - Separater geseedeter Zufallsgenerator — bestehende Spielergebnisse vollständig unverändert
+- **Tore pro Spieler in KADER ANZEIGEN** — Saison-Torkonto in Gold unterhalb der Wertung (nur wenn Tore > 0)
 
-### Changed
-- **Squad popup sorted GK → CF** — Kader anzeigen now lists players goalkeeper-first (GK → CB → RB/LB → DM → MF → AM → LW/RW → CF), matching a standard match-day lineup sheet; previously used the draft's CF-first order
+### Geändert
+- **Kader-Popup nach TW → ST sortiert** — KADER ANZEIGEN listet Spieler torwart-zuerst (TW → IV → RV/LV → DM → MF → OM → LA/RA → ST)
 
 ---
 
 ## [0.15.0] — 2026-06-08
 
-### Added
-- **All decades padded to 13 players** — each decade now has enough depth to guarantee 13 unique cards per deal
-  - **1990s (+2):** Thomas Sobotzik (MF, 66 BL apps, 12 goals, 1994–2001, two stints) and Horst Heldt (MF, 64 BL apps, 9 goals, 1999–2001, 2 Germany caps) — selected based on Bundesliga appearances and goals/assists at SGE
-  - **2020s (+1):** Ansgar Knauff (RW, 96 BL apps, 13 goals, 2021–present) — UEFA Europa League Young Player of the Season 2021/22; developed into one of the Bundesliga's most dangerous wide players
+### Hinzugefügt
+- **Alle Jahrzehnte auf 13 Spieler aufgestockt** — garantiert 13 einzigartige Karten pro Deal
+  - **1990er (+2):** Thomas Sobotzik (MF, 66 BL-Einsätze, 12 Tore) und Horst Heldt (MF, 64 BL-Einsätze, 9 Tore, 2 Länderspiele)
+  - **2020er (+1):** Ansgar Knauff (RA, 96 BL-Einsätze, 13 Tore) — UEFA-Europa-League-Nachwuchsspieler der Saison 2021/22
 
-### Fixed
-- **Rafael Borré decade corrected** — changed from `"2010s"` to `"2020s"`; his entire SGE Bundesliga career ran from 2021/22 to 2022/23
+### Behoben
+- **Rafael Borré Jahrzehnt korrigiert** — von `"2010s"` zu `"2020s"`; SGE-Karriere lief 2021/22–2022/23
 
 ---
 
 ## [0.14.0] — 2026-06-08
 
-### Fixed
-- **Results screen position mismatch** — finishing 2nd (68–77 pts) incorrectly showed "BUNDESLIGA-MEISTER · PLATZ 1" in the headline while the stat box correctly showed 2nd place
-  - Root cause: `isChampion` threshold was `points >= 68` (2nd place) but the sub text hardcoded "PLATZ 1"
-  - Fix: display logic now branches on `result.position` directly — headline and stat box always agree
-  - Added a dedicated **VIZEMEISTER** branch for position 2 (displayed in gold, same as Meister)
-  - `isChampion` corrected to `points >= 78` (actual 1st-place threshold) to match `estimatePosition`
+### Behoben
+- **Ergebnisbildschirm Positionsabweichung** — 2. Platz (68–77 Pkt.) zeigte fälschlicherweise "BUNDESLIGA-MEISTER · PLATZ 1"
+  - `isChampion` korrigiert auf `points >= 78`; dedizierter VIZEMEISTER-Zweig für Platz 2 hinzugefügt
 
 ---
 
 ## [0.13.0] — 2026-06-08
 
-### Changed
-- **Draft header shows era instead of specific season** — label above the player list now reads "90er Jahre" (or 60er / 70er / 80er / 2000er / 2010er / 2020er Jahre) instead of "Saison 1993/94"
-  - The player pool covers an entire decade, not a single season, so the season year was misleading
-  - Sub-label updated from "Saisonkader" to "Kader dieser Ära"
+### Geändert
+- **Draft-Kopfzeile zeigt Ära statt spezifischer Saison** — "90er Jahre" statt "Saison 1993/94"; Unterbezeichnung von "Saisonkader" zu "Kader dieser Ära"
 
 ---
 
 ## [0.12.0] — 2026-06-08
 
-### Changed
-- **Draft list sorted by position** — players are now ordered CF → RW/LW → AM → MF → DM → RB/LB → CB → GK so strikers always appear at the top and the goalkeeper at the bottom
+### Geändert
+- **Draft-Liste nach Position sortiert** — ST → RA/LA → OM → MF → DM → RV/LV → IV → TW
 
-### Fixed
-- **Replaced Randal Kolo Muani with Omar Marmoush** — Kolo Muani's entry removed; Marmoush (58 apps, 32 goals, rating 89, 2022–2024) was already in the database and supersedes him as the representative 2022/23 attacking option
+### Behoben
+- **Randal Kolo Muani durch Omar Marmoush ersetzt** — Marmoush (58 Einsätze, 32 Tore, Wertung 89, 2022–2024) war bereits in der Datenbank
 
 ---
 
 ## [0.11.0] — 2026-06-08
 
-### Added
-- **Animated match ticker** — results now appear one per second over 34 seconds instead of all at once
-  - Ticker enlarged (420 px) during animation so multiple recent results are visible
-  - Each row slides in from the left as it appears
-  - Ticker auto-scrolls to keep the latest match in view
-  - **ÜBERSPRINGEN** button dumps all remaining matches instantly and triggers the stat reveal
-  - Final stats (headline, points, position, goal difference) are hidden until all 34 matches have been shown, then fade in from above
-- **Squad popup** — squad removed from the main results modal and moved to a separate gold-bordered popup opened via **KADER ANZEIGEN**
-  - Each player's slot label is colour-coded: green (main position), gold (alternate position), red (incompatible)
-  - Footer buttons (SCHLIESSEN, NEUES SPIEL) are hidden during animation and revealed alongside KADER ANZEIGEN once the season is complete
+### Hinzugefügt
+- **Animierter Spielticker** — Ergebnisse erscheinen eine pro Sekunde; Ticker auf 420 px vergrößert, ÜBERSPRINGEN gibt alle verbleibenden Spiele sofort aus
+- **Kader-Popup** — Kader in separates gold-umrahmtes Popup über KADER ANZEIGEN ausgelagert; SCHLIESSEN/NEUES SPIEL werden nach Saisonabschluss eingeblendet
 
 ---
 
 ## [0.10.0] — 2026-06-08
 
-### Added
-- **Per-opponent difficulty modifiers** — each of the 17 Bundesliga opponents now has a strength rating that shifts the win probability for that individual game
-  - Bayern München: −0.22 to winProb (hardest opponent)
-  - BVB / Leverkusen / Leipzig: −0.14 to −0.15
-  - Stuttgart / M'gladbach: −0.07 to −0.08
-  - Augsburg / Köln / HSV / Hertha / Schalke: up to +0.03 (easier opponents)
-  - Previously every game used the same flat probability regardless of opponent — a weak OOP squad would beat Bayern as often as Schalke, which was unrealistic
-  - `gameWin` is clamped to [0.04, 0.76] so upsets remain possible but a weak squad has almost no chance vs the top four
+### Hinzugefügt
+- **Pro-Gegner-Schwierigkeits-Modifikatoren** — jeder Gegner hat eine Stärkebewertung, die `winProb` für das individuelle Spiel verschiebt
+  - Bayern München: −0,22 (schwierigster Gegner); BVB/Leverkusen/Leipzig: −0,14 bis −0,15
+  - Augsburg/Köln/HSV/Hertha/Schalke: bis zu +0,03 (leichtere Gegner)
+  - `gameWin` begrenzt auf [0,04; 0,76]
 
 ---
 
 ## [0.9.0] — 2026-06-08
 
-### Changed
-- **Three-tier position compatibility system** replaces the old binary compatible/incompatible model
-  - **Green** = player's natural position exactly matches the slot — no penalty (factor 1.0)
-  - **Yellow** = slot is in the player's historically documented `altPositions` array — small penalty (factor 0.88, −12 %)
-  - **Red** = no match at all — hefty penalty (factor 0.65, −35 %)
-  - Removed `POS_COMPAT` broad-compatibility matrix. Slot colour is now derived purely from each player's individual `position` and `altPositions` data, not a generic positional adjacency table
-  - Draft filter (click a slot during deal phase) now shows green cards (main fit), yellow cards (alt fit), and dims non-fitting players
-  - `positionFit` property (`'main'` | `'alt'` | `'out'`) replaces the old boolean `inPosition` flag
-  - Engine penalty increased for fully incompatible placements (was 25 %, now 35 %)
+### Geändert
+- **Dreistufiges Positionskompatibilitätssystem** ersetzt das alte binäre Modell
+  - **Grün** = Hauptposition (Faktor 1,0); **Gelb** = dokumentierte Ausweichposition (Faktor 0,88, −12 %); **Rot** = unvereinbar (Faktor 0,65, −35 %)
+  - `POS_COMPAT`-Breitkompatibilitätsmatrix entfernt; Slot-Farbe aus individuellem `position`/`altPositions` abgeleitet
+  - `positionFit`-Eigenschaft (`'main'` | `'alt'` | `'out'`) ersetzt altes boolesches `inPosition`-Flag
 
 ---
 
 ## [0.8.0] — 2026-06-08
 
-### Fixed
-- **Position table calibrated to real Bundesliga standings (2014/15–2023/24)**
-  - 43 pts now correctly maps to ~9th place (was incorrectly showing 6th)
-  - 73 pts maps to 2nd place (Stuttgart's 2023/24 result)
-  - 40 pts maps to 10th place
-  - Full ladder: 78+ → 1st, 68+ → 2nd, 60+ → 3rd, 55+ → 4th, 50+ → 5th, 45+ → 6th, 41+ → 8th, 37+ → 10th, 32+ → 12th, 27+ → 14th, 22+ → 16th (Playoff), 16+ → 17th (Abstieg)
-  - Updated `isEuropa` threshold (50 pts) and `isRelegated` threshold (<27 pts) to match
+### Behoben
+- **Positionstabelle kalibriert an echten Bundesliga-Tabellen (2014/15–2023/24)**
+  - 43 Punkte → ~9. Platz (war fälschlicherweise 6.); 73 Punkte → 2. Platz (Stuttgart 2023/24)
+  - `isEuropa`-Schwellenwert (50 Pkt.) und `isRelegated` (<27 Pkt.) aktualisiert
 
 ---
 
 ## [0.7.0] — 2026-06-08
 
-### Fixed
-- **`POS_COMPAT` tightened** — previous matrix was far too permissive, causing most OOP placements to show green (compatible) and receive no engine penalty
-  - `MF` was compatible with RW, LW, RB, LB — now only DM and AM
-  - `RB`/`LB` were compatible with MF — now fullbacks only swap among RB/CB/LB
-  - `CF` was compatible with RW/LW — now only stretches to AM
-  - `RW`/`LW` were compatible with MF and CF — now only AM and the opposite wing
-  - Individual player `altPositions` in `players.js` handle real historical flexibility beyond these defaults
+### Behoben
+- **`POS_COMPAT` enger gefasst** — Matrix war viel zu permissiv; MF nicht mehr kompatibel mit RA/LA/RV/LV; RV/LV tauschen nur untereinander; ST streckt sich nur bis OM; RA/LA nur zu OM und dem gegenüberliegenden Flügel
 
 ---
 
 ## [0.6.0] — 2026-06-08
 
-### Fixed
-- **Engine now uses slot position weights** — the fundamental fix for the out-of-position exploit
-  - Previously: engine used `player.position` (natural role) for `POSITION_WEIGHTS` regardless of where the player was placed. Two CFs placed as defenders still scored as CFs (attack weight 2.5 each)
-  - Now: engine uses `slot.pos` (where they actually play). A CF in the GK slot is scored with GK weights — high defence requirement, near-zero attack
-  - `slotPos` is now passed from the simulate handler alongside `inPosition`
-  - OOP penalty increased to 25 % (was 18 %)
-  - Win probability formula updated: `0.12 × totalPower − 0.63`
+### Behoben
+- **Engine verwendet nun Slot-Positions-Gewichte** — die grundlegende Behebung des Außer-Position-Exploits
+  - Vorher: Engine verwendete `player.position` unabhängig von der Platzierung
+  - Jetzt: Engine verwendet `slot.pos`; ein ST im TW-Slot wird mit TW-Gewichten bewertet
+  - OOP-Strafe auf 25 % erhöht (war 18 %); Formel: `0,12 × totalPower − 0,63`
 
 ---
 
 ## [0.5.0] — 2026-06-08
 
-### Fixed
-- **Simulation engine recalibrated** after further over-easy results (54 pts with mostly OOP squad)
-  - `goalBonus` multiplier reduced from ×0.20 to ×0.04 (max attack multiplier ×1.12 instead of ×1.60)
-  - `appBonus` multiplier reduced from ×0.10 to ×0.02 (max midfield multiplier ×1.04 instead of ×1.20)
-  - Frankfurt players all have high career stats so large bonuses inflated everyone equally — the bonuses no longer dominate the score
-  - Added 18 % rating penalty (`posFactor = 0.82`) for players placed outside their compatible positions
-  - `inPosition` flag passed from `index.html` simulate handler using `playerFitsSlot(player, slot.pos)`
-  - Era diversity bonus range tightened from 0.85–1.05 to 0.90–1.04
-  - Updated `estimatePosition` and result thresholds
+### Behoben
+- **Simulations-Engine nach zu einfachen Ergebnissen neu kalibriert** (54 Pkt. mit größtenteils OOP-Kader)
+  - `goalBonus`-Multiplikator ×0,20 → ×0,04; `appBonus` ×0,10 → ×0,02
+  - 18 % Wertungsstrafe für OOP-Platzierungen hinzugefügt
+  - Ären-Vielfalt-Bonus-Bereich auf 0,90–1,04 angepasst
 
 ---
 
 ## [0.4.0] — 2026-06-08
 
-### Fixed
-- **Critical engine bug: game was unwinnable to lose**
-  - `winProb = 0.18 + 0.09 × totalPower` with typical squad power of 7–10 produced values of 0.81–1.08
-  - Capped at 0.88 with `drawProb = 0.18` → `lossProb = −0.06` (negative) → team could never lose
-  - Even a 74-rated single-era squad was getting 29+ wins per season
-  - **Fix**: new formula `min(0.68, max(0.18, 0.07 × totalPower − 0.14))`, `drawProb` raised to 0.22
-  - `lossProb` is now always positive; max win probability capped at 68 %
+### Behoben
+- **Kritischer Engine-Bug: Spiel war unverliebar**
+  - `winProb = 0,18 + 0,09 × totalPower` mit Kader-Power 7–10 → Werte 0,81–1,08; bei Cap 0,88 und `drawProb = 0,18` war `lossProb` negativ
+  - Fix: `min(0,68, max(0,18, 0,07 × totalPower − 0,14))`; `drawProb` auf 0,22 angehoben
 
 ---
 
 ## [0.3.0] — 2026-06-08
 
-### Added
-- **German position labels throughout** — player cards now show `TW`, `IV`, `RV`, `LV`, `DM`, `MF`, `OM`, `RA`, `LA`, `ST` instead of English codes (`GK`, `CB`, `RB`, etc.)
-- **Alt positions visible in draft cards** — secondary positions shown in a small label next to the primary (also in German)
-- **Slot click filter during draft** — clicking an empty pitch slot in deal mode highlights compatible players (green border) and dims incompatible ones. Click again to clear
-- `POS_DE` mapping object and `posDE()` helper function
-- `playerFitsSlot()` now checks both main position and `altPositions` for compatibility
-- CSS classes: `.slot-active`, `.slot-match`, `.slot-dim`
-- **Compatible slot check extended to `altPositions`** — `renderPitch` in place mode now correctly shows green for players whose alt positions fit the target slot
+### Hinzugefügt
+- **Deutsche Positionsbezeichnungen** — TW, IV, RV, LV, DM, MF, OM, RA, LA, ST statt GK, CB, RB usw.
+- **Alt-Positionen in Draft-Karten** — Nebenpositionen in kleinem Label neben der Hauptposition
+- **Slot-Klick-Filter während des Drafts** — hebt kompatible Spieler (grüner Rahmen) hervor; `POS_DE`-Mapping und `posDE()`-Hilfsfunktion
 
 ---
 
 ## [0.2.0] — 2026-06-07
 
-### Added
-- **100-player database** — 24 new historically verified players added, focusing on high-appearance SGE players not previously included:
-  - 1960s: Wolfgang Solz (CF), Karl-Heinz Wirth (CB)
-  - 1970s: Peter Kunter (GK, *"der fliegende Zahnarzt"*), Gert Trinklein (CB), Thomas Rohrbach (MF), Peter Reichel (CB), Wolfgang Kraus (MF), Roland Weidle (MF), Helmut Müller (MF), Rüdiger Wenzel (CF)
-  - 1980s: Frank Poth (RB), Werner Lorant (DM), Bernd Tretter (CF), Ralf Sievers (MF)
-  - 1990s: Stefan Studer (MF), Dietmar Roth (CB, 264 BL apps), Slobodan Komljenović (CB)
-  - 2000s: Alexander Schur (AM), Jermaine Jones (DM), Benjamin Köhler (AM)
-  - 2010s: Sebastian Jung (RB), Bastian Oczipka (LB), Michael Fink (MF)
-  - 2020s: Djibril Sow (DM)
+### Hinzugefügt
+- **100-Spieler-Datenbank** — 24 neue historisch verifizierte Spieler hinzugefügt:
+  - 1960er: Wolfgang Solz (ST), Karl-Heinz Wirth (IV)
+  - 1970er: Peter Kunter (TW, *"der fliegende Zahnarzt"*), Gert Trinklein, Thomas Rohrbach, Peter Reichel, Wolfgang Kraus, Roland Weidle, Helmut Müller, Rüdiger Wenzel
+  - 1980er: Frank Poth (RV), Werner Lorant (DM), Bernd Tretter (ST), Ralf Sievers (MF)
+  - 1990er: Stefan Studer (MF), Dietmar Roth (IV, 264 BL-Einsätze), Slobodan Komljenović (IV)
+  - 2000er: Alexander Schur (OM), Jermaine Jones (DM), Benjamin Köhler (OM)
+  - 2010er: Sebastian Jung (RV), Bastian Oczipka (LV), Michael Fink (MF)
+  - 2020er: Djibril Sow (DM)
 
-### Fixed
-- Removed 4 non-Frankfurt players incorrectly included in the database: Marc Ziegler, Rainer Zietsch, Bernd Krauss, Jan Šimák
-- Corrected historical data for Uli Stein (activeFrom corrected to 1987), Axel Kruse (joined Jan 1991 from Hertha BSC, decade corrected to 1990s), Ralf Weber (joined Aug 1989 from Kickers Offenbach), Dieter Stinka (left for Darmstadt 98 after 1965/66)
+### Behoben
+- 4 Nicht-Frankfurter Spieler entfernt: Marc Ziegler, Rainer Zietsch, Bernd Krauss, Jan Šimák
+- Historische Daten korrigiert: Uli Stein (activeFrom 1987), Axel Kruse (Jan 1991 von Hertha), Ralf Weber (Aug 1989 von Kickers Offenbach), Dieter Stinka (zu Darmstadt 98 nach 1965/66)
 
 ---
 
 ## [0.1.0] — 2026-06-06
 
-### Added
-- Initial release
-- Formation selector: 4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 5-3-2, 4-1-4-1
-- Draft system: season-based player pools, decade diversity bias, deal/place two-phase state machine
-- Pitch rendering with compatible/incompatible slot colours
-- `SGE_SEASONS` array covering all 59 Bundesliga seasons Frankfurt participated in (gaps for 1996–1997 and 2011–2012 relegation periods)
-- Season simulation engine (`data/engine.js`) with seeded RNG, opponent list, match ticker
-- 76-player initial database covering 6 decades of SGE Bundesliga history
-- Era diversity bonus system (0.85–1.05 multiplier)
-- Balance penalty for heavily lopsided squads
+### Hinzugefügt
+- Erstveröffentlichung
+- Formationsauswahl: 4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 5-3-2, 4-1-4-1
+- Draft-System: saisonbasierte Spieler-Pools, Jahrzehnt-Vielfalt-Bias, Deal/Platzierung Zwei-Phasen-Zustandsmaschine
+- Spielfelddarstellung mit kompatiblen/inkompatiblen Slot-Farben
+- `SGE_SEASONS`-Array mit allen 59 Bundesligasaisons (Lücken 1996–1997 und 2011–2012)
+- Saison-Simulationsengine (`data/engine.js`) mit geseedetem Zufallsgenerator, Gegnerliste, Spielticker
+- 76-Spieler-Erstdatenbank aus 6 Jahrzehnten SGE-Bundesliga-Geschichte
+- Ären-Vielfalt-Bonus-System (0,85–1,05 Multiplikator)
+- Balancestrafe für stark einseitige Kader

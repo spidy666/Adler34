@@ -712,14 +712,14 @@ const POS_ORDER       = { CF:0, RW:1, LW:2, AM:3, MF:4, DM:5, RB:6, LB:7, CB:8, 
 const SQUAD_POS_ORDER = { GK:0, CB:1, RB:2, LB:3, DM:4, MF:5, AM:6, LW:7, RW:8, CF:9 };
 function posDE(code) { return POS_DE[code] || code; }
 
-// Convert a flag emoji nationality string to a flagcdn.com img tag.
+// Convert flag emoji(s) in a nationality string to flagcdn.com img tags.
 // Flag emoji (two Regional Indicator chars) don't render on Windows desktop —
-// this swaps them for small PNGs that work everywhere.
+// this swaps every flag in the string for a small PNG that works everywhere.
 function flagImg(natStr) {
-  const m = natStr.match(/([\u{1F1E6}-\u{1F1FF}]{2})(.*)/u);
-  if (!m) return natStr;
-  const cc = [...m[1]].map(c => String.fromCodePoint(c.codePointAt(0) - 0x1F1E6 + 65)).join('').toLowerCase();
-  return `<img src="https://flagcdn.com/16x12/${cc}.png" width="16" height="12" alt="${cc.toUpperCase()}" style="vertical-align:middle;margin-right:4px;">${m[2].trim()}`;
+  return natStr.replace(/([\u{1F1E6}-\u{1F1FF}]{2})/gu, flag => {
+    const cc = [...flag].map(c => String.fromCodePoint(c.codePointAt(0) - 0x1F1E6 + 65)).join('').toLowerCase();
+    return `<img src="https://flagcdn.com/16x12/${cc}.png" width="16" height="12" alt="${cc.toUpperCase()}" style="vertical-align:middle;margin-right:3px;">`;
+  });
 }
 
 // Three-tier fit check based strictly on player data:

@@ -388,18 +388,6 @@ const PLAYERS_WOMEN = [
     bio: "Defender who joined for the 2024/25 season, born 1999.",
   },
   {
-    id: "fw-katharina-rust",
-    name: "Katharina Rust",
-    season: "2024/25", decade: "2020s",
-    activeFrom: 2024, activeTo: 2025,
-    position: "RB", positionLabel: "Rechte Verteidigerin",
-    altPositions: ["CB"],
-    nationality: "🇩🇪 Deutschland",
-    years: "2024–present",
-    bundesligaApps: 12, bundesligaGoals: 0, rating: 75,
-    bio: "Young right-back born 2005, part of the 2024/25 squad.",
-  },
-  {
     id: "fw-verena-hanshaw",
     name: "Verena Hanshaw",
     season: "2020/21", decade: "2010s",
