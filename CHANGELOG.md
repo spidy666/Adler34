@@ -4,6 +4,18 @@ Alle wesentlichen Änderungen an **34-0 — Eintracht Frankfurt Bundesliga Dream
 
 ---
 
+## [0.35.0] — 2026-06-10
+
+### Behoben
+- **Zufallsgenerator durch Mulberry32 ersetzt** — `seededRng()` war als "Mulberry32" kommentiert, verwendete jedoch den Park-Miller-LCG (`s × 16807 mod 2147483647`), einen Generator aus dem Jahr 1969 mit bekannten sequenziellen Korrelationen
+  - LCG-Werte liegen auf Hyperebenen: aufeinanderfolgende Zufallswerte sind linear abhängig, was dazu führt, dass Spielergebnisse in Verlustserien clustern
+  - Drei von sechs Debug-Saisons endeten ~10 Punkte unter der erwarteten Punktzahl mit 4+ aufeinanderfolgenden Niederlagen (z. B. Spieltage 7–11: N, N, U, N, N)
+  - Ersetzt durch echten Mulberry32 (Tommy Ettinger), der PractRand bis 64 GB besteht und keine sequenzielle Korrelation aufweist
+  - Determinismus bleibt erhalten: dieselbe Aufstellung erzeugt immer dasselbe Ergebnis
+- **Spieler-IDs in Saison-Seed eingemischt** — der bisherige Seed `Σ(Wertung × 7 + Einsätze)` ließ Kader mit ähnlicher Gesamtwertungssumme in denselben RNG-Bereich fallen; durch Einmischung eines Horner-Polynomial-Hashes der Spieler-ID (`mod 9973`) werden verschiedene Spieler mit gleichen Wertungen nun zuverlässig getrennt
+
+---
+
 ## [0.34.0] — 2026-06-10
 
 ### Behoben
