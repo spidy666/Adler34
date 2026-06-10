@@ -322,14 +322,17 @@ function estimatePosition(points) {
 }
 
 /**
- * Seeded pseudo-random number generator (Mulberry32)
+ * Seeded pseudo-random number generator (Mulberry32 by Tommy Ettinger).
+ * Passes PractRand up to 64 GB. Replaces the old Park-Miller LCG (s*16807 %
+ * 2147483647) which had sequential correlations causing loss streaks to cluster.
  */
 function seededRng(seed) {
-  let s = seed % 2147483647;
-  if (s <= 0) s += 2147483646;
+  let s = seed >>> 0;
   return function() {
-    s = (s * 16807) % 2147483647;
-    return (s - 1) / 2147483646;
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(s ^ s >>> 15, 1 | s);
+    t = (t + Math.imul(t ^ t >>> 7, 61 | t)) >>> 0;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
 }
 
