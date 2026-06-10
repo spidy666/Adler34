@@ -135,11 +135,17 @@ function getBalancePenalty(attackScore, midfieldScore, defenseScore) {
 }
 
 /**
- * Decade diversity bonus: using players from more decades = stronger chemistry
+ * Decade diversity bonus: using players from more decades = stronger chemistry.
+ * Frauen mode has only 2 decades (2010s, 2020s), so 2 decades = full coverage = 1.00.
+ * Penalising a Frauen squad that spans both eras the same as a men's squad that
+ * only covers 2 of 6 decades would permanently disadvantage every top Frauen team.
  */
-function getDiversityBonus(players) {
+function getDiversityBonus(players, isFrauen = false) {
   const decades = new Set(players.map(p => p.decade));
   const count = decades.size;
+  if (isFrauen) {
+    return count >= 2 ? 1.00 : 0.93; // 1 decade = small penalty, 2 = full coverage
+  }
   if (count <= 1) return 0.90;
   if (count === 2) return 0.94;
   if (count === 3) return 0.97;
@@ -161,7 +167,7 @@ function simulateSeason(players, mode = 'men') {
 
   const { attackScore, midfieldScore, defenseScore } = calculateSquadStrength(players);
   const balancePenalty = getBalancePenalty(attackScore, midfieldScore, defenseScore);
-  const diversityBonus = getDiversityBonus(players);
+  const diversityBonus = getDiversityBonus(players, isFrauen);
 
   // Normalize to a 0–1 range "power level"
   const totalPower = ((attackScore * 0.4 + midfieldScore * 0.3 + defenseScore * 0.3) 
