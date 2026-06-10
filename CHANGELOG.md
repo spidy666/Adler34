@@ -4,6 +4,19 @@ Alle wesentlichen Änderungen an **34-0 — Eintracht Frankfurt Bundesliga Dream
 
 ---
 
+## [0.34.0] — 2026-06-10
+
+### Behoben
+- **Frauen-Ären-Vielfalt-Bonus korrigiert** — `getDiversityBonus()` ist nun modusabhängig; in Frauen-Modus gilt 2 Jahrzehnte = volle Abdeckung = Bonus 1,00 (war 0,94)
+  - Die bisherige Funktion bestrafte einen Frauen-Kader, der beide verfügbaren Ären (2010er + 2020er) abdeckt, genauso wie einen Männer-Kader, der nur 2 von 6 Jahrzehnten umfasst — ein falscher Vergleich
+  - Mit der Korrektur: zwei-Ären-Frauen-Kader → totalPower ~10,6 → winProb ~0,69 → erwartete Punkte ~60 (Meisterschaftsbereich)
+  - Zuvor: dieselbe Aufstellung → winProb 0,618 → erwartete Punkte ~54 → Titelgewinn strukturell kaum möglich
+  - Einstieg-Strafe für Ein-Ären-Frauen-Kader auf 0,93 angepasst (1 von 2 verfügbaren Ären = die Hälfte der gesamten Frauen-Geschichte; 0,90 wäre zu hart)
+  - Männer-Bonustabelle vollständig unverändert (1→0,90, 2→0,94, 3→0,97, 4→1,00, 5→1,02, 6→1,04)
+- **Zweite Länderflagge in Nationalitätsfeld nicht dargestellt** — `flagImg()` konvertierte nur das erste Flaggen-Emoji eines Strings; das zweite blieb als rohes Emoji-Zeichen, das unter Windows nicht dargestellt wird. Funktion auf globales Ersetzen umgestellt — alle Flaggen im String werden nun in flagcdn.com-Bilder umgewandelt
+
+---
+
 ## [0.33.2] — 2026-06-10
 
 ### Behoben
