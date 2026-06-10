@@ -1318,7 +1318,9 @@ btnDebug.addEventListener('click', () => {
 
   lines.push('ENGINE:');
   lines.push(`attackScore:     ${rpad(atk.toFixed(1), 5)}   midfieldScore: ${rpad(mid.toFixed(1), 5)}   defenseScore: ${rpad(def.toFixed(1), 5)}`);
-  lines.push(`imbalance:       ${rpad(imbalance.toFixed(3), 5)}   balancePenalty: ${bp.toFixed(2)}${bp < 1.0 ? '  (' + Math.round((1 - bp) * 100) + '% hit)' : '  (no penalty)'}`);
+  const bpHitPct = Math.round((1 - bp) * 100);
+  const bpNote   = bpHitPct > 0 ? `  (${bpHitPct}% hit)` : '  (no penalty)';
+  lines.push(`imbalance:       ${rpad(imbalance.toFixed(3), 5)}   balancePenalty: ${bp.toFixed(3)}${bpNote}`);
   const dbSign = r.diversityBonus >= 0 ? '+' : '';
   lines.push(`diversityBonus:  ${dbSign}${r.diversityBonus}%   (${decades.length} decades: ${decades.join(' ')})`);
   lines.push(`totalPower:      ${rpad(tp.toFixed(2), 5)}   baseWinProb: ${wp.toFixed(3)}`);
