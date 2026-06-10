@@ -949,7 +949,7 @@ function renderSidebar() {
     if (teamPlayers.length > 0) {
       const minYear = Math.min(...teamPlayers.map(p => p.activeFrom));
       const maxYear = Math.max(...teamPlayers.map(p => p.activeTo));
-      label = `${seasonLabel(minYear)} – ${seasonLabel(maxYear)}`;
+      label = `${seasonLabel(minYear)} – ${seasonLabel(maxYear - 1)}`;
     }
 
     let html = `
@@ -994,7 +994,7 @@ function renderSidebar() {
 
     teamDealEl.querySelectorAll('.draft-card:not(.slot-dim)').forEach(card => {
       card.addEventListener('click', () => {
-        const player = PLAYERS.find(p => p.id === card.dataset.pid);
+        const player = activePlayers.find(p => p.id === card.dataset.pid);
         if (player) pickPlayer(player);
       });
     });
@@ -1361,82 +1361,119 @@ modalOverlay.addEventListener('click', e => {
   if (e.target === modalOverlay) { stopAnimation(); modalOverlay.classList.remove('open'); }
 });
 
-// ── INFO / README MODAL ───────────────────────────────────────────────────
-function renderMarkdown(md) {
-  const lines = md.split('\n');
-  const out = [];
-  let inPre = false, inOl = false, inUl = false, inTable = false;
-  let preLines = [];
+// ── INFO / SPIELANLEITUNG MODAL ───────────────────────────────────────────
+function buildInfoHTML(mode) {
+  const isFrauen = mode === 'frauen';
 
-  const flush = () => {
-    if (inOl)    { out.push('</ol>');              inOl    = false; }
-    if (inUl)    { out.push('</ul>');              inUl    = false; }
-    if (inTable) { out.push('</tbody></table>');   inTable = false; }
-  };
-  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const fmt = s => esc(s)
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  const thresholds = isFrauen ? `
+    <table>
+      <thead><tr><th>Punkte</th><th>Tabellenplatz</th></tr></thead>
+      <tbody>
+        <tr><td>60+</td><td>🥇 1. Platz — Meisterin</td></tr>
+        <tr><td>54–59</td><td>2. Platz</td></tr>
+        <tr><td>48–53</td><td>3. Platz</td></tr>
+        <tr><td>43–47</td><td>4. Platz (Champions League)</td></tr>
+        <tr><td>39–42</td><td>5. Platz (UEFA Women's Cup)</td></tr>
+        <tr><td>33–38</td><td>6. Platz</td></tr>
+        <tr><td>28–32</td><td>8. Platz</td></tr>
+        <tr><td>23–27</td><td>10. Platz</td></tr>
+        <tr><td>19–22</td><td>12. Platz</td></tr>
+        <tr><td>13–18</td><td>13. Platz</td></tr>
+        <tr><td>&lt; 13</td><td>14. Platz (Abstieg)</td></tr>
+      </tbody>
+    </table>` : `
+    <table>
+      <thead><tr><th>Punkte</th><th>Tabellenplatz</th></tr></thead>
+      <tbody>
+        <tr><td>78+</td><td>🥇 1. Platz — Meister</td></tr>
+        <tr><td>68–77</td><td>2. Platz</td></tr>
+        <tr><td>60–67</td><td>3. Platz</td></tr>
+        <tr><td>55–59</td><td>4. Platz (Champions League)</td></tr>
+        <tr><td>50–54</td><td>5. Platz (Europa League)</td></tr>
+        <tr><td>45–49</td><td>6. Platz (Europa League)</td></tr>
+        <tr><td>41–44</td><td>8. Platz</td></tr>
+        <tr><td>37–40</td><td>10. Platz</td></tr>
+        <tr><td>32–36</td><td>12. Platz</td></tr>
+        <tr><td>27–31</td><td>14. Platz</td></tr>
+        <tr><td>22–26</td><td>16. Platz (Relegations-Playoff)</td></tr>
+        <tr><td>16–21</td><td>17. Platz (Abstieg)</td></tr>
+        <tr><td>&lt; 16</td><td>18. Platz (Abstieg)</td></tr>
+      </tbody>
+    </table>`;
 
-  for (const raw of lines) {
-    const line = raw.trimEnd();
-    if (line.startsWith('```')) {
-      if (!inPre) { flush(); inPre = true; preLines = []; }
-      else { out.push(`<pre><code>${esc(preLines.join('\n'))}</code></pre>`); inPre = false; }
-      continue;
-    }
-    if (inPre) { preLines.push(raw); continue; }
+  const dbSection = isFrauen ? `
+    <h3>Spielerinnen-Datenbank</h3>
+    <p><strong>69 Spielerinnen der SGE Frauen</strong> von der Saison 2020/21 bis 2025/26 — nach der Fusion mit dem 1. FFC Frankfurt.</p>
+    <table>
+      <thead><tr><th>Jahrzehnt</th><th>Spielerinnen</th><th>Bekannte Namen</th></tr></thead>
+      <tbody>
+        <tr><td><strong>2010er</strong></td><td>15</td><td>Freigang, Kleinherne, Nüsken, Reuteler, Dunst, Martinez</td></tr>
+        <tr><td><strong>2020er</strong></td><td>54</td><td>Prašnikar, Anyomi, Johannes, Feiersinger, Hanshaw, Chiba</td></tr>
+      </tbody>
+    </table>` : `
+    <h3>Spieler-Datenbank</h3>
+    <p><strong>102 historische SGE-Spieler</strong> aus allen sechs Bundesliga-Jahrzehnten, von der Saison 1963/64 bis 2024/25.</p>
+    <table>
+      <thead><tr><th>Jahrzehnt</th><th>Spieler</th><th>Bekannte Namen</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1960er</strong></td><td>14</td><td>Loy, Pfaff, Stein, Grabowski, Jusufi</td></tr>
+        <tr><td><strong>1970er</strong></td><td>18</td><td>Hölzenbein, Körbel, Nickel, Pahl, Lorant</td></tr>
+        <tr><td><strong>1980er</strong></td><td>13</td><td>Cha Bum-kun, Pezzey, Bein, Köpke, Binz</td></tr>
+        <tr><td><strong>1990er</strong></td><td>13</td><td>Yeboah, Okocha, Möller, Kruse, Heldt</td></tr>
+        <tr><td><strong>2000er</strong></td><td>13</td><td>Meier, Russ, Schwegler, Jones</td></tr>
+        <tr><td><strong>2010er</strong></td><td>18</td><td>Trapp, Kostić, Silva, Kamada, Oczipka</td></tr>
+        <tr><td><strong>2020er</strong></td><td>13</td><td>Sow, Götze, Marmoush, Borré, Knauff</td></tr>
+      </tbody>
+    </table>`;
 
-    if (line.startsWith('|')) {
-      const cells = line.split('|').slice(1,-1).map(c => c.trim());
-      if (cells.every(c => /^[-:| ]+$/.test(c))) continue;
-      if (!inTable) { flush(); out.push('<table><thead><tr>' + cells.map(c=>`<th>${fmt(c)}</th>`).join('') + '</tr></thead><tbody>'); inTable = true; }
-      else          { out.push('<tr>' + cells.map(c=>`<td>${fmt(c)}</td>`).join('') + '</tr>'); }
-      continue;
-    }
-    if (inTable) flush();
+  const gameCount = isFrauen ? 26 : 34;
+  const teamCount = isFrauen ? 14 : 18;
+  const playerWord = isFrauen ? 'Spielerin' : 'Spieler';
+  const playerWordPlural = isFrauen ? 'Spielerinnen' : 'Spieler';
+  const slotTip = isFrauen
+    ? 'zuerst auf einen leeren Slot klicken — passende Spielerinnen werden farbig hervorgehoben'
+    : 'zuerst auf einen leeren Slot klicken — passende Spieler werden farbig hervorgehoben';
+  const diversityTip = isFrauen
+    ? '<strong>Ära-Vielfalt</strong> — der Frauen-Kader umfasst zwei Jahrzehnte (2010er / 2020er); gemischte Teams erhalten einen kleinen Bonus'
+    : '<strong>Ära-Vielfalt</strong> — ein Kader aus 4+ Jahrzehnten erhält einen Chemie-Bonus; Einzel-Ären werden bestraft';
 
-    if (line === '---')          { flush(); out.push('<hr>'); continue; }
-    if (line.startsWith('### ')) { flush(); out.push(`<h3>${fmt(line.slice(4))}</h3>`); continue; }
-    if (line.startsWith('## '))  { flush(); out.push(`<h2>${fmt(line.slice(3))}</h2>`); continue; }
-    if (line.startsWith('# '))   { flush(); out.push(`<h1>${fmt(line.slice(2))}</h1>`); continue; }
-    if (line.startsWith('> '))   { flush(); out.push(`<blockquote>${fmt(line.slice(2))}</blockquote>`); continue; }
+  return `
+    <h2>Eintracht Frankfurt${isFrauen ? ' Frauen' : ''} — Traumelf</h2>
+    <p>Stell die beste ${playerWord} der Eintracht Frankfurt zusammen und simuliere eine komplette Saison mit <strong>${gameCount} Spielen</strong> in der ${isFrauen ? 'Frauen-Bundesliga' : 'Bundesliga'} (<strong>${teamCount} Teams</strong>). Schaffst du den Meistertitel?</p>
 
-    const olMatch = line.match(/^(\d+)\. (.+)/);
-    if (olMatch) {
-      if (inUl) { out.push('</ul>'); inUl = false; }
-      if (!inOl) { out.push('<ol>'); inOl = true; }
-      out.push(`<li>${fmt(olMatch[2])}</li>`);
-      continue;
-    }
-    const ulMatch = line.match(/^ *[-*] (.+)/);
-    if (ulMatch) {
-      if (inOl) { out.push('</ol>'); inOl = false; }
-      if (!inUl) { out.push('<ul>'); inUl = true; }
-      out.push(`<li>${fmt(ulMatch[1])}</li>`);
-      continue;
-    }
-    if (line.trim() === '') { flush(); continue; }
-    flush();
-    out.push(`<p>${fmt(line)}</p>`);
-  }
-  flush();
-  return out.join('\n');
+    <h3>Spielablauf</h3>
+    <ol>
+      <li><strong>Formation wählen</strong> — sechs klassische Systeme (4-4-2, 4-3-3, 4-2-3-1, 3-5-2, 5-3-2, 4-1-4-1)</li>
+      <li><strong>Kader zusammenstellen</strong> — jede Runde zeigt dir ${playerWordPlural} aus einer Saison. Wähle eine/n aus — der Rest wird abgelegt</li>
+      <li><strong>${playerWordPlural} auf dem Platz positionieren</strong> — klicke auf eine Karte, dann auf einen freien Slot
+        <ul>
+          <li><strong>Grüner Slot</strong> = Stammposition — kein Abzug</li>
+          <li><strong>Gelber Slot</strong> = dokumentierte Alternativposition — kleiner Abzug (~12&thinsp;%)</li>
+          <li><strong>Roter Slot</strong> = inkompatible Position — deutlicher Abzug (~35&thinsp;%)</li>
+          <li><strong>Tipp:</strong> ${slotTip}</li>
+        </ul>
+      </li>
+      <li><strong>Alle 11 Positionen besetzen</strong>, dann auf <strong>SAISON SIMULIEREN</strong> klicken</li>
+      <li>${gameCount} Spielergebnisse erscheinen nacheinander — danach werden Punkte, Tordifferenz und Tabellenplatz enthüllt</li>
+    </ol>
+
+    <h3>Tipps</h3>
+    <ul>
+      <li>${diversityTip}</li>
+      <li><strong>Positionsbesetzung</strong> — das Modell bewertet nach dem Slot, auf dem eine/r aufgestellt ist, nicht nach der Stammposition</li>
+      <li><strong>Balance</strong> — ein zu einseitig aufgestelltes Team (z.&thinsp;B. nur Angriff) wird bestraft</li>
+    </ul>
+
+    <h3>Tabellenplatz-Richtwerte (${isFrauen ? 'Frauen-Bundesliga' : 'Bundesliga'}, ${teamCount} Teams, ${gameCount} Spiele)</h3>
+    ${thresholds}
+
+    ${dbSection}`;
 }
 
 const infoOverlay = document.getElementById('infoOverlay');
-document.getElementById('btnInfo').addEventListener('click', async () => {
+document.getElementById('btnInfo').addEventListener('click', () => {
   infoOverlay.classList.add('open');
-  const body = document.getElementById('infoPopupBody');
-  if (body.dataset.loaded) return;
-  try {
-    const text = await fetch('./README.md').then(r => r.text());
-    body.innerHTML = renderMarkdown(text);
-    body.dataset.loaded = '1';
-  } catch {
-    body.innerHTML = '<p>README konnte nicht geladen werden.</p>';
-  }
+  document.getElementById('infoPopupBody').innerHTML = buildInfoHTML(gameMode);
 });
 document.getElementById('btnCloseInfo').addEventListener('click', () => infoOverlay.classList.remove('open'));
 infoOverlay.addEventListener('click', e => { if (e.target === infoOverlay) infoOverlay.classList.remove('open'); });

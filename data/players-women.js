@@ -4,7 +4,6 @@
  * activeFrom: start year of first season in the covered window (or earlier if joined before)
  * activeTo:   end year of last season at the club within the window (2026 = still registered as of 2025/26)
  * decade:     based on when the player first appeared for the SGE/FFC entity
- * rating:     placeholder 0 — to be calibrated
  */
 
 const PLAYERS_WOMEN = [
@@ -21,7 +20,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2020–2022",
-    bundesligaApps: 44, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 44, bundesligaGoals: 0, rating: 87,
     bio: "First goalkeeper signed after the FFC/SGE merger. German international, moved to Wolfsburg 2022.",
   },
   {
@@ -33,7 +32,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇺🇸 USA",
     years: "2020–2021",
-    bundesligaApps: 4, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 4, bundesligaGoals: 0, rating: 75,
     bio: "American backup goalkeeper in the first post-merger season.",
   },
   {
@@ -45,7 +44,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2014–2024",
-    bundesligaApps: 44, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 44, bundesligaGoals: 0, rating: 78,
     bio: "Long-serving backup goalkeeper across the FFC and SGE eras. Left for Union Berlin 2024.",
   },
   {
@@ -57,7 +56,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2022–2025",
-    bundesligaApps: 55, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 55, bundesligaGoals: 0, rating: 85,
     bio: "Starting keeper 2022–25, with a league-high 11 clean sheets in 2024/25. German international. Moved to Wolfsburg 2025.",
   },
   {
@@ -69,7 +68,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2022–2023",
-    bundesligaApps: 2, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 2, bundesligaGoals: 0, rating: 74,
     bio: "Young third goalkeeper in 2022/23, born 2004.",
   },
   {
@@ -81,7 +80,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2024–present",
-    bundesligaApps: 3, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 3, bundesligaGoals: 0, rating: 76,
     bio: "Young reserve keeper promoted to first-team contract 2024. German U17 European champion 2022.",
   },
   {
@@ -93,7 +92,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2024–2025",
-    bundesligaApps: 4, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 4, bundesligaGoals: 0, rating: 76,
     bio: "Third goalkeeper, joined from 1. FC Nürnberg 2024. Made a Champions League appearance in 2024/25.",
   },
   {
@@ -105,7 +104,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2021–2024",
-    bundesligaApps: 18, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 18, bundesligaGoals: 0, rating: 76,
     bio: "Born 2003. Backup goalkeeper across three seasons, bridging the Frohms and Johannes eras.",
   },
   {
@@ -117,7 +116,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 83,
     bio: "First-choice goalkeeper for 2025/26. Born 2003.",
   },
   {
@@ -129,7 +128,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 73,
     bio: "Young backup goalkeeper, born 2006.",
   },
   {
@@ -141,7 +140,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 72,
     bio: "Third goalkeeper, born 2008. One of the youngest players in the squad.",
   },
 
@@ -157,7 +156,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["RB"],
     nationality: "🇩🇪 Deutschland",
     years: "2017–2025",
-    bundesligaApps: 110, bundesligaGoals: 2, rating: 0,
+    bundesligaApps: 110, bundesligaGoals: 2, rating: 85,
     bio: "Germany international centre-back who came through the FFC system. SGE defensive cornerstone for eight years. Joined Wolfsburg June 2025.",
   },
   {
@@ -169,7 +168,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2022–2025",
-    bundesligaApps: 45, bundesligaGoals: 1, rating: 0,
+    bundesligaApps: 45, bundesligaGoals: 1, rating: 82,
     bio: "Germany international and 2023 World Cup squad member. Part of the squad from 2021/22.",
   },
   {
@@ -181,7 +180,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["LB"],
     nationality: "🇦🇹 Österreich",
     years: "2020–2022",
-    bundesligaApps: 38, bundesligaGoals: 1, rating: 0,
+    bundesligaApps: 38, bundesligaGoals: 1, rating: 82,
     bio: "Austria international (104 caps), Euro 2017 semi-finalist. Two seasons at Frankfurt.",
   },
   {
@@ -193,7 +192,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2020–2023",
-    bundesligaApps: 43, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 43, bundesligaGoals: 0, rating: 78,
     bio: "Solid centre-back with 43 Bundesliga appearances. Moved to 1. FC Nürnberg 2023.",
   },
   {
@@ -205,7 +204,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["RB"],
     nationality: "🇩🇪 Deutschland",
     years: "2020–2023",
-    bundesligaApps: 43, bundesligaGoals: 1, rating: 0,
+    bundesligaApps: 43, bundesligaGoals: 1, rating: 79,
     bio: "Versatile defender, made her Bundesliga debut at 17. Moved to Wolfsburg June 2023.",
   },
   {
@@ -217,7 +216,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["LB"],
     nationality: "🇳🇱 Niederlande",
     years: "2021–2022",
-    bundesligaApps: 18, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 18, bundesligaGoals: 0, rating: 80,
     bio: "Experienced Dutch international, spent one season at Frankfurt.",
   },
   {
@@ -229,7 +228,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["LB"],
     nationality: "🇩🇪 Deutschland",
     years: "2022–2025",
-    bundesligaApps: 50, bundesligaGoals: 1, rating: 0,
+    bundesligaApps: 50, bundesligaGoals: 1, rating: 80,
     bio: "Germany U-team international, joined January 2022. Left for Union Berlin 2025.",
   },
   {
@@ -241,7 +240,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["DM"],
     nationality: "🇩🇪 Deutschland",
     years: "2021–present",
-    bundesligaApps: 48, bundesligaGoals: 1, rating: 0,
+    bundesligaApps: 48, bundesligaGoals: 1, rating: 80,
     bio: "Born 2005. Professional contract from 2023, regular starter from 2023/24. UWCL debut October 2023.",
   },
   {
@@ -253,7 +252,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["MF"],
     nationality: "🇩🇪 Deutschland",
     years: "2022–2025",
-    bundesligaApps: 20, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 20, bundesligaGoals: 0, rating: 79,
     bio: "Offensive midfielder (OM), born 2004. Regular first-team appearances from 2023/24. Left for SC Freiburg 2025.",
   },
   {
@@ -265,7 +264,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["LB"],
     nationality: "🇩🇪 Deutschland",
     years: "2013–2021",
-    bundesligaApps: 88, bundesligaGoals: 3, rating: 0,
+    bundesligaApps: 88, bundesligaGoals: 3, rating: 80,
     bio: "Seven-year Frankfurt career (née Störzel). Moved to Girondins de Bordeaux after 2020/21 season.",
   },
   {
@@ -277,7 +276,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["CB"],
     nationality: "🇩🇪 Deutschland",
     years: "2015–2023",
-    bundesligaApps: 130, bundesligaGoals: 3, rating: 0,
+    bundesligaApps: 130, bundesligaGoals: 3, rating: 82,
     bio: "Youth product of FFC Frankfurt, Bundesliga debut November 2016. Over 130 appearances before moving to Köln 2023.",
   },
   {
@@ -289,7 +288,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇧🇷 Brasilien",
     years: "2019–2024",
-    bundesligaApps: 76, bundesligaGoals: 2, rating: 0,
+    bundesligaApps: 76, bundesligaGoals: 2, rating: 81,
     bio: "Brazilian international right-back. Injury-plagued but accumulated 76 Bundesliga appearances. Left January 2024.",
   },
   {
@@ -301,7 +300,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["RB", "CB"],
     nationality: "🇨🇭 Schweiz",
     years: "2023–present",
-    bundesligaApps: 35, bundesligaGoals: 1, rating: 0,
+    bundesligaApps: 35, bundesligaGoals: 1, rating: 80,
     bio: "Swiss international, joined August 2023 from FC Zürich. Deployed at left back at Frankfurt despite natural right-back profile. Three-year deal.",
   },
   {
@@ -313,7 +312,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["RW"],
     nationality: "🇩🇪 Deutschland",
     years: "2022–2025",
-    bundesligaApps: 35, bundesligaGoals: 3, rating: 0,
+    bundesligaApps: 35, bundesligaGoals: 3, rating: 80,
     bio: "Germany international right-back with attacking quality. Moved to Leverkusen 2025.",
   },
   {
@@ -325,7 +324,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇸🇪 Schweden",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 84,
     bio: "Sweden international centre-back, joined from Manchester City 2025. Born 1992.",
   },
   {
@@ -337,7 +336,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇳🇴 Norwegen",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 79,
     bio: "Norway international centre-back, joined 2025. Born 2000.",
   },
   {
@@ -349,7 +348,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 74,
     bio: "Young German centre-back, born 2006.",
   },
   {
@@ -361,7 +360,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇷🇸 Serbien / 🇩🇪 Deutschland",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 75,
     bio: "Serbian-German centre-back, born 2005.",
   },
   {
@@ -373,7 +372,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2024–2025",
-    bundesligaApps: 12, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 12, bundesligaGoals: 0, rating: 76,
     bio: "Centre-back born 2004, part of the 2024/25 squad. Moved to Union Berlin.",
   },
   {
@@ -385,7 +384,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["LB"],
     nationality: "🇩🇪 Deutschland",
     years: "2024–present",
-    bundesligaApps: 15, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 15, bundesligaGoals: 0, rating: 77,
     bio: "Defender who joined for the 2024/25 season, born 1999.",
   },
   {
@@ -397,7 +396,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["CB"],
     nationality: "🇩🇪 Deutschland",
     years: "2024–present",
-    bundesligaApps: 12, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 12, bundesligaGoals: 0, rating: 75,
     bio: "Young right-back born 2005, part of the 2024/25 squad.",
   },
   {
@@ -409,7 +408,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇦🇹 Österreich",
     years: "2018–2024",
-    bundesligaApps: 80, bundesligaGoals: 2, rating: 0,
+    bundesligaApps: 80, bundesligaGoals: 2, rating: 83,
     bio: "Austria international, named in UEFA Euro 2017 Team of the Tournament. Six years at Frankfurt before leaving 2024.",
   },
   {
@@ -421,7 +420,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["RB"],
     nationality: "🇩🇪 Deutschland",
     years: "2022–present",
-    bundesligaApps: 38, bundesligaGoals: 2, rating: 0,
+    bundesligaApps: 38, bundesligaGoals: 2, rating: 79,
     bio: "Germany U19 international and twin sister of İlayda Açıkgöz. Came through the Frankfurt system.",
   },
 
@@ -437,7 +436,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["MF"],
     nationality: "🇬🇷 Griechenland",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 79,
     bio: "Greece international defensive midfielder, joined 2025. Born 1994.",
   },
   {
@@ -449,7 +448,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["MF"],
     nationality: "🇨🇭 Schweiz / 🇭🇷 Kroatien",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 74,
     bio: "Swiss-Croatian defensive midfielder, born 2006.",
   },
   {
@@ -461,7 +460,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["MF"],
     nationality: "🇧🇪 Belgien",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 79,
     bio: "Belgium international attacking midfielder, joined 2025. Born 2001.",
   },
   {
@@ -473,7 +472,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇪🇸 Spanien",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 77,
     bio: "Spanish central midfielder, joined June 2025. Born 2005.",
   },
   {
@@ -485,7 +484,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 75,
     bio: "German midfielder, born 2005.",
   },
   {
@@ -497,7 +496,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 73,
     bio: "Young German midfielder, born 2007.",
   },
   {
@@ -509,7 +508,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["MF"],
     nationality: "🇩🇪 Deutschland / 🇵🇱 Polen",
     years: "2016–2025",
-    bundesligaApps: 150, bundesligaGoals: 15, rating: 0,
+    bundesligaApps: 150, bundesligaGoals: 15, rating: 82,
     bio: "Nine-year Frankfurt career including FFC era. ~200 competitive appearances, 25 goals. Plays for Poland national team. Left for Union Berlin 2025.",
   },
   {
@@ -521,7 +520,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["DM", "AM"],
     nationality: "🇩🇪 Deutschland",
     years: "2019–2023",
-    bundesligaApps: 83, bundesligaGoals: 12, rating: 0,
+    bundesligaApps: 83, bundesligaGoals: 12, rating: 89,
     bio: "Exceptional box-to-box midfielder and Germany international. 83 appearances and 12 goals before moving to Chelsea July 2023.",
   },
   {
@@ -533,7 +532,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["AM"],
     nationality: "🇦🇹 Österreich",
     years: "2019–2025",
-    bundesligaApps: 120, bundesligaGoals: 20, rating: 0,
+    bundesligaApps: 120, bundesligaGoals: 20, rating: 86,
     bio: "Austria's key midfielder. 147 competitive appearances, 25 goals across all competitions. Moved to Bayern Munich 2025.",
   },
   {
@@ -545,7 +544,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["AM"],
     nationality: "🇨🇭 Schweiz",
     years: "2018–present",
-    bundesligaApps: 130, bundesligaGoals: 40, rating: 0,
+    bundesligaApps: 130, bundesligaGoals: 40, rating: 89,
     bio: "Swiss Player of the Year 2024. ~183 competitive appearances, 53 goals. First 10-goal Bundesliga season in 2024/25. Contracted through 2026.",
   },
   {
@@ -557,7 +556,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["AM"],
     nationality: "🇦🇹 Österreich",
     years: "2018–2023",
-    bundesligaApps: 100, bundesligaGoals: 23, rating: 0,
+    bundesligaApps: 100, bundesligaGoals: 23, rating: 85,
     bio: "Austria international with five years at Frankfurt. 100+ appearances, ~23 goals. Terminated contract summer 2023, moved to AS Roma.",
   },
   {
@@ -569,7 +568,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["DM"],
     nationality: "🇩🇪 Deutschland",
     years: "2018–2022",
-    bundesligaApps: 55, bundesligaGoals: 4, rating: 0,
+    bundesligaApps: 55, bundesligaGoals: 4, rating: 78,
     bio: "Central midfielder, part of the FFC-era squad through the merger. Later played for Werder Bremen.",
   },
   {
@@ -581,7 +580,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇨🇭 Schweiz",
     years: "2020–2022",
-    bundesligaApps: 59, bundesligaGoals: 2, rating: 0,
+    bundesligaApps: 59, bundesligaGoals: 2, rating: 80,
     bio: "Swiss international central midfielder, 59 league appearances across two seasons. Moved to Servette 2022.",
   },
   {
@@ -593,7 +592,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2011–2021",
-    bundesligaApps: 70, bundesligaGoals: 6, rating: 0,
+    bundesligaApps: 70, bundesligaGoals: 6, rating: 78,
     bio: "Long-serving FFC/Frankfurt player across two spells. Career affected by multiple cruciate and meniscus injuries.",
   },
   {
@@ -605,7 +604,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2020–2023",
-    bundesligaApps: 40, bundesligaGoals: 3, rating: 0,
+    bundesligaApps: 40, bundesligaGoals: 3, rating: 79,
     bio: "Germany U19 international, joined from Bayern Munich July 2020. Later at Basel and Union Berlin.",
   },
   {
@@ -617,7 +616,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["AM"],
     nationality: "🇮🇸 Island",
     years: "2021–2022",
-    bundesligaApps: 18, bundesligaGoals: 2, rating: 0,
+    bundesligaApps: 18, bundesligaGoals: 2, rating: 78,
     bio: "Icelandic international, signed on a two-year deal January 2021. Mainly a squad player.",
   },
   {
@@ -629,7 +628,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2022–present",
-    bundesligaApps: 42, bundesligaGoals: 4, rating: 0,
+    bundesligaApps: 42, bundesligaGoals: 4, rating: 80,
     bio: "Germany U20 international and twin sister of Dilara Açıkgöz. Extended her contract to 2027.",
   },
   {
@@ -641,7 +640,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2020–present",
-    bundesligaApps: 38, bundesligaGoals: 3, rating: 0,
+    bundesligaApps: 38, bundesligaGoals: 3, rating: 78,
     bio: "Born 2004. Promoted from the reserve team 2022, regular first-team appearances from 2022/23.",
   },
   {
@@ -653,7 +652,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["AM"],
     nationality: "🇩🇪 Deutschland",
     years: "2023–2025",
-    bundesligaApps: 35, bundesligaGoals: 6, rating: 0,
+    bundesligaApps: 35, bundesligaGoals: 6, rating: 81,
     bio: "Germany international, first on loan from Wolfsburg 2023/24 then signed for 2024/25.",
   },
   {
@@ -665,7 +664,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["DM"],
     nationality: "🇩🇪 Deutschland",
     years: "2023–2026",
-    bundesligaApps: 44, bundesligaGoals: 3, rating: 0,
+    bundesligaApps: 44, bundesligaGoals: 3, rating: 81,
     bio: "Germany international, joined from Leverkusen summer 2023. Recognised as the squad's best tackler in 2023/24.",
   },
   {
@@ -677,7 +676,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["DM"],
     nationality: "🇩🇪 Deutschland",
     years: "2024–present",
-    bundesligaApps: 22, bundesligaGoals: 3, rating: 0,
+    bundesligaApps: 22, bundesligaGoals: 3, rating: 81,
     bio: "Germany international, joined July 2024 on a three-year deal. 3 goals and 4 assists in her first Bundesliga season.",
   },
   {
@@ -689,7 +688,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["MF"],
     nationality: "🇩🇪 Deutschland",
     years: "2022–2023",
-    bundesligaApps: 14, bundesligaGoals: 2, rating: 0,
+    bundesligaApps: 14, bundesligaGoals: 2, rating: 76,
     bio: "Right midfielder/winger, born 2005. Part of the 2022/23 squad. Later moved to Leverkusen.",
   },
   {
@@ -701,7 +700,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2020–2022",
-    bundesligaApps: 28, bundesligaGoals: 2, rating: 0,
+    bundesligaApps: 28, bundesligaGoals: 2, rating: 77,
     bio: "Central midfielder in the squad for the first two post-merger seasons. Born 2000.",
   },
   {
@@ -713,7 +712,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2024–present",
-    bundesligaApps: 18, bundesligaGoals: 2, rating: 0,
+    bundesligaApps: 18, bundesligaGoals: 2, rating: 77,
     bio: "Forward joined for the 2024/25 season. Moved to 1. FSV Mainz 05.",
   },
   {
@@ -725,7 +724,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇪 Deutschland",
     years: "2024–2025",
-    bundesligaApps: 16, bundesligaGoals: 2, rating: 0,
+    bundesligaApps: 16, bundesligaGoals: 2, rating: 76,
     bio: "Central midfielder born 2003, part of the 2024/25 squad. Moved to FC Zürich.",
   },
   {
@@ -737,7 +736,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇩🇰 Dänemark",
     years: "2024–present",
-    bundesligaApps: 12, bundesligaGoals: 1, rating: 0,
+    bundesligaApps: 12, bundesligaGoals: 1, rating: 75,
     bio: "Born November 2005. Signed February 2024 from Kolding IF, spent part of her time on loan at BK Häcken.",
   },
   {
@@ -749,7 +748,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["CF"],
     nationality: "🇯🇵 Japan",
     years: "2024–present",
-    bundesligaApps: 18, bundesligaGoals: 7, rating: 0,
+    bundesligaApps: 18, bundesligaGoals: 7, rating: 85,
     bio: "Japan international, joined January 2024. Scored a hat-trick in four minutes against Freiburg October 2024.",
   },
 
@@ -765,7 +764,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["RW"],
     nationality: "🇩🇪 Deutschland",
     years: "2018–present",
-    bundesligaApps: 170, bundesligaGoals: 99, rating: 0,
+    bundesligaApps: 170, bundesligaGoals: 99, rating: 91,
     bio: "SGE Frauen's all-time top scorer. Germany international with close to 100 Bundesliga goals for the club. 17 goals in 2020/21 alone.",
   },
   {
@@ -777,7 +776,7 @@ const PLAYERS_WOMEN = [
     altPositions: [],
     nationality: "🇸🇮 Slowenien",
     years: "2020–2025",
-    bundesligaApps: 105, bundesligaGoals: 39, rating: 0,
+    bundesligaApps: 105, bundesligaGoals: 39, rating: 88,
     bio: "Slovenian Player of the Year 2022, 2023, and 2024. Frauen-Bundesliga top scorer in 2021/22 and 2022/23. Joined Utah Royals (NWSL) 2025.",
   },
   {
@@ -789,7 +788,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["RW", "LW"],
     nationality: "🇩🇪 Deutschland",
     years: "2021–present",
-    bundesligaApps: 101, bundesligaGoals: 50, rating: 0,
+    bundesligaApps: 101, bundesligaGoals: 50, rating: 87,
     bio: "Germany international, ~50 Bundesliga goals in 101 league appearances. Powerful and versatile across the frontline.",
   },
   {
@@ -801,7 +800,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["RW", "CF"],
     nationality: "🇨🇭 Schweiz",
     years: "2024–present",
-    bundesligaApps: 20, bundesligaGoals: 5, rating: 0,
+    bundesligaApps: 20, bundesligaGoals: 5, rating: 80,
     bio: "Swiss international forward, joined for the 2024/25 season. Born 2003.",
   },
   {
@@ -813,7 +812,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["LW"],
     nationality: "🇦🇺 Australien",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 84,
     bio: "Australia international winger, joined August 2025. Born 1994. Previously at Real Madrid.",
   },
   {
@@ -825,7 +824,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["LW", "CF"],
     nationality: "🇸🇪 Schweden",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 82,
     bio: "Sweden international, joined July 2025. Born 1997.",
   },
   {
@@ -837,7 +836,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["AM"],
     nationality: "🇽🇰 Kosovo / 🇩🇪 Deutschland",
     years: "2025–present",
-    bundesligaApps: 0, bundesligaGoals: 0, rating: 0,
+    bundesligaApps: 0, bundesligaGoals: 0, rating: 79,
     bio: "Kosovo-German left winger, joined summer 2025. Born 1999.",
   },
   {
@@ -849,7 +848,7 @@ const PLAYERS_WOMEN = [
     altPositions: ["LW"],
     nationality: "🇩🇪 Deutschland",
     years: "2017–2024",
-    bundesligaApps: 135, bundesligaGoals: 32, rating: 0,
+    bundesligaApps: 135, bundesligaGoals: 32, rating: 84,
     bio: "Quick and direct wide forward. 32 goals in 135 Frankfurt appearances. Moved to West Ham summer 2024.",
   },
 

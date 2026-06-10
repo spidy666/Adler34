@@ -4,6 +4,27 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.33.0] — 2026-06-10
+
+### Added
+- **Ratings for all 69 Frauen players** — replaced placeholder `rating: 0` with calibrated values across four tiers
+  - Elite (88–91): Freigang 91, Nüsken/Reuteler 89, Prašnikar 88
+  - Strong (84–87): Anyomi 87, Frohms/Dunst 86/87, Johannes/Feiersinger/Kleinherne/Chiba 85, Martinez/Raso/Ilestedt 84
+  - Established (77–83): Hanshaw 83, Winkler 83, Hechler/Doorsoun/Kirchberger/Pawollek 82, Letícia Santos/Wolter/Gräwe/Senß/Verena 81–83, internationals 78–80
+  - Reserves/youth (72–77): backup GKs, 2025/26 newcomers with no Bundesliga data
+  - Ratings shifted ~2 pts higher than equivalent men's tier to compensate for the smaller era-diversity bonus (max 0.94 vs 1.04 for men)
+- **Mode-aware German Spielanleitung** — the info popup now renders dynamic German content based on the active mode
+  - Men: 34 Spiele, 18 Teams, men's points table, men's player database overview
+  - Frauen: 26 Spiele, 14 Teams, Frauen-BL points table, women's player database overview
+  - No longer fetches README.md; re-renders on every open so the content reflects any mode switch
+
+### Fixed
+- **Frauen card selection bug** — clicking a player card in Frauen mode did nothing because the handler used `PLAYERS.find()` (men's array) instead of `activePlayers.find()`. Corrected to `activePlayers.find()`.
+- **Season range label off-by-one** — the deck header showed e.g. "2020/21 – 2026/27" (one season too far) because `activeTo` is the end-year of the last season, not a start year. Fixed with `seasonLabel(maxYear - 1)`.
+- **Rebić nationality label** — `"🇭🇷 Croatia"` (English) corrected to `"🇭🇷 Kroatien"` (German), consistent with all other nationality strings.
+
+---
+
 ## [0.32.1] — 2026-06-10
 
 ### Changed

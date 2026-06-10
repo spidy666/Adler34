@@ -1170,7 +1170,7 @@ const PLAYERS = [
     activeFrom: 2016, activeTo: 2019,
     position: "LW", positionLabel: "Linksaußen / Stürmer",
     altPositions: ["CF", "RW", "AM"],
-    nationality: "🇭🇷 Croatia",
+    nationality: "🇭🇷 Kroatien",
     years: "2016–2020",
     bundesligaApps: 80, bundesligaGoals: 26, rating: 85,
     peakSeason: "2018/19",
