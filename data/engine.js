@@ -192,7 +192,15 @@ function simulateSeason(players, mode = 'men') {
   players.forEach(p => { playerGoals[p.id] = 0; });
 
   // Seed so same team always gets same result (deterministic based on ratings)
-  const seed = players.reduce((acc, p) => acc + p.rating * 7 + p.bundesligaApps, 0);
+  // Mix player IDs into the seed so squads with the same total rating sum
+  // but different players don't cluster into the same RNG region.
+  const seed = players.reduce((acc, p) => {
+    let idHash = 0;
+    for (let i = 0; i < p.id.length; i++) {
+      idHash = (Math.imul(31, idHash) + p.id.charCodeAt(i)) | 0;
+    }
+    return acc + p.rating * 7 + p.bundesligaApps + (Math.abs(idHash) % 9973);
+  }, 0);
   let rng = seededRng(seed);
 
   const opponents = generateOpponents(seed, isFrauen);
