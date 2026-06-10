@@ -231,9 +231,15 @@ function simulateSeason(players, mode = 'men') {
   // Assign scorers using a separate seeded RNG so main match outcomes are unchanged.
   const scorerRng = seededRng(seed + 999983);
   for (const game of games) {
+    const usedMins = new Set();
     for (let k = 0; k < game.gf; k++) {
       const scorer = pickScorer(players, scorerRng);
-      const minute = Math.floor(scorerRng() * 90) + 1;
+      let minute = Math.floor(scorerRng() * 90) + 1;
+      // Shift collisions forward one minute at a time (wrapping at 90)
+      for (let guard = 0; usedMins.has(minute) && guard < 90; guard++) {
+        minute = minute % 90 + 1;
+      }
+      usedMins.add(minute);
       game.scorers.push({ name: scorer.name, id: scorer.id, minute });
       playerGoals[scorer.id]++;
     }
