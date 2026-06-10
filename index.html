@@ -86,6 +86,10 @@
       margin: 0 auto;
     }
     @media (max-width: 580px) { .formation-grid { grid-template-columns: repeat(2, 1fr); } }
+    .mode-switcher { display: flex; gap: 10px; justify-content: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--gray); }
+    .mode-btn { padding: 9px 28px; border: 1px solid var(--gray); background: none; color: var(--dim); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; }
+    .mode-btn.active { background: var(--red); color: var(--white); border-color: var(--red); }
+    .mode-btn:not(.active):hover { border-color: var(--white); color: var(--white); }
     .formation-card {
       background: var(--black);
       border: 1px solid var(--gray);
@@ -463,6 +467,10 @@
       <div class="fp-hero-sub">Schritt 1 — Taktik festlegen, dann Spieler ziehen</div>
     </div>
     <div class="formation-grid" id="formationGrid"></div>
+    <div class="mode-switcher">
+      <button class="mode-btn active" id="btnModeMen">Männer</button>
+      <button class="mode-btn" id="btnModeFrauen">Frauen</button>
+    </div>
   </div>
 </div>
 
@@ -594,7 +602,8 @@
 <canvas id="fireworksCanvas"></canvas>
 
 <script type="module">
-import { PLAYERS } from './data/players.js';
+import { PLAYERS }       from './data/players.js';
+import { PLAYERS_WOMEN } from './data/players-women.js';
 import { simulateSeason } from './data/engine.js';
 
 // ── FORMATION DEFINITIONS ──────────────────────────────────────────────────
@@ -760,6 +769,8 @@ function decadeDE(y) {
 }
 
 // ── STATE ────────────────────────────────────────────────────────────────
+let gameMode      = 'men';         // 'men' | 'frauen'
+let activePlayers = PLAYERS;       // switched by mode buttons
 let formationKey  = null;
 let slotFills     = {};        // slotId → player
 let placedIds     = new Set();
@@ -905,7 +916,7 @@ function handleSlotClick(slotId) {
 const ALL_DECADES = ['1960s','1970s','1980s','1990s','2000s','2010s','2020s'];
 
 function dealNewTeam() {
-  const deckPool = d => PLAYERS.filter(p => p.decade === d && !placedIds.has(p.id));
+  const deckPool = d => activePlayers.filter(p => p.decade === d && !placedIds.has(p.id));
 
   // Prefer decades with 5+ unplaced players; fall back to any non-empty decade
   const viable   = ALL_DECADES.filter(d => deckPool(d).length >= 5);
@@ -1056,6 +1067,23 @@ function updateStatus() {
     draftHintEl.textContent = 'Wähle einen Spieler aus dem Kader';
   }
 }
+
+// ── MODE SWITCHER ─────────────────────────────────────────────────────────
+function setGameMode(mode) {
+  if (gameMode === mode) return;
+  gameMode      = mode;
+  activePlayers = mode === 'frauen' ? PLAYERS_WOMEN : PLAYERS;
+  document.getElementById('btnModeMen').classList.toggle('active', mode === 'men');
+  document.getElementById('btnModeFrauen').classList.toggle('active', mode === 'frauen');
+  // Reset any in-progress draft when switching modes
+  slotFills    = {};
+  placedIds    = new Set();
+  phase        = 'deal';
+  formationKey = null;
+  showScreen('screenFormation');
+}
+document.getElementById('btnModeMen').addEventListener('click',    () => setGameMode('men'));
+document.getElementById('btnModeFrauen').addEventListener('click', () => setGameMode('frauen'));
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────
 btnBack.addEventListener('click', () => {

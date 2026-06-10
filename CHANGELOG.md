@@ -4,6 +4,19 @@ All notable changes to **34-0 — Eintracht Frankfurt Bundesliga Dream Team** ar
 
 ---
 
+## [0.31.0] — 2026-06-10
+
+### Added
+- **Frauen game mode** — new "Frauen" mode uses the Eintracht Frankfurt Women squad (2020/21–2024/25)
+  - Mode switcher buttons ("Männer" / "Frauen") appear under the formation grid on the start screen
+  - 32 players added across two eras (2010s, 2020s) covering GKs, defenders, midfielders, and forwards
+  - Key players include Laura Freigang, Nicole Anyomi, Sjoeke Nüsken, Barbara Dunst, Geraldine Reuteler, Sophia Kleinherne
+  - Ratings are placeholders (0) — to be calibrated in a future update
+  - Switching mode resets the current draft and returns to the formation screen
+  - All existing draft, simulation, and fireworks mechanics work identically in Frauen mode
+
+---
+
 ## [0.30.0] — 2026-06-10
 
 ### Added
