@@ -16,7 +16,7 @@ const OPPONENT_DIFFICULTY_FRAUEN = {
   'Bayer 04 Leverkusen': 0.10,
   'SC Freiburg':         0.06,
   'TSG Hoffenheim':      0.03,
-  'RB Leipzig':          0.02,
+  'Hamburger SV':       -0.02,
   'SGS Essen':           0.00,
   'SV Werder Bremen':   -0.01,
   'Turbine Potsdam':    -0.02,
@@ -321,7 +321,7 @@ function seededRng(seed) {
 function generateOpponents(seed, isFrauen = false) {
   const teams = isFrauen ? [
     'FC Bayern München', 'VfL Wolfsburg', 'Bayer 04 Leverkusen', 'SC Freiburg',
-    'TSG Hoffenheim', 'RB Leipzig', 'SGS Essen',
+    'TSG Hoffenheim', 'Hamburger SV', 'SGS Essen',
     'SV Werder Bremen', 'Turbine Potsdam', 'MSV Duisburg',
     '1. FC Köln', 'SC Sand', 'Carl Zeiss Jena',
   ] : [
